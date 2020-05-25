@@ -39,6 +39,12 @@ export const asyncRouterMap = [
             name: 'TaskList',
             component: () => import('@/views/task/Task'),
             meta: { title: 'STable Example', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/info-manage/archivesInfoManagement',
+            name: 'ArchivesInfoManagement',
+            component: () => import('@/views/archivesInfoManagement/index.vue'),
+            meta: { title: '档案信息管理', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
