@@ -10,36 +10,19 @@
       <a-spin :spinning="confirmLoading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-form-model-item
-            label="任务名称"
+            label="河湖名称"
             prop="name"
             ref="name"
             @blur="() => {$refs.name.onFieldBlur()}">
             <a-input v-model="form.name"/>
           </a-form-model-item>
-          <a-form-model-item label="任务地点" prop="site" ref="address" @blur="() => {$refs.address.onFieldBlur()}">
+          <a-form-model-item label="标题" prop="site" ref="address">
             <a-input v-model="form.site"/>
           </a-form-model-item>
-          <a-form-model-item label="负责人" prop="principal" ref="leader" @blur="() => {$refs.leader.onFieldBlur()}">
-            <a-input v-model="form.principal"/>
+          <a-form-model-item label="上传文件" prop="file" ref="leader">
+            <a-input v-model="form.file"/>
           </a-form-model-item>
-          <a-form-model-item
-            label="参与人员"
-            prop="participant"
-            ref="participant"
-            @blur="() => {$refs.participant.onFieldBlur()}">
-            <!--            <a-input v-model="form.participant"/>-->
-            <a-select
-              mode="multiple"
-              v-model="form.participant"
-              style="width: 100%"
-              placeholder="请选择参与人员"
-            >
-              <a-select-option :key="item.id" v-for="item in participantData">
-                {{item.name}}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item label="任务进展">
+          <a-form-model-item label="发布人">
             <a-input v-model="form.progress"/>
           </a-form-model-item>
         </a-form-model>
@@ -48,7 +31,6 @@
       <template slot="footer">
         <a-button @click="()=>{this.visible=false}">取消</a-button>
         <a-button type="primary" @click="handleOk">保存</a-button>
-        <a-button type="danger" @click="handleOk">发布</a-button>
       </template>
     </a-modal>
 
@@ -67,19 +49,7 @@
     },
     data () {
       return {
-        participantData: [
-          {
-            id: 1,
-            name: '李明'
-          }, {
-            id: 2,
-            name: '方楠'
-          }, {
-            id: 3,
-            name: '史青'
-          }
-        ],
-        title: '新建',
+        title: '新增',
         labelCol: { span: 4 },
         wrapperCol: { span: 18 },
         status: true,
@@ -99,8 +69,7 @@
           site: [
             { required: true, message: '地点不能为空', trigger: 'blur' }
           ],
-          principal: [
-            { required: true, message: '负责人不能为空', trigger: 'blur' }
+          file: [
           ],
           participant: [
             { required: true, message: '参与人不能为空', trigger: 'blur' }

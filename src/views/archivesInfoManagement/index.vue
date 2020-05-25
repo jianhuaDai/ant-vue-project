@@ -19,7 +19,7 @@
                 </a-col>
                 <a-col :md="8" :sm="24">
                   <a-form-item label="河湖标题" style="margin-bottom: 0">
-                    <a-input v-model="queryParam.name" placeholder="" />
+                    <a-input v-model="queryParam.title" placeholder="" />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
