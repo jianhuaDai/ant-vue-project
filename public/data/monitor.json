@@ -1,0 +1,99 @@
+[{
+	"city": "江苏省",
+	"shuizhi": 1144,
+	"shipin": 1415,
+	"shuiwen": 86,
+	"yuliang": 454,
+	"排污口": 20205
+}, {
+	"city": "南京市",
+	"shuizhi": 92,
+	"shipin": 103,
+	"shuiwen": 7,
+	"yuliang": 33,
+	"排污口": 1790
+}, {
+	"city": "无锡市",
+	"shuizhi": 78,
+	"shipin": 112,
+	"shuiwen": 8,
+	"yuliang": 38,
+	"排污口": 1689
+}, {
+	"city": "徐州市",
+	"shuizhi": 94,
+	"shipin": 126,
+	"shuiwen": 9,
+	"yuliang": 96,
+	"排污口": 1920
+}, {
+	"city": "常州市",
+	"shuizhi": 86,
+	"shipin": 101,
+	"shuiwen": 6,
+	"yuliang": 28,
+	"排污口": 1532
+}, {
+	"city": "苏州市",
+	"shuizhi": 82,
+	"shipin": 108,
+	"shuiwen": 7,
+	"yuliang": 27,
+	"排污口": 1663
+}, {
+	"city": "南通市",
+	"shuizhi": 89,
+	"shipin": 124,
+	"shuiwen": 5,
+	"yuliang": 30,
+	"排污口": 1454
+}, {
+	"city": "连云港市",
+	"shuizhi": 92,
+	"shipin": 120,
+	"shuiwen": 6,
+	"yuliang": 28,
+	"排污口": 1353
+}, {
+	"city": "淮安市",
+	"shuizhi": 85,
+	"shipin": 120,
+	"shuiwen": 5,
+	"yuliang": 31,
+	"排污口": 1432
+}, {
+	"city": "盐城市",
+	"shuizhi": 83,
+	"shipin": 98,
+	"shuiwen": 6,
+	"yuliang": 29,
+	"排污口": 1631
+}, {
+	"city": "扬州市",
+	"shuizhi": 92,
+	"shipin": 96,
+	"shuiwen": 6,
+	"yuliang": 32,
+	"排污口": 1278
+}, {
+	"city": "镇江市",
+	"shuizhi": 89,
+	"shipin": 113,
+	"shuiwen": 7,
+	"yuliang": 29,
+	"排污口": 1387
+}, {
+	"city": "泰州市",
+	"shuizhi": 98,
+	"shipin": 89,
+	"shuiwen": 8,
+	"yuliang": 27,
+	"排污口": 1512
+}, {
+	"city": "宿迁市",
+	"shuizhi": 84,
+	"shipin": 105,
+	"shuiwen": 6,
+	"yuliang": 26,
+	"排污口": 1564
+}]

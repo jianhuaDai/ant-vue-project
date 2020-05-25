@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="334px" height="170px" viewBox="0 0 334 170" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59 (86127) - https://sketch.com -->
+    <title>天气</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M-1.91201222e-14,1.99124737 C-1.91201222e-14,0.891511813 0.8997803,0 2.00365528,0 L331.996345,0 C333.102933,0 334,0.891395504 334,1.99124737 L334,167.461049 C334,168.560785 333.10022,169.452297 331.996345,169.452297 L2.00365528,169.452297 C0.897067026,169.452297 -1.91201222e-14,168.560901 -1.91201222e-14,167.461049 L-1.91201222e-14,1.99124737 Z" id="path-1"></path>
+    </defs>
+    <g id="设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页" transform="translate(-1082.000000, -24.000000)">
+            <g id="编组-3" transform="translate(1082.000000, 24.000000)">
+                <g id="天气">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mask" fill="#FEA533" xlink:href="#path-1"></use>
+                    <circle id="椭圆形" fill-opacity="0.2" fill="#FFFFFF" mask="url(#mask-2)" cx="305.5" cy="32.5" r="117.5"></circle>
+                    <circle id="椭圆形" fill-opacity="0.2" fill="#FFFFFF" mask="url(#mask-2)" cx="316" cy="24" r="107"></circle>
+                    <circle id="椭圆形" fill="#FFE85C" mask="url(#mask-2)" cx="324.5" cy="11.5" r="73.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

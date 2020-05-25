@@ -1,0 +1,183 @@
+{
+  "data": {
+    "geo_info": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 1
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.69388580322266,
+              32.04358676118635
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 2
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.73356103897093,
+              32.07432013477124
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 3
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.78207683563232,
+              32.08282908943214
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 4
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.75316262245178,
+              32.03798453714119
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 5
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.81851196289062,
+              32.056208697692895
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 6
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.7923765182495,
+              32.01726424391602
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "7"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.82233142852783,
+              32.03791177872976
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 8
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.94421100616454,
+              32.10813309293063
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 9
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.87271404266359,
+              32.077047450074716
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": 10
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.93910408020018,
+              31.997995078625863
+            ]
+          }
+        }
+      ]
+    },
+    "list": [
+      {
+        "id": "1",
+        "name": "长江水位告警"
+      },
+      {
+        "id": "2",
+        "name": "秦淮河水污染告警"
+      },
+      {
+        "id": "3",
+        "name": "玄武湖水位告警"
+      },
+      {
+        "id": "4",
+        "name": "莫愁湖降水量减少告警"
+      },
+      {
+        "id": "5",
+        "name": "琵琶湖水污染告警"
+      },
+      {
+        "id": "6",
+        "name": "外秦淮河水位告警"
+      },
+      {
+        "id": "7",
+        "name": "月牙河降水量增加告警"
+      },
+      {
+        "id": "8",
+        "name": "羊山湖水位降低告警"
+      },
+      {
+        "id": "9",
+        "name": "下黄马水库巡河事件"
+      },
+      {
+        "id": "10",
+        "name": "横山水库巡河事件"
+      }
+    ],
+    "msg": "ok",
+    "code": 0
+  }
+}

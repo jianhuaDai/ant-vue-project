@@ -1,0 +1,85 @@
+[{
+	"city": "江苏省",
+	"zonghezhang": 4,
+	"shengjihezhang": 13,
+	"shijihezhang": 0,
+	"qujihezhang": 0
+}, {
+	"city": "南京市",
+	"zonghezhang": 2,
+	"shengjihezhang": 0,
+	"shijihezhang": 19,
+	"qujihezhang": 179
+}, {
+	"city": "无锡市",
+	"zonghezhang": 3,
+	"shengjihezhang": 0,
+	"shijihezhang": 16,
+	"qujihezhang": 133
+}, {
+	"city": "徐州市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 23,
+	"qujihezhang": 64
+}, {
+	"city": "常州市",
+	"zonghezhang": 5,
+	"shengjihezhang": 0,
+	"shijihezhang": 12,
+	"qujihezhang": 168
+}, {
+	"city": "苏州市",
+	"zonghezhang": 5,
+	"shengjihezhang": 0,
+	"shijihezhang": 18,
+	"qujihezhang": 181
+}, {
+	"city": "南通市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 16,
+	"qujihezhang": 184
+}, {
+	"city": "连云港市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 13,
+	"qujihezhang": 104
+}, {
+	"city": "淮安市",
+	"zonghezhang": 7,
+	"shengjihezhang": 0,
+	"shijihezhang": 18,
+	"qujihezhang": 122
+}, {
+	"city": "盐城市",
+	"zonghezhang": 5,
+	"shengjihezhang": 0,
+	"shijihezhang": 18,
+	"qujihezhang": 116
+}, {
+	"city": "扬州市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 12,
+	"qujihezhang": 123
+}, {
+	"city": "镇江市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 20,
+	"qujihezhang": 103
+}, {
+	"city": "泰州市",
+	"zonghezhang": 4,
+	"shengjihezhang": 0,
+	"shijihezhang": 13,
+	"qujihezhang": 116
+}, {
+	"city": "宿迁市",
+	"zonghezhang": 3,
+	"shengjihezhang": 0,
+	"shijihezhang": 12,
+	"qujihezhang": 98
+}]

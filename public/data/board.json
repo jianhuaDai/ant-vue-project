@@ -1,0 +1,183 @@
+{
+  "data": {
+    "geo_info": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "1"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.73044967651366,
+              32.09508204682983
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "2"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.74465465545654,
+              32.06220987232539
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "3"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.78864288330078,
+              32.06744693937369
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "4"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.75860214233398,
+              32.03536519790318
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "5"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.81743907928465,
+              32.054426454868896
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "6"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.7937605381012,
+              32.024696073409146
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "7"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.82233142852783,
+              32.03791177872976
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "8"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.93781661987306,
+              32.110186917791225
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "9"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.87413024902344,
+              32.07492015111869
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "id": "10"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              118.94135713577269,
+              32.000888441180585
+            ]
+          }
+        }
+      ]
+    },
+    "list": [
+      {
+        "id": "1",
+        "name": "长江公示牌"
+      },
+      {
+        "id": "2",
+        "name": "秦淮河公示牌"
+      },
+      {
+        "id": "3",
+        "name": "玄武湖公示牌"
+      },
+      {
+        "id": "4",
+        "name": "莫愁湖公示牌"
+      },
+      {
+        "id": "5",
+        "name": "琵琶湖公示牌"
+      },
+      {
+        "id": "6",
+        "name": "外秦淮河公示牌"
+      },
+      {
+        "id": "7",
+        "name": "月牙河公示牌"
+      },
+      {
+        "id": "8",
+        "name": "羊山湖公示牌"
+      },
+      {
+        "id": "9",
+        "name": "下黄马水库公示牌"
+      },
+      {
+        "id": "10",
+        "name": "横山水库公示牌"
+      }
+    ],
+    "msg": "ok",
+    "code": 0
+  }
+}
