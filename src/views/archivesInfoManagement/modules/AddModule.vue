@@ -20,7 +20,12 @@
             <a-input v-model="form.site"/>
           </a-form-model-item>
           <a-form-model-item label="上传文件" prop="file" ref="leader">
-            <a-input v-model="form.file"/>
+            <a-upload
+              :customRequest="customRequest"
+              :fileList="fileList"
+            >
+              <a-button> <a-icon type="upload" /> Upload </a-button>
+            </a-upload>
           </a-form-model-item>
           <a-form-model-item label="发布人">
             <a-input v-model="form.progress"/>
@@ -60,7 +65,8 @@
           site: '',
           principal: '',
           participant: '',
-          progress: ''
+          progress: '',
+          formData: null
         },
         rules: {
           name: [
@@ -76,7 +82,8 @@
           ]
         },
         layout: 'horizontal',
-        visible: false
+        visible: false,
+        fileList: []
       }
     },
     watch: {
@@ -85,6 +92,12 @@
       }
     },
     methods: {
+      customRequest (data) {
+          this.form.formData = new FormData()
+          this.form.formData.append('file', data.file)
+          this.fileList = [data.file]
+          console.log(data)
+      },
       showModal (data = {}) {
         this.visible = true
         this.form = { ...{}, ...data }

@@ -51,7 +51,8 @@ import {
   FormModel,
   Tree,
   Cascader,
-  pagination
+  pagination,
+  Descriptions
   // Trend
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
@@ -101,7 +102,7 @@ Vue.use(TreeSelect)
 Vue.use(notification)
 Vue.use(FormModel)
 Vue.use(Cascader)
-
+Vue.use(Descriptions)
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
 Vue.prototype.$notification = notification

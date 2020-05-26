@@ -72,7 +72,7 @@
         <a-input/>
       </div>
     </div>
-    <DetailModal ref="detailModal"/>
+    <DetailModal v-if="showDetail" :orgData="orgData" ref="detailModal" @setDetailModule="setDetailModule"/>
   </mask-page-view>
 </template>
 
@@ -101,6 +101,7 @@
   let popup = null
   let SelectedLayer = null
   const LOD_LEVEL = 10.5
+  // eslint-disable-next-line no-unused-vars
   let LAST_ZOOM = 0
   export default {
     name: 'MapDemo',
@@ -136,13 +137,18 @@
           activeLayerBtn: {},
           existLayerGroup: {}
         },
-        layerBtn: LayerBtns()
+        layerBtn: LayerBtns(),
+        orgData: null,
+        showDetail: false
       }
     },
     components: { MapView, MaskPageView, DetailModal },
     methods: {
+      setDetailModule (value) {
+        this.showDetail = value
+      },
       cityChange (value) {
-        console.log('city change:', this.city.value)
+        // console.log('city change:', this.city.value)
         this.selectArea(this.city.value.slice(-1)[0])
       },
       customRow (record, index) {
@@ -187,7 +193,7 @@
         }
       },
       rowSelect (record) {
-        console.log('click:', record)
+        // console.log('click:', record)
         if (record.lat_lon) {
           MapScene.setZoomAndCenter(12, JSON.parse(record.lat_lon))
           // this.setSelectLayer(buildGeoJSON(JSON.parse(record.lat_lon), 'Point', { 'name': '点' }), 'Point')
@@ -197,10 +203,18 @@
         }
       },
       onSearch (v) {
-        console.log(v)
+        // console.log(v)
       },
+      // 图层marker点击事件集合type="get_water"取水口 "water_functional"水功能区
       markerLayerClick (v, layerId) {
+        this.showDetail = true
+        console.log(v, 'cccccc')
         MapScene.panTo(v.lngLat)
+        // 显示详情弹框
+        this.orgData = v.data
+        this.$nextTick().then(() => {
+          this.$refs.detailModal.showModal()
+        })
         switch (layerId) {
           case 12 : {
             popup = new Popup({
@@ -245,7 +259,7 @@
         }
       },
       clusterLayerClick (v, layerId) {
-        console.log('map layer:', v, layerId)
+        // console.log('map layer:', v, layerId)
         // console.log(MapScene.getLayerByName(layerId).getSource().getClustersLeaves(v.feature.cluster_id))
         //
         if (v.feature.cluster) {
@@ -352,6 +366,7 @@
       },
       renderLayer (layerId, res) {
         const geoData = res.data.geo_info
+        console.log(layerId, 'dddd')
         switch (layerId) {
           case 11: {
             geoData.features.forEach((v, index) => {
@@ -541,7 +556,7 @@
       loadLayer (layerId) {
         GetDataByLayer(layerId).then(res => {
           if (res) {
-            console.log('===res:')
+            console.log('===res:333')
             setTimeout(() => {
               this.renderLayer(layerId, res)
             }, 200)
@@ -579,7 +594,7 @@
             })
           }
         } else {
-          console.log('hide:', layerGroup)
+          // console.log('hide:', layerGroup)
           if (layerGroup.pointLayer) {
             layerGroup.pointLayer.hide()
           }
@@ -981,7 +996,7 @@
         }
       },
       mapLoad (map) {
-        console.log('map loaded')
+        // console.log('map loaded')
         // MapScene.map.addSource('32', {
         //   'type': 'geojson',
         //   'data': '/JiangSuBoundary.json'
@@ -1018,7 +1033,7 @@
     right: 50%;
     bottom: 5%;
     transform: translateX(50%);
-    z-index: 9999;
+    z-index: 999;
     display: flex;
     justify-content: flex-start;
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.4);
@@ -1068,7 +1083,7 @@
     position: absolute;
     right: 0;
     height: 80%;
-    z-index: 9999;
+    z-index: 999;
     transform: scaleX(0.8);
     border-left: 1px solid #E5E9ED;
   }
@@ -1203,7 +1218,7 @@
     left: 24px;
     top: 24px;
     /*transform: translateX(50%);*/
-    z-index: 9999;
+    z-index: 999;
     /*display: none;*/
   }
 </style>

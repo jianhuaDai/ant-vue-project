@@ -34,12 +34,12 @@
           </div>
         </a-card>
         <!-- <task-module ref="taskModule"></task-module> -->
-        <a-tabs default-active-key="1" class="tabs-area">
-          <a-tab-pane key="1" tab="一河一档">
-            <RiverAndStall/>
+        <a-tabs v-model="activityKey" class="tabs-area">
+          <a-tab-pane key="stall" tab="一河一档">
+            <RiverAndStall ref="stall"/>
           </a-tab-pane>
-          <a-tab-pane key="2" tab="一河一策">
-            <RiverAndPolicy/>
+          <a-tab-pane key="policy" tab="一河一策">
+            <RiverAndPolicy ref="policy" />
           </a-tab-pane>
         </a-tabs>
       </a-col>
@@ -62,15 +62,21 @@ export default {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
     resetQuery () {
-      // this.queryParam.status = ''
-      // this.$refs.table.refresh(true)
+      this.queryParam.name = ''
+      this.queryParam.title = ''
+      this.$refs[this.activityKey].$refs.table.refresh(true)
     }
   },
   created () {},
   data () {
     return {
       checkedKeys: [],
-      treeData: treeData
+      treeData: treeData,
+      queryParam: {
+        name: '',
+        title: ''
+      },
+      activityKey: 'stall'
     }
   }
 }

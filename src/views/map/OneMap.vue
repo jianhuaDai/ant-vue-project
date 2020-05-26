@@ -152,7 +152,6 @@
         }
       },
       rowSelect (record) {
-        console.log('click:', record)
         if (record.lat_lon) {
           MapScene.setZoomAndCenter(12, JSON.parse(record.lat_lon))
           // this.setSelectLayer(buildGeoJSON(JSON.parse(record.lat_lon), 'Point', { 'name': '点' }), 'Point')
@@ -162,7 +161,6 @@
         }
       },
       onSearch (v) {
-        console.log(v)
       },
       markerLayerClick (v, layerId) {
         MapScene.panTo(v.lngLat)
@@ -210,9 +208,7 @@
         }
       },
       clusterLayerClick (v, layerId) {
-        console.log('map layer:', v, layerId)
         // console.log(MapScene.getLayerByName(layerId).pick({ x: v.feature.coordinates[0], y: v.feature.coordinates[1] }))
-        console.log(MapScene.getLayerByName(layerId).getSource().getFeatureById(v.featureId))
         //
         if (v.feature.cluster) {
           const targetZoom = MapScene.getZoom() >= 11 ? (MapScene.getZoom() + 1) : 11
@@ -295,6 +291,7 @@
       },
       renderLayer (layerId, res) {
         const geoData = res.data.geo_info
+        console.log(layerId, 'ddddd')
         switch (layerId) {
           case 11: {
             // this.renderPointLayer(layerId, res.data.geo_info, 'pollution')
@@ -367,7 +364,6 @@
             layer.setMinZoom(7)
             layer2.setMinZoom(7)
             layer.on('click', e => {
-              console.log(e)
               this.setSelectLayer(buildGeoJSON(e.feature.geometry.coordinates))
               this.$set(this.tableOption.rowSelection.selectedRowKeys, 0, e.feature.properties.id)
               // MapScene.getLayerByName(layerId).setSelect(e.featureId)
@@ -480,13 +476,12 @@
       loadLayer (layerId) {
         GetDataByLayer(layerId).then(res => {
           if (res) {
-            console.log('===res:')
+            console.log('===res:333')
             this.renderLayer(layerId, res)
           }
         })
       },
       toggleLayer (layerId, isShow = true, externalLayer = false) {
-        console.log('toggle:', layerId, isShow)
         const layerGroup = this.layerData.existLayerGroup[layerId]
         if (isShow) {
           if (!layerGroup.baseLayer && !layerGroup.markerLayer) {
@@ -539,7 +534,6 @@
         if (!this.layerData.existLayerGroup[layer.id]) {
           this.layerData.existLayerGroup[layer.id] = {}
         }
-        console.log(this.layerData.existLayerGroup)
         for (const key in this.layerData.existLayerGroup) {
           this.toggleLayer(parseInt(key), this.layerData.showLayerBtns.includes(parseInt(key)), layer.externalLayer)
         }
@@ -637,7 +631,7 @@
             cityBoundaryLine.setMaxZoom(9)
             scene.addLayer(cityBoundaryLine)
           })
-          //todo 删除 选中南京
+          // todo 删除 选中南京
           // loadNJWFS({
           //   service: 'WFS',
           //   version: '1.0.0',
@@ -838,7 +832,6 @@
       }
     },
     mounted () {
-      console.log(this.$refs.map.getScene())
     }
   }
 </script>
@@ -857,7 +850,7 @@
     right: 50%;
     bottom: 5%;
     transform: translateX(50%);
-    z-index: 9999;
+    z-index: 999;
     display: flex;
     justify-content: flex-start;
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.4);
@@ -907,7 +900,7 @@
     position: absolute;
     right: 0;
     height: 80%;
-    z-index: 9999;
+    z-index: 999;
     transform: scaleX(0.8);
     border-left: 1px solid #E5E9ED;
   }
