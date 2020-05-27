@@ -45,6 +45,18 @@ export const asyncRouterMap = [
             name: 'ArchivesInfoManagement',
             component: () => import('@/views/archivesInfoManagement/index.vue'),
             meta: { title: '档案信息管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/info-manage/getWaterManagement',
+            name: 'getWaterManagement',
+            component: () => import('@/views/getWaterManagement/index.vue'),
+            meta: { title: '取水口管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/info-manage/waterFunManagement',
+            name: 'waterFunManagement',
+            component: () => import('@/views/waterFunManagement/index.vue'),
+            meta: { title: '水功能管理', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },
