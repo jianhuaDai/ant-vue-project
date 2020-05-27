@@ -40,7 +40,9 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="经纬度" prop="name" ref="name">
-                <a-input v-model="form.name" />
+                <a-input v-model="form.location" disabled>
+                  <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -100,7 +102,8 @@
                   class="avatar-uploader"
                   :show-upload-list="false"
                   accept=".png,.jpg,.bmp"
-                  :headers="{'Content-Type': 'multipart/form-data'}">
+                  :headers="{ 'Content-Type': 'multipart/form-data' }"
+                >
                   <img width="100" height="100" v-if="form.imageUrl" :src="form.imageUrl" alt="avatar" />
                   <div v-else>
                     <a-button> <a-icon type="upload" /> </a-button>
@@ -129,11 +132,27 @@
         <a-button type="primary" @click="handleOk">保存</a-button>
       </template>
     </a-modal>
+    <div
+      id="distance"
+      class="distance-container"
+      v-show="showMapDom"></div>
+    <div
+      class="add-mask"
+      v-show="showMapDom"></div>
+    <div class="add-map-box" v-if="showMapDom">
+      <div id="add-map" class="map-view" style="width:100%;height:428px"></div>
+      <div class="add-map-submit">
+        <a-button class="add-map-submit-btn" type="primary" @click="AddDraw" :disabled="!lat">确定</a-button>
+        <a-button class="add-map-submit-btn" @click="cancelAddDraw">取消</a-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // import { saveEmploy } from '../../../../api/manage'
+import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
+import mapboxgl from 'mapbox-gl'
 import { options } from '../data.js'
 import { uploadSingle } from '@/api/upload'
 export default {
@@ -145,6 +164,9 @@ export default {
   },
   data () {
     return {
+      lng: '',
+      lat: '',
+      showMapDom: false,
       getWaterMethods: [],
       scaleTypes: [],
       purposes: [],
@@ -162,7 +184,8 @@ export default {
         principal: '',
         participant: '',
         progress: '',
-        imageUrl: ''
+        imageUrl: '',
+        location: '1, 1'
       },
       loading: false,
       rules: {
@@ -174,7 +197,6 @@ export default {
       layout: 'horizontal',
       visible: false,
       options: options
-
     }
   },
   watch: {
@@ -182,8 +204,47 @@ export default {
       this.treeData = this.buildTreeData(value, [])
     }
   },
-  mounted () {},
+  created () {
+  },
   methods: {
+    initMap () {
+      const map = new mapboxgl.Map({
+        container: 'add-map',
+        style: Style.chiefStyle,
+        pitch: 0,
+        attributionControl: false,
+        center: [118.806266, 32.059868],
+        zoom: 5,
+        minZoom: 6,
+        maxZoom: 10,
+        token: MAPBOX_TOKEN
+      })
+      var marker = new mapboxgl.Marker({
+        draggable: true
+      })
+      // 地图导航
+      var _this = this
+      var nav = new mapboxgl.NavigationControl()
+      map.addControl(nav, 'top-left')
+      map.on('click', function (e) {
+        _this.lng = e.lngLat.lng.toFixed(6)
+        _this.lat = e.lngLat.lat.toFixed(6)
+        marker.setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map)
+      })
+    },
+    AddDraw () {
+      this.form.location = this.lng + ', ' + this.lat
+      this.showMapDom = false
+    },
+    cancelAddDraw () {
+      this.showMapDom = false
+    },
+    showMap () {
+      this.showMapDom = true
+      setTimeout(() => {
+        this.initMap()
+      }, 500)
+    },
     customRequest (data) {
       const formData = new FormData()
       formData.append('file', data.file)
@@ -254,5 +315,23 @@ export default {
       color: #999;
     }
   }
+}
+.add-map-box {
+  position: fixed;
+  width: 648px;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px 20px 0;
+  z-index: 4000;
+}
+.add-map-submit {
+  height: 52px;
+  padding: 10px 0 0;
+}
+.add-map-submit-btn {
+  float: right;
+  margin-left: 20px;
 }
 </style>
