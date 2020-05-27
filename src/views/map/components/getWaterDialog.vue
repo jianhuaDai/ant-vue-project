@@ -1,66 +1,7 @@
 <template>
   <div class="detail-box">
     <div>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">取水口编号:</div>
-          <div class="item-content">{{ infoDetail.line_name }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">取水口名称:</div>
-          <div class="item-content">{{ infoDetail.line_num }}</div>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">位置:</div>
-          <div class="item-content">{{ infoDetail.management_unit }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">所属区域:</div>
-          <div class="item-content">{{ infoDetail.location_info }}</div>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">经纬度:</div>
-          <div class="item-content">{{ this.startPoint }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">取水量:</div>
-          <div class="item-content">111T</div>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">取水方式:</div>
-          <div class="item-content">{{ infoDetail.line_length }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">取水水源类型:</div>
-          <div class="item-content"></div>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">取水用途:</div>
-          <div class="item-content">{{ infoDetail.line_length }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">规模类型:</div>
-          <div class="item-content"></div>
-        </a-col>
-      </a-row>
-      <a-row :gutter="24">
-        <a-col :span="12">
-          <div class="item-title">供水范围:</div>
-          <div class="item-content">{{ infoDetail.line_length }}</div>
-        </a-col>
-        <a-col :span="12">
-          <div class="item-title">开始取水时间:</div>
-          <div class="item-content"></div>
-        </a-col>
-      </a-row>
+      <getWaterDialogAttribute :infoDetail="infoDetail"></getWaterDialogAttribute>
       <p class="chart-title">取水口取水量同比</p>
       <div style="width: 100%; height: 300px;" id="waterChart"></div>
     </div>
@@ -68,9 +9,10 @@
 </template>
 <script>
 import { getHehuanxian } from '@/api/inforserve'
+import getWaterDialogAttribute from './getWaterDialogAttribute.vue'
 var echarts = require('echarts/lib/echarts')
 export default {
-  components: {},
+  components: { getWaterDialogAttribute },
   props: {
     id: {
       type: String,
@@ -246,25 +188,16 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.detail-box {
+.detail-box ::v-deep {
   width: 100%;
-}
-.title-detail {
-  height: 50px;
-  width: 100%;
-  text-align: center;
-  line-height: 50px;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.item-title {
-  float: left;
-  width: 110px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #232C3D;
+  .item-title {
+    float: left;
+    width: 110px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #232c3d;
+  }
 }
 .chart-title {
   margin: 0 0 0 10px;
