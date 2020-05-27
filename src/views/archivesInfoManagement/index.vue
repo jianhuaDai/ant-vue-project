@@ -2,10 +2,7 @@
   <div class="main-view">
     <a-row class="row" :gutter="24">
       <a-col :span="4" class="left-tree-area">
-        <a-tree
-          v-model="checkedKeys"
-          :tree-data="treeData"
-        />
+        <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
       </a-col>
       <a-col :span="20">
         <a-card :bordered="false">
@@ -53,11 +50,12 @@ import { STable, Ellipsis } from '@/components'
 import { treeData } from './data.js'
 import RiverAndStall from './components/riverAndStall'
 import RiverAndPolicy from './components/riverAndPolicy'
-
+import AreaTree from '@com/Hczy/AreaTree.vue'
 export default {
   name: 'ArchivesInfoManagement',
-  components: { STable, Ellipsis, RiverAndStall, RiverAndPolicy },
+  components: { STable, Ellipsis, RiverAndStall, RiverAndPolicy, AreaTree },
   methods: {
+    getSelectNode (node) {},
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
