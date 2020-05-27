@@ -47,6 +47,24 @@ export const asyncRouterMap = [
             meta: { title: '档案信息管理', keepAlive: true, permission: ['dashboard'] }
           },
           {
+            path: '/info-manage/sourcemanage',
+            name: 'sourcemanage',
+            component: () => import('@/views/sourcemanage/sourcemanage'),
+            meta: { title: '污染源管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/info-manage/areamanage',
+            name: 'areamanage',
+            component: () => import('@/views/areamanage/areamanage'),
+            meta: { title: '区域管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/info-manage/riverlakemanage',
+            name: 'riverlakemanage',
+            component: () => import('@/views/riverlakemanage/riverlakemanage'),
+            meta: { title: '河湖资源管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
             path: '/info-manage/getWaterManagement',
             name: 'getWaterManagement',
             component: () => import('@/views/getWaterManagement/index.vue'),
