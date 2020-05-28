@@ -5,18 +5,13 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务名称" style="margin-bottom: 0">
-                <a-input v-model="queryParam.name" placeholder=""/>
+              <a-form-item label="功能区名称" style="margin-bottom: 0">
+                <a-input v-model="queryParam.name" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务状态" style="margin-bottom: 0">
-                <a-select v-model="queryParam.status" placeholder="请选择" :default-value="0">
-                  <a-select-option value="">全部</a-select-option>
-                  <a-select-option :value="1">未制定方案</a-select-option>
-                  <a-select-option :value="2">已制定方案</a-select-option>
-                  <a-select-option :value="3">已完成</a-select-option>
-                </a-select>
+              <a-form-item label="级别类型" style="margin-bottom: 0">
+                <a-cascader :options="options" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -34,27 +29,18 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.id"
+        :rowKey="record => record.id"
         :columns="columns"
         :data="loadData"
         showPagination="auto"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
         <span slot="name" slot-scope="text, record">
           <a @click="goTo(record)">{{ text }}</a>
         </span>
 
         <span slot="action" slot-scope="text, record, index">
           <template>
-            <a @click="()=>{}" v-show="record.publish !== '1'" v-html="'&emsp;发布'"></a>
-            <span style="font-size: 14px" v-show="record.publish === '1'">已发布</span>
-            <a-divider type="vertical" />
-            <a @click="handleEditOrNew(record)">编辑</a>
+            <a @click="handleEditOrNew(record)">修改</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>
@@ -65,115 +51,54 @@
 </template>
 
 <script>
-  import PageView from '../../layouts/PageView'
-  import { STable, Ellipsis } from '@/components'
-  import { getTasks } from '@/api/task'
-  import AddModule from './modules/addModule'
-
-  const statusMap = {
-    1: {
-      status: 'default',
-      text: '未制定方案'
-    },
-    2: {
-      status: 'processing',
-      text: '已制定方案'
-    },
-    3: {
-      status: 'success',
-      text: '已完成'
-    }
-  }
-
-  export default {
-    name: 'Task',
-    components: { PageView, STable, Ellipsis, AddModule },
-    methods: {
-      goTo (record) {
-        this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+import PageView from '../../layouts/PageView'
+import { STable, Ellipsis } from '@/components'
+import { getTasks } from '@/api/getWater'
+import AddModule from './modules/addModule'
+import { options } from './data.js'
+import { columns } from './columns.js'
+export default {
+  name: 'Task',
+  components: { PageView, STable, Ellipsis, AddModule },
+  data () {
+    return {
+      queryParam: {
+        name: '',
+        status: ''
       },
-      resetQuery () {
-        this.queryParam.status = ''
-        this.$refs.table.refresh(true)
-      },
-      handleEditOrNew (record) {
-        this.$refs.taskModule.showModal(record)
-      },
-      handleDel (record) {
-        this.$confirm({
-          title: '删除操作',
-          content: `确定要删除${record.name}吗`,
-          onOk () {
-          },
-          onCancel () {
-          }
+      columns,
+      loadData: parameter => {
+        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+          return res.data
         })
-      }
-    },
-    created () {
-    },
-    data () {
-      return {
-        queryParam: {
-          name: '',
-          status: ''
-        },
-        columns: [
-          {
-            title: '#',
-            scopedSlots: { customRender: 'serial' }
-          },
-          {
-            title: '任务名称',
-            dataIndex: 'name',
-            scopedSlots: { customRender: 'name' }
-          },
-          {
-            title: '任务地点',
-            dataIndex: 'site'
-          },
-          {
-            title: '负责人',
-            dataIndex: 'principal'
-          },
-          {
-            title: '任务状态',
-            dataIndex: 'status',
-            scopedSlots: { customRender: 'status' }
-          },
-          {
-            title: '创建时间',
-            dataIndex: 'create_at',
-            sorter: true
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            width: '160px',
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        loadData: parameter => {
-          return getTasks(Object.assign(parameter, this.queryParam))
-            .then(res => {
-              return res.data
-            })
-        },
-        selectedRowKeys: [],
-        selectedRows: []
-
-      }
-    },
-    filters: {
-      statusFilter (type) {
-        return statusMap[type].text
       },
-      statusTypeFilter (type) {
-        return statusMap[type].status
-      }
+      selectedRowKeys: [],
+      selectedRows: [],
+      options: options
     }
-  }
+  },
+  methods: {
+    goTo (record) {
+      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+    },
+    resetQuery () {
+      this.queryParam.status = ''
+      this.$refs.table.refresh(true)
+    },
+    handleEditOrNew (record) {
+      this.$refs.taskModule.showModal(record)
+    },
+    handleDel (record) {
+      this.$confirm({
+        title: '删除操作',
+        content: `确定要删除${record.name}吗`,
+        onOk () {},
+        onCancel () {}
+      })
+    }
+  },
+  created () {},
+  filters: {}
+}
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

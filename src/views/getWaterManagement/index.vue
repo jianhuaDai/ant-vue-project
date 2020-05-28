@@ -5,18 +5,13 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务名称" style="margin-bottom: 0">
+              <a-form-item label="所属区域" style="margin-bottom: 0">
                 <a-input v-model="queryParam.name" placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务状态" style="margin-bottom: 0">
-                <a-select v-model="queryParam.status" placeholder="请选择" :default-value="0">
-                  <a-select-option value="">全部</a-select-option>
-                  <a-select-option :value="1">未制定方案</a-select-option>
-                  <a-select-option :value="2">已制定方案</a-select-option>
-                  <a-select-option :value="3">已完成</a-select-option>
-                </a-select>
+              <a-form-item label="取水口名称" style="margin-bottom: 0">
+                <a-input v-model="queryParam.status" placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -29,7 +24,7 @@
         </a-form>
       </div>
     </a-card>
-    <a-card :bordered="false" style="margin-top: 12px" title="任务列表">
+    <a-card :bordered="false" style="margin-top: 12px" title="查询列表">
       <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">添加任务</a-button>
       <s-table
         ref="table"
@@ -39,22 +34,13 @@
         :data="loadData"
         showPagination="auto"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
         <span slot="name" slot-scope="text, record">
           <a @click="goTo(record)">{{ text }}</a>
         </span>
 
-        <span slot="action" slot-scope="text, record, index">
+        <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="()=>{}" v-show="record.publish !== '1'" v-html="'&emsp;发布'"></a>
-            <span style="font-size: 14px" v-show="record.publish === '1'">已发布</span>
-            <a-divider type="vertical" />
-            <a @click="handleEditOrNew(record)">编辑</a>
+            <a @click="handleEditOrNew(record)">修改</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>
@@ -67,26 +53,70 @@
 <script>
   import PageView from '../../layouts/PageView'
   import { STable, Ellipsis } from '@/components'
-  import { getTasks } from '@/api/task'
+  import { getTasks } from '@/api/getWater'
   import AddModule from './modules/addModule'
-
-  const statusMap = {
-    1: {
-      status: 'default',
-      text: '未制定方案'
-    },
-    2: {
-      status: 'processing',
-      text: '已制定方案'
-    },
-    3: {
-      status: 'success',
-      text: '已完成'
-    }
-  }
 
   export default {
     name: 'Task',
+        data () {
+      return {
+        queryParam: {
+          name: '',
+          status: ''
+        },
+        columns: [
+          {
+            title: '取水口名称',
+            dataIndex: 'name',
+            scopedSlots: { customRender: 'name' }
+          },
+          {
+            title: '取水流量',
+            dataIndex: 'site'
+          },
+          {
+            title: '所属水源地',
+            dataIndex: 'principal'
+          },
+          {
+            title: '经纬度',
+            dataIndex: 'create_at'
+          },
+          {
+            title: '是否为引调水工程取水口',
+            dataIndex: 'is1'
+          },
+          {
+            title: '取水方式',
+            dataIndex: 'is2'
+          },
+          {
+            title: '所属区域',
+            dataIndex: 'is3'
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            width: '160px',
+            scopedSlots: { customRender: 'action' }
+          }
+        ],
+        loadData: parameter => {
+          return getTasks(Object.assign(parameter, this.queryParam))
+            .then(res => {
+              res.data.list = res.data.list.map((item, index) => {
+                return {
+                  ...item,
+                  id: index + 1
+                }
+              })
+              return res.data
+            })
+        },
+        selectedRowKeys: [],
+        selectedRows: []
+      }
+    },
     components: { PageView, STable, Ellipsis, AddModule },
     methods: {
       goTo (record) {
@@ -111,66 +141,6 @@
       }
     },
     created () {
-    },
-    data () {
-      return {
-        queryParam: {
-          name: '',
-          status: ''
-        },
-        columns: [
-          {
-            title: '#',
-            scopedSlots: { customRender: 'serial' }
-          },
-          {
-            title: '任务名称',
-            dataIndex: 'name',
-            scopedSlots: { customRender: 'name' }
-          },
-          {
-            title: '任务地点',
-            dataIndex: 'site'
-          },
-          {
-            title: '负责人',
-            dataIndex: 'principal'
-          },
-          {
-            title: '任务状态',
-            dataIndex: 'status',
-            scopedSlots: { customRender: 'status' }
-          },
-          {
-            title: '创建时间',
-            dataIndex: 'create_at',
-            sorter: true
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            width: '160px',
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        loadData: parameter => {
-          return getTasks(Object.assign(parameter, this.queryParam))
-            .then(res => {
-              return res.data
-            })
-        },
-        selectedRowKeys: [],
-        selectedRows: []
-
-      }
-    },
-    filters: {
-      statusFilter (type) {
-        return statusMap[type].text
-      },
-      statusTypeFilter (type) {
-        return statusMap[type].status
-      }
     }
   }
 </script>
