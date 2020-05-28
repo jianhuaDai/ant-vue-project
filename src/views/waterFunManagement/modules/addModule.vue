@@ -46,8 +46,12 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item>
-                &nbsp;''
+              <a-form-model-item label="水体类型" prop="name" ref="name">
+                <a-select v-model="form.name">
+                  <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -64,15 +68,6 @@
             <a-col :span="12">
               <a-form-model-item label="是否达标" prop="name" ref="name">
                 <a-switch checked-children="开" un-checked-children="关" default-checked />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="水体类型" prop="name" ref="name">
-                <a-select v-model="form.name">
-                  <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -104,7 +99,7 @@
                   accept=".png,.jpg,.bmp"
                   :headers="{ 'Content-Type': 'multipart/form-data' }"
                 >
-                  <img width="100" height="100" v-if="form.imageUrl" :src="form.imageUrl" alt="avatar" />
+                  <img width="100" height="100" v-if="showImage" :src="form.imageUrl" alt="avatar" />
                   <div v-else>
                     <a-button> <a-icon type="upload" /> </a-button>
                   </div>
@@ -166,6 +161,7 @@ export default {
     return {
       lng: '',
       lat: '',
+      showImage: false,
       showMapDom: false,
       getWaterMethods: [],
       scaleTypes: [],
@@ -202,6 +198,13 @@ export default {
   watch: {
     orgData (value) {
       this.treeData = this.buildTreeData(value, [])
+    },
+    'form': {
+      handler (value) {
+        console.log(value.imageUrl, 'pppppp')
+        this.showImage = value.imageUrl
+      },
+      deep: true
     }
   },
   created () {
@@ -250,7 +253,7 @@ export default {
       formData.append('file', data.file)
       uploadSingle(formData)
         .then(res => {
-          this.form.imageUrl = res.data
+          this.$set(this.form, 'imageUrl', res.data)
         })
         .catch(() => {})
       this.fileList = [data.file]
