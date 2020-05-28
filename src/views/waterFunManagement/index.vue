@@ -11,7 +11,7 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="级别类型" style="margin-bottom: 0">
-                <a-cascader :options="options" placeholder=""/>
+                <a-cascader :options="options" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -56,9 +56,27 @@ import { STable, Ellipsis } from '@/components'
 import { getTasks } from '@/api/getWater'
 import AddModule from './modules/addModule'
 import { options } from './data.js'
+import { columns } from './columns.js'
 export default {
   name: 'Task',
   components: { PageView, STable, Ellipsis, AddModule },
+  data () {
+    return {
+      queryParam: {
+        name: '',
+        status: ''
+      },
+      columns,
+      loadData: parameter => {
+        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+          return res.data
+        })
+      },
+      selectedRowKeys: [],
+      selectedRows: [],
+      options: options
+    }
+  },
   methods: {
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
@@ -80,59 +98,6 @@ export default {
     }
   },
   created () {},
-  data () {
-    return {
-      queryParam: {
-        name: '',
-        status: ''
-      },
-      columns: [
-        {
-          title: '功能区名称',
-          dataIndex: 'name',
-          scopedSlots: { customRender: 'name' }
-        },
-        {
-          title: '级别',
-          dataIndex: 'site'
-        },
-        {
-          title: '类型',
-          dataIndex: 'principal'
-        },
-        {
-          title: '经纬度',
-          dataIndex: 'create_at'
-        },
-        {
-          title: '是否为考核水功能区',
-          dataIndex: 'a1'
-        },
-        {
-          title: '水质目标',
-          dataIndex: 'a2'
-        },
-        {
-          title: '所属区域',
-          dataIndex: 'a3'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          width: '160px',
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      loadData: parameter => {
-        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
-          return res.data
-        })
-      },
-      selectedRowKeys: [],
-      selectedRows: [],
-      options: options
-    }
-  },
   filters: {}
 }
 </script>
