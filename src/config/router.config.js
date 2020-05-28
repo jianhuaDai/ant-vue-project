@@ -35,10 +35,10 @@ export const asyncRouterMap = [
         meta: { title: '信息管理', icon: infoManage, iconSelected: infoManageSelected, permission: ['dashboard'] },
         children: [
           {
-            path: '/info-manage/task',
-            name: 'TaskList',
-            component: () => import('@/views/task/Task'),
-            meta: { title: 'STable Example', keepAlive: true, permission: ['dashboard'] }
+            path: '/info-manage/chief',
+            name: 'ChiefList',
+            component: () => import('@/views/chief-manage/index'),
+            meta: { title: '河湖长信息管理', keepAlive: true, permission: ['dashboard'] }
           },
           {
             path: '/info-manage/archivesInfoManagement',
