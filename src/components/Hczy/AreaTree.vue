@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tree">
     <a-tree
       :tree-data="treeData"
       :replace-fields="replaceFields"
@@ -29,4 +29,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.tree {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+</style>

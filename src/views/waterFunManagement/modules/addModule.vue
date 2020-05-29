@@ -201,7 +201,6 @@ export default {
     },
     'form': {
       handler (value) {
-        console.log(value.imageUrl, 'pppppp')
         this.showImage = value.imageUrl
       },
       deep: true

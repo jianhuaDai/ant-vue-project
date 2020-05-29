@@ -10,9 +10,6 @@
         :data="loadData"
         showPagination="true"
       >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
@@ -87,10 +84,6 @@ export default {
         status: ''
       },
       columns: [
-        {
-          title: '序号',
-          scopedSlots: { customRender: 'serial' }
-        },
         {
           title: '河湖名称',
           dataIndex: 'name',

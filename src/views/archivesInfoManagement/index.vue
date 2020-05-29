@@ -1,6 +1,6 @@
 <template>
   <div class="main-view">
-    <a-row class="row" :gutter="10">
+    <a-row class="row" :gutter="16" style="margin-left: -2px;">
       <a-col :span="4" class="left-tree-area">
         <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
       </a-col>
