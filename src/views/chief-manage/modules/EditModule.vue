@@ -3,52 +3,96 @@
     <a-modal
       v-model="visible"
       @ok="handleOk"
-      width="40%"
+      width="70%"
       :title="title"
       :confirmLoading="confirmLoading"
     >
       <a-spin :spinning="confirmLoading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-form-model-item
-            label="任务名称"
-            prop="name"
-            ref="name"
-            @blur="() => {$refs.name.onFieldBlur()}">
-            <a-input v-model="form.name"/>
-          </a-form-model-item>
-          <a-form-model-item label="任务地点" prop="site" ref="address" @blur="() => {$refs.address.onFieldBlur()}">
-            <a-input v-model="form.site"/>
-          </a-form-model-item>
-          <a-form-model-item label="负责人" prop="principal" ref="leader" @blur="() => {$refs.leader.onFieldBlur()}">
-            <a-input v-model="form.principal"/>
-          </a-form-model-item>
-          <a-form-model-item
-            label="参与人员"
-            prop="participant"
-            ref="participant"
-            @blur="() => {$refs.participant.onFieldBlur()}">
-            <!--            <a-input v-model="form.participant"/>-->
-            <a-select
-              mode="multiple"
-              v-model="form.participant"
-              style="width: 100%"
-              placeholder="请选择参与人员"
-            >
-              <a-select-option :key="item.id" v-for="item in participantData">
-                {{item.name}}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item label="任务进展">
-            <a-input v-model="form.progress"/>
-          </a-form-model-item>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                label="任务名称"
+                prop="name"
+                ref="name"
+                @blur="() => {$refs.name.onFieldBlur()}">
+                <a-input v-model="form.name"/>
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="任务地点"
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                prop="site"
+                ref="address"
+                @blur="() => {$refs.address.onFieldBlur()}">
+                <a-input v-model="form.site"/>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="负责人"
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                prop="principal"
+                ref="leader"
+                @blur="() => {$refs.leader.onFieldBlur()}">
+                <a-input v-model="form.principal"/>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="参与人员"
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                prop="participant"
+                ref="participant"
+                @blur="() => {$refs.participant.onFieldBlur()}">
+                <!--            <a-input v-model="form.participant"/>-->
+                <a-select
+                  mode="multiple"
+                  v-model="form.participant"
+                  style="width: 100%"
+                  placeholder="请选择参与人员"
+                >
+                  <a-select-option :key="item.id" v-for="item in participantData">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                label="任务进展">
+                <a-input v-model="form.progress"/>
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                :label-col="{span:6}"
+                :wrapper-col="{span:18}"
+                label="任务进展">
+                <a-input v-model="form.progress"/>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
         </a-form-model>
       </a-spin>
 
       <template slot="footer">
         <a-button @click="()=>{this.visible=false}">取消</a-button>
         <a-button type="primary" @click="handleOk">保存</a-button>
-        <a-button type="danger" @click="handleOk">发布</a-button>
       </template>
     </a-modal>
 

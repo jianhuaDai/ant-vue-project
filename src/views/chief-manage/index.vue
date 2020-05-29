@@ -10,14 +10,14 @@
         <a-card :bordered="false">
           <div class="table-page-search-wrapper">
             <a-form layout="inline">
-              <a-row :gutter="48">
+              <a-row :gutter="24">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="任务名称" style="margin-bottom: 0">
+                  <a-form-item label="姓名" style="margin-bottom: 0">
                     <a-input v-model="queryParam.name" placeholder=""/>
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="任务状态" style="margin-bottom: 0">
+                  <a-form-item label="河湖长类型" style="margin-bottom: 0">
                     <a-select v-model="queryParam.status" placeholder="请选择" :default-value="0">
                       <a-select-option value="">全部</a-select-option>
                       <a-select-option :value="1">未制定方案</a-select-option>
@@ -36,8 +36,8 @@
             </a-form>
           </div>
         </a-card>
-        <a-card :bordered="false" style="margin-top: 8px;height: calc(100% - 88px)"  title="查询列表">
-          <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">添加任务</a-button>
+        <a-card :bordered="false" style="margin-top: 8px;height: calc(100% - 88px)" title="查询列表">
+          <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">新增</a-button>
           <s-table
             ref="table"
             size="default"
@@ -46,27 +46,20 @@
             :data="loadData"
             showPagination="auto"
           >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
+            <span slot="serial" slot-scope="text, record, index">
+              {{ index + 1 }}
+            </span>
             <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
-            <span slot="name" slot-scope="text, record">
-          <a @click="goTo(record)">{{ text }}</a>
-        </span>
-
+              <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+            </span>
             <span slot="action" slot-scope="text, record, index">
-          <template>
-            <a @click="()=>{}" v-show="record.publish !== '1'" v-html="'&emsp;发布'"></a>
-            <span style="font-size: 14px" v-show="record.publish === '1'">已发布</span>
-            <a-divider type="vertical" />
-            <a @click="handleEditOrNew(record)">编辑</a>
-            <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
-          </template>
-        </span>
+              <template>
+                <a @click="handleEditOrNew(record)">编辑</a>
+                <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
+              </template>
+            </span>
           </s-table>
-          <task-module ref="taskModule"></task-module>
+          <edit-module ref="taskModule"></edit-module>
         </a-card>
       </a-col>
     </a-row>
@@ -77,8 +70,8 @@
   import PageView from '../../layouts/PageView'
   import { STable, Ellipsis } from '@/components'
   import { getTasks } from '@/api/task'
-  import TaskModule from './modules/TaskModule'
-  import AreaTree from "../../components/Hczy/AreaTree";
+  import EditModule from './modules/EditModule'
+  import AreaTree from '../../components/Hczy/AreaTree'
 
   const statusMap = {
     1: {
@@ -97,7 +90,7 @@
 
   export default {
     name: 'Task',
-    components: { PageView, STable, Ellipsis, TaskModule, AreaTree },
+    components: { PageView, STable, Ellipsis, EditModule, AreaTree },
     methods: {
       goTo (record) {
         this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
@@ -130,36 +123,36 @@
         },
         columns: [
           {
-            title: '#',
-            scopedSlots: { customRender: 'serial' }
+            title: '姓名',
+            dataIndex: 'name'
           },
           {
-            title: '任务名称',
-            dataIndex: 'name',
-            scopedSlots: { customRender: 'name' }
-          },
-          {
-            title: '任务地点',
+            title: '职位',
             dataIndex: 'site'
           },
           {
-            title: '负责人',
+            title: '所属单位',
             dataIndex: 'principal'
           },
           {
-            title: '任务状态',
-            dataIndex: 'status',
+            title: '级别',
+            dataIndex: 'level',
             scopedSlots: { customRender: 'status' }
           },
           {
-            title: '创建时间',
+            title: '联系电话',
             dataIndex: 'create_at',
             sorter: true
           },
           {
+            title: '状态',
+            dataIndex: 'status',
+            scopedSlots: { customRender: 'status' }
+          },
+          {
             title: '操作',
             dataIndex: 'action',
-            width: '160px',
+            width: '120px',
             scopedSlots: { customRender: 'action' }
           }
         ],
