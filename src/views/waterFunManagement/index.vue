@@ -25,7 +25,7 @@
       </div>
     </a-card>
     <a-card :bordered="false" style="margin-top: 12px" title="任务列表">
-      <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">添加任务</a-button>
+      <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">新增</a-button>
       <s-table
         ref="table"
         size="default"
