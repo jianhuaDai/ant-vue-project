@@ -24,30 +24,30 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name" ref="name">
-                <a-cascader :options="options" placeholder="Please select"/>
+              <a-form-model-item label="所属区域" prop="name2" ref="name">
+                <a-cascader :options="options" placeholder=""/>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="具体地址" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="具体地址" prop="name3" ref="name">
+                <a-input v-model="form.name3" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属水源地" prop="name" ref="name">
-                <a-cascader :options="options" placeholder="Please select"/>
+              <a-form-model-item label="所属水源地" prop="name4" ref="name">
+                <a-cascader :options="options" placeholder=""/>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name" ref="name">
+              <a-form-model-item label="经纬度" prop="name5" ref="name">
                 <a-input v-model="form.location" disabled>
                   <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
                 </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水方式" prop="name" ref="name">
-                <a-select v-model="form.name">
+              <a-form-model-item label="取水方式" prop="name6" ref="name">
+                <a-select v-model="form.name4">
                   <a-select-option v-for="item in getWaterMethods" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
@@ -55,8 +55,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水流量" prop="name" ref="name">
-                <a-input v-model="form.name">
+              <a-form-model-item label="取水流量" prop="name7" ref="name">
+                <a-input v-model="form.name5">
                   <template slot="addonAfter">
                     m³/s
                   </template>
@@ -66,7 +66,7 @@
             <a-col :span="12">
               <a-form-model-item
                 label="是否为引调水工程取水口"
-                prop="name"
+                prop="name8"
                 ref="name"
                 :labelCol="{ span: 12 }"
                 :wrapperCol="{ span: 10, offset: 1 }"
@@ -75,13 +75,13 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="引调水工程名称" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="引调水工程名称" prop="name9" ref="name">
+                <a-input v-model="form.name9" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="规模类型" prop="name" ref="name">
-                <a-select v-model="form.name">
+              <a-form-model-item label="规模类型" prop="name10" ref="name">
+                <a-select v-model="form.name10">
                   <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
@@ -89,13 +89,13 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水口工程名称" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="取水口工程名称" prop="name11" ref="name">
+                <a-input v-model="form.name11" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="主要取水用途" prop="name" ref="name">
-                <a-select v-model="form.name">
+              <a-form-model-item label="主要取水用途" prop="name12" ref="name">
+                <a-select v-model="form.name12">
                   <a-select-option v-for="item in purposes" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
@@ -103,22 +103,28 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水许可证编号" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="取水许可证编号" prop="name13" ref="name">
+                <a-input v-model="form.name13" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="供水范围" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="供水范围" prop="name14" ref="name">
+                <a-input v-model="form.name14" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="开始取水时间" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="开始取水时间" prop="name15" ref="name">
+                <a-date-picker
+                  v-model="form.date1"
+                  show-time
+                  type="date"
+                  placeholder=""
+                  style="width: 100%;"
+                />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="图片" prop="name" ref="name">
+              <a-form-model-item label="图片" prop="name16" ref="name16">
                 <a-upload
                   :customRequest="customRequest"
                   :fileList="fileList"
@@ -135,8 +141,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="备注" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="备注" prop="name17" ref="name">
+                <a-input v-model="form.name17" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -207,7 +213,7 @@ export default {
         location: ''
       },
       rules: {
-        name: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '取水口名称不能为空', trigger: 'blur' }],
         site: [{ required: true, message: '地点不能为空', trigger: 'blur' }],
         principal: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
         participant: [{ required: true, message: '参与人不能为空', trigger: 'blur' }]

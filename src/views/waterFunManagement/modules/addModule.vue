@@ -24,30 +24,30 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name" ref="name">
+              <a-form-model-item label="所属区域" prop="name2" ref="name">
                 <a-cascader :options="options" placeholder="" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="位置" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="位置" prop="name3" ref="name">
+                <a-input v-model="form.name3" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="级别类型" prop="name" ref="name">
+              <a-form-model-item label="级别类型" prop="name4" ref="name">
                 <a-cascader :options="options" placeholder="" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name" ref="name">
+              <a-form-model-item label="经纬度" prop="name5" ref="name">
                 <a-input v-model="form.location" disabled>
                   <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
                 </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="水体类型" prop="name" ref="name">
-                <a-select v-model="form.name">
+              <a-form-model-item label="水体类型" prop="name6" ref="name">
+                <a-select v-model="form.name6">
                   <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
@@ -57,7 +57,7 @@
             <a-col :span="12">
               <a-form-model-item
                 label="是否为考核水功能区"
-                prop="name"
+                prop="name7"
                 ref="name"
                 :labelCol="{ span: 12 }"
                 :wrapperCol="{ span: 10 }"
@@ -66,18 +66,18 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="是否达标" prop="name" ref="name">
+              <a-form-model-item label="是否达标" prop="name8" ref="name">
                 <a-switch checked-children="开" un-checked-children="关" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="水质目标" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="水质目标" prop="name9" ref="name">
+                <a-input v-model="form.name9" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="断面名称" prop="name" ref="name">
-                <a-select v-model="form.name">
+              <a-form-model-item label="断面名称" prop="name10" ref="name">
+                <a-select v-model="form.name10">
                   <a-select-option v-for="item in purposes" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
@@ -85,12 +85,12 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="长度/面积" prop="name" ref="name">
-                <a-input v-model="form.name" />
+              <a-form-model-item label="长度/面积" prop="name11" ref="name">
+                <a-input v-model="form.name11" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="图片" prop="name" ref="name">
+              <a-form-model-item label="图片" prop="name12" ref="name">
                 <a-upload
                   :customRequest="customRequest"
                   :fileList="fileList"
@@ -107,8 +107,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="备注" prop="name" ref="name">
-                <a-input type="textarea" v-model="form.name" />
+              <a-form-model-item label="备注" prop="name13" ref="name">
+                <a-input type="textarea" v-model="form.name13" />
               </a-form-model-item>
             </a-col>
           </a-row>
