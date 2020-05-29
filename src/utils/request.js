@@ -23,14 +23,14 @@ const err = (error) => {
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+        message: '提示',
+        description: '认证过期请重新登录'
       })
       if (token) {
         store.dispatch('Logout').then(() => {
           setTimeout(() => {
             window.location.reload()
-          }, 1500)
+          }, 1000)
         })
       }
     }

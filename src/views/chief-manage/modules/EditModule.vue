@@ -3,87 +3,65 @@
     <a-modal
       v-model="visible"
       @ok="handleOk"
-      width="70%"
+      width="40%"
       :title="title"
       :confirmLoading="confirmLoading"
     >
       <a-spin :spinning="confirmLoading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-row :gutter="24">
-            <a-col :md="12" :sm="24">
+            <a-col :md="24" :sm="24">
               <a-form-model-item
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                label="任务名称"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}"
+                label="人员"
                 prop="name"
-                ref="name"
-                @blur="() => {$refs.name.onFieldBlur()}">
-                <a-input v-model="form.name"/>
+                ref="name">
+                <a-tree-select
+                  v-model="form.name"
+                  tree-data-simple-mode
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                  :tree-data="treeData"
+                  placeholder="请选择人员"
+                  :load-data="onLoadData"/>
               </a-form-model-item>
             </a-col>
-            <a-col :md="12" :sm="24">
+            <a-col :md="24" :sm="24">
               <a-form-model-item
-                label="任务地点"
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                prop="site"
-                ref="address"
-                @blur="() => {$refs.address.onFieldBlur()}">
-                <a-input v-model="form.site"/>
+                label="河湖"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}"
+                prop="river">
+                <a-tree-select
+                  v-model="form.river"
+                  tree-data-simple-mode
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                  :tree-data="riverData"
+                  placeholder="请选择河湖"
+                  :load-data="onLoadData"/>
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :md="12" :sm="24">
+            <a-col :md="24" :sm="24">
               <a-form-model-item
-                label="负责人"
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                prop="principal"
-                ref="leader"
-                @blur="() => {$refs.leader.onFieldBlur()}">
-                <a-input v-model="form.principal"/>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :md="12" :sm="24">
-              <a-form-model-item
-                label="参与人员"
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                prop="participant"
-                ref="participant"
-                @blur="() => {$refs.participant.onFieldBlur()}">
-                <!--            <a-input v-model="form.participant"/>-->
+                label="河长级别"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}"
+                prop="level"
+                ref="level">
                 <a-select
                   mode="multiple"
-                  v-model="form.participant"
+                  v-model="form.level"
                   style="width: 100%"
-                  placeholder="请选择参与人员"
+                  placeholder="请选择河长级别"
                 >
-                  <a-select-option :key="item.id" v-for="item in participantData">
+                  <a-select-option :key="item.id" v-for="item in levelData">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :md="12" :sm="24">
-              <a-form-model-item
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                label="任务进展">
-                <a-input v-model="form.progress"/>
-              </a-form-model-item>
-            </a-col>
-            <a-col :md="12" :sm="24">
-              <a-form-model-item
-                :label-col="{span:6}"
-                :wrapper-col="{span:18}"
-                label="任务进展">
-                <a-input v-model="form.progress"/>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -111,19 +89,38 @@
     },
     data () {
       return {
-        participantData: [
+        treeData: [
+          { id: 1, pId: 0, value: '1', title: '省河长办公室', selectable: false, isLeaf: false },
+          { id: 2, pId: 0, value: '2', title: '市河长办公室', selectable: false, isLeaf: false },
+          { id: 3, pId: 0, value: '3', title: '区河长办公室', selectable: false, isLeaf: false }
+        ],
+        riverData: [
+          { id: 1, pId: 0, value: '1', title: '河流', selectable: false, isLeaf: false },
+          { id: 2, pId: 0, value: '2', title: '河段', selectable: false, isLeaf: false },
+          { id: 3, pId: 0, value: '3', title: '湖泊', selectable: false, isLeaf: false }
+        ],
+        levelData: [
           {
             id: 1,
-            name: '李明'
+            name: '国家级'
           }, {
             id: 2,
-            name: '方楠'
+            name: '省级'
           }, {
             id: 3,
-            name: '史青'
+            name: '市级'
+          }, {
+            id: 4,
+            name: '县级'
+          }, {
+            id: 5,
+            name: '乡镇级'
+          }, {
+            id: 6,
+            name: '村级'
           }
         ],
-        title: '新建',
+        title: '新增',
         labelCol: { span: 4 },
         wrapperCol: { span: 18 },
         status: true,
@@ -131,23 +128,18 @@
         form: {
           id: '',
           name: '',
-          site: '',
-          principal: '',
-          participant: '',
-          progress: ''
+          river: '',
+          level: ''
         },
         rules: {
           name: [
-            { required: true, message: '任务名称不能为空', trigger: 'blur' }
+            { required: true, message: '人员不能为空', trigger: 'change' }
           ],
-          site: [
-            { required: true, message: '地点不能为空', trigger: 'blur' }
+          river: [
+            { required: true, message: '请选择河湖', trigger: 'change' }
           ],
-          principal: [
-            { required: true, message: '负责人不能为空', trigger: 'blur' }
-          ],
-          participant: [
-            { required: true, message: '参与人不能为空', trigger: 'blur' }
+          level: [
+            { required: true, message: '请选择河长级别', trigger: 'blur' }
           ]
         },
         layout: 'horizontal',
@@ -160,6 +152,31 @@
       }
     },
     methods: {
+      genTreeNode (parentId, isLeaf = false) {
+        const random = Math.random()
+          .toString(36)
+          .substring(2, 6)
+        return {
+          id: random,
+          pId: parentId,
+          value: random,
+          title: isLeaf ? '秦明' : '办公室一组',
+          selectable: isLeaf,
+          isLeaf
+        }
+      },
+      onLoadData (treeNode) {
+        return new Promise(resolve => {
+          const { id } = treeNode.dataRef
+          setTimeout(() => {
+            this.treeData = this.treeData.concat([
+              this.genTreeNode(id, false),
+              this.genTreeNode(id, true)
+            ])
+            resolve()
+          }, 300)
+        })
+      },
       showModal (data = {}) {
         this.visible = true
         this.form = { ...{}, ...data }
