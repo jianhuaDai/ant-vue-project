@@ -6,14 +6,15 @@
           title="区域数据"
           :style="{height:leftTreeHeight + 'px'}"
           :bodyStyle="{padding:'10px 10px 10px 10px'}">
-          <div
+          <!-- <div
             style="border:0px solid #ddd; overflow:auto;"
             :style="{height:treeHeight+'px'}"
             class="tree-scroll">
             <a-tree
               :treeData="treeData"
               @select="onSelecttree" />
-          </div>
+          </div> -->
+          <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
         </a-card>
       </a-col>
       <a-col :span="18">
@@ -81,9 +82,12 @@
 </template>
 <script>
 import { STable } from '@/components'
+import { treeData } from './data.js'
+import AreaTree from '@com/Hczy/AreaTree.vue'
 export default {
   components: {
-    STable
+    STable,
+    AreaTree
   },
   data () {
     return {
@@ -95,31 +99,7 @@ export default {
       hehutypevalue: '0',
       treeSelectData: {},
       form: this.$form.createForm(this),
-      treeData: [
-        { id: 1,
-          pId: 0,
-          value: '1',
-          title: '江苏省',
-          children: [
-            {
-              id: '2',
-              pId: '0',
-              value: '2',
-              title: '南京市'
-            },
-            {
-              id: '3',
-              pId: '0',
-              value: '3',
-              title: '苏州市'
-            }, {
-              id: '4',
-              pId: '0',
-              value: '4',
-              title: '常州市'
-            }
-          ] }
-      ],
+      treeData: treeData,
       columns: [
         // {
         //   title: '序号',
@@ -178,6 +158,7 @@ export default {
 
   },
   methods: {
+    getSelectNode (node) {},
     // 左侧树形触发
     onSelecttree (selectedKeys, info) {
       // console.log(selectedKeys)
