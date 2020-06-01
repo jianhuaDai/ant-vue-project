@@ -39,7 +39,7 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name5" ref="name">
+              <a-form-model-item label="经纬度" prop="name5" ref="name5">
                 <mapInput v-model="form.location" v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
@@ -183,7 +183,7 @@ export default {
       }
     }
   },
-  component: { mapInput },
+  components: { mapInput },
   data () {
     return {
       getWaterMethods: getWaterMethods,
