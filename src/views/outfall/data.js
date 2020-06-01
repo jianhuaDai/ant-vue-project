@@ -1,3 +1,29 @@
+// 排口类型
+export const outfallTypes = [
+  {
+    key: '1',
+    name: '工业废水'
+  },
+  {
+    key: '2',
+    name: '生活污水'
+  },
+  {
+    key: '3',
+    name: '混合废污水'
+  }
+]
+// 排水去向
+export const drainageDirection = [
+  {
+    key: '1',
+    name: '河流'
+  },
+  {
+    key: '2',
+    name: '地下'
+  }
+]
 // 取水方式
 export const getWaterMethods = [
   {
