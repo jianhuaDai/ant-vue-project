@@ -40,9 +40,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="经纬度" prop="name5" ref="name">
-                <a-input v-model="form.location" disabled>
-                  <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
-                </a-input>
+                <mapInput v-model="form.location" v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -127,40 +125,39 @@
         <a-button type="primary" @click="handleOk">保存</a-button>
       </template>
     </a-modal>
-    <div
-      id="distance"
-      class="distance-container"
-      v-show="showMapDom"></div>
-    <div
-      class="add-mask"
-      v-show="showMapDom"></div>
-    <div class="add-map-box" v-if="showMapDom">
-      <div id="add-map" class="map-view" style="width:100%;height:428px"></div>
-      <div class="add-map-submit">
-        <a-button class="add-map-submit-btn" type="primary" @click="AddDraw" :disabled="!lat">确定</a-button>
-        <a-button class="add-map-submit-btn" @click="cancelAddDraw">取消</a-button>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 // import { saveEmploy } from '../../../../api/manage'
-import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
-import mapboxgl from 'mapbox-gl'
 import { options } from '../data.js'
 import { uploadSingle } from '@/api/upload'
+import mapInput from '@/components/Hczy/mapInput.vue'
 export default {
   props: {
     orgData: {
       type: Array,
       default: () => []
+    },
+    formData: {
+      type: Object,
+      default: function () {
+        return {
+          id: '',
+          name: '',
+          site: '',
+          principal: '',
+          participant: '',
+          progress: '',
+          imageUrl: '',
+          location: '1, 1'
+        }
+      }
     }
   },
+  components: { mapInput },
   data () {
     return {
-      lng: '',
-      lat: '',
       showImage: false,
       showMapDom: false,
       getWaterMethods: [],
@@ -173,16 +170,6 @@ export default {
       wrapperCol: { span: 15, offset: 1 },
       status: true,
       confirmLoading: false,
-      form: {
-        id: '',
-        name: '',
-        site: '',
-        principal: '',
-        participant: '',
-        progress: '',
-        imageUrl: '',
-        location: '1, 1'
-      },
       loading: false,
       rules: {
         name: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
@@ -192,14 +179,15 @@ export default {
       },
       layout: 'horizontal',
       visible: false,
-      options: options
+      options: options,
+      form: {}
     }
   },
   watch: {
     orgData (value) {
       this.treeData = this.buildTreeData(value, [])
     },
-    'form': {
+    form: {
       handler (value) {
         this.showImage = value.imageUrl
       },
@@ -207,46 +195,9 @@ export default {
     }
   },
   created () {
+    this.form = this.formData
   },
   methods: {
-    initMap () {
-      const map = new mapboxgl.Map({
-        container: 'add-map',
-        style: Style.chiefStyle,
-        pitch: 0,
-        attributionControl: false,
-        center: [118.806266, 32.059868],
-        zoom: 5,
-        minZoom: 6,
-        maxZoom: 10,
-        token: MAPBOX_TOKEN
-      })
-      var marker = new mapboxgl.Marker({
-        draggable: true
-      })
-      // 地图导航
-      var _this = this
-      var nav = new mapboxgl.NavigationControl()
-      map.addControl(nav, 'top-left')
-      map.on('click', function (e) {
-        _this.lng = e.lngLat.lng.toFixed(6)
-        _this.lat = e.lngLat.lat.toFixed(6)
-        marker.setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map)
-      })
-    },
-    AddDraw () {
-      this.form.location = this.lng + ', ' + this.lat
-      this.showMapDom = false
-    },
-    cancelAddDraw () {
-      this.showMapDom = false
-    },
-    showMap () {
-      this.showMapDom = true
-      setTimeout(() => {
-        this.initMap()
-      }, 500)
-    },
     customRequest (data) {
       const formData = new FormData()
       formData.append('file', data.file)
@@ -317,23 +268,5 @@ export default {
       color: #999;
     }
   }
-}
-.add-map-box {
-  position: fixed;
-  width: 648px;
-  top: 38%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px 20px 0;
-  z-index: 4000;
-}
-.add-map-submit {
-  height: 52px;
-  padding: 10px 0 0;
-}
-.add-map-submit-btn {
-  float: right;
-  margin-left: 20px;
 }
 </style>

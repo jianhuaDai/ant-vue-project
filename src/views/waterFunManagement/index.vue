@@ -45,7 +45,7 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule"></add-module>
+      <add-module ref="taskModule" :form="rowData"></add-module>
     </a-card>
   </div>
 </template>
@@ -74,7 +74,18 @@ export default {
       },
       selectedRowKeys: [],
       selectedRows: [],
-      options: options
+      options: options,
+      showAddModule: false,
+      rowData: {
+        id: '',
+        name: '',
+        site: '',
+        principal: '',
+        participant: '',
+        progress: '',
+        imageUrl: '',
+        location: '1, 1'
+      }
     }
   },
   methods: {
@@ -86,6 +97,18 @@ export default {
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
+      record
+        ? (this.rowData = record)
+        : (this.rowData = {
+            id: '',
+            name: '',
+            site: '',
+            principal: '',
+            participant: '',
+            progress: '',
+            imageUrl: '',
+            location: '1, 1'
+          })
       this.$refs.taskModule.showModal(record)
     },
     handleDel (record) {
