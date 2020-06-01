@@ -24,7 +24,7 @@ export const asyncRouterMap = [
       {
         path: '/map',
         name: 'MapIndex',
-        component: () => import('@/views/map/MapDemo'),
+        component: () => import('@/views/map/OneMap'),
         meta: { title: '一张图', icon: map, iconSelected: mapSelected, hiddenBread: true, hideHeader: true, permission: ['dashboard'], hiddenHeaderContent: true }
       },
       // 信息管理
