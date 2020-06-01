@@ -5,13 +5,13 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="功能区名称" style="margin-bottom: 0">
+              <a-form-item label="所属区域" style="margin-bottom: 0">
                 <a-input v-model="queryParam.name" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="级别类型" style="margin-bottom: 0">
-                <a-cascader :options="options" placeholder="" />
+              <a-form-item label="取水口名称" style="margin-bottom: 0">
+                <a-input v-model="queryParam.status" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -24,7 +24,7 @@
         </a-form>
       </div>
     </a-card>
-    <a-card :bordered="false" style="margin-top: 12px" title="任务列表">
+    <a-card :bordered="false" style="margin-top: 12px" title="查询列表">
       <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">新增</a-button>
       <s-table
         ref="table"
@@ -38,7 +38,7 @@
           <a @click="goTo(record)">{{ text }}</a>
         </span>
 
-        <span slot="action" slot-scope="text, record, index">
+        <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEditOrNew(record)">修改</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
@@ -55,27 +55,65 @@ import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
 import { getTasks } from '@/api/getWater'
 import AddModule from './modules/addModule'
-import { options } from './data.js'
-import { columns } from './columns.js'
+
 export default {
-  name: 'WaterFunManagement',
-  components: { PageView, STable, Ellipsis, AddModule },
+  name: 'RiverLakeEcologicalStation',
   data () {
     return {
       queryParam: {
         name: '',
         status: ''
       },
-      columns,
+      columns: [
+        {
+          title: '取水口名称',
+          dataIndex: 'name',
+          scopedSlots: { customRender: 'name' }
+        },
+        {
+          title: '取水流量',
+          dataIndex: 'site'
+        },
+        {
+          title: '所属水源地',
+          dataIndex: 'principal'
+        },
+        {
+          title: '经纬度',
+          dataIndex: 'create_at'
+        },
+        {
+          title: '是否为引调水工程取水口',
+          dataIndex: 'is1'
+        },
+        {
+          title: '取水方式',
+          dataIndex: 'is2'
+        },
+        {
+          title: '所属区域',
+          dataIndex: 'is3'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '160px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
       loadData: parameter => {
         return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+          res.data.list = res.data.list.map((item, index) => {
+            return {
+              ...item,
+              id: index + 1
+            }
+          })
           return res.data
         })
       },
       selectedRowKeys: [],
       selectedRows: [],
-      options: options,
-      showAddModule: false,
       rowData: {
         id: '',
         name: '',
@@ -88,6 +126,7 @@ export default {
       }
     }
   },
+  components: { PageView, STable, Ellipsis, AddModule },
   methods: {
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
@@ -120,8 +159,7 @@ export default {
       })
     }
   },
-  created () {},
-  filters: {}
+  created () {}
 }
 </script>
 <style scoped></style>

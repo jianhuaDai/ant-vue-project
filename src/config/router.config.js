@@ -78,6 +78,48 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/monitor-info',
+        component: PageView,
+        meta: {
+          title: '监测信息管理',
+          icon: infoManage,
+          iconSelected: infoManageSelected,
+          permission: ['dashboard']
+        },
+        children: [
+          {
+            path: '/monitor-info/water',
+            name: 'Water',
+            component: () => import('@/views/water/index.vue'),
+            meta: { title: '水情', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/monitor-info/rain',
+            name: 'Rain',
+            component: () => import('@/views/rain/index.vue'),
+            meta: { title: '雨情', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/monitor-info/water-quality-measure-station',
+            name: 'WaterQualityMeasureStation',
+            component: () => import('@/views/waterQualityMeasureStation/index.vue'),
+            meta: { title: '水质测站', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/monitor-info/river-lake-ecological-station',
+            name: 'RiverLakeEcologicalStation',
+            component: () => import('@/views/riverLakeEcologicalStation/index.vue'),
+            meta: { title: '河湖生态测站', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
+            path: '/monitor-info/video-station',
+            name: 'VideoStation',
+            component: () => import('@/views/videoStation/index.vue'),
+            meta: { title: '视频站', keepAlive: true, permission: ['dashboard'] }
+          }
+        ]
+      },
       // Exception
       {
         path: '/exception',

@@ -6,12 +6,12 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="所属区域" style="margin-bottom: 0">
-                <a-input v-model="queryParam.name" placeholder=""/>
+                <a-input v-model="queryParam.name" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="取水口名称" style="margin-bottom: 0">
-                <a-input v-model="queryParam.status" placeholder=""/>
+                <a-input v-model="queryParam.status" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -29,7 +29,7 @@
       <s-table
         ref="table"
         size="default"
-        :rowKey="(record) => record.id"
+        :rowKey="record => record.id"
         :columns="columns"
         :data="loadData"
         showPagination="auto"
@@ -45,105 +45,121 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule"></add-module>
+      <add-module ref="taskModule" :formData="rowData"></add-module>
     </a-card>
   </div>
 </template>
 
 <script>
-  import PageView from '../../layouts/PageView'
-  import { STable, Ellipsis } from '@/components'
-  import { getTasks } from '@/api/getWater'
-  import AddModule from './modules/addModule'
+import PageView from '../../layouts/PageView'
+import { STable, Ellipsis } from '@/components'
+import { getTasks } from '@/api/getWater'
+import AddModule from './modules/addModule'
 
-  export default {
-    name: 'Task',
-        data () {
-      return {
-        queryParam: {
-          name: '',
-          status: ''
+export default {
+  name: 'GetWaterManagement',
+  data () {
+    return {
+      queryParam: {
+        name: '',
+        status: ''
+      },
+      columns: [
+        {
+          title: '取水口名称',
+          dataIndex: 'name',
+          scopedSlots: { customRender: 'name' }
         },
-        columns: [
-          {
-            title: '取水口名称',
-            dataIndex: 'name',
-            scopedSlots: { customRender: 'name' }
-          },
-          {
-            title: '取水流量',
-            dataIndex: 'site'
-          },
-          {
-            title: '所属水源地',
-            dataIndex: 'principal'
-          },
-          {
-            title: '经纬度',
-            dataIndex: 'create_at'
-          },
-          {
-            title: '是否为引调水工程取水口',
-            dataIndex: 'is1'
-          },
-          {
-            title: '取水方式',
-            dataIndex: 'is2'
-          },
-          {
-            title: '所属区域',
-            dataIndex: 'is3'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            width: '160px',
-            scopedSlots: { customRender: 'action' }
-          }
-        ],
-        loadData: parameter => {
-          return getTasks(Object.assign(parameter, this.queryParam))
-            .then(res => {
-              res.data.list = res.data.list.map((item, index) => {
-                return {
-                  ...item,
-                  id: index + 1
-                }
-              })
-              return res.data
-            })
+        {
+          title: '取水流量',
+          dataIndex: 'site'
         },
-        selectedRowKeys: [],
-        selectedRows: []
-      }
-    },
-    components: { PageView, STable, Ellipsis, AddModule },
-    methods: {
-      goTo (record) {
-        this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
-      },
-      resetQuery () {
-        this.queryParam.status = ''
-        this.$refs.table.refresh(true)
-      },
-      handleEditOrNew (record) {
-        this.$refs.taskModule.showModal(record)
-      },
-      handleDel (record) {
-        this.$confirm({
-          title: '删除操作',
-          content: `确定要删除${record.name}吗`,
-          onOk () {
-          },
-          onCancel () {
-          }
+        {
+          title: '所属水源地',
+          dataIndex: 'principal'
+        },
+        {
+          title: '经纬度',
+          dataIndex: 'create_at'
+        },
+        {
+          title: '是否为引调水工程取水口',
+          dataIndex: 'is1'
+        },
+        {
+          title: '取水方式',
+          dataIndex: 'is2'
+        },
+        {
+          title: '所属区域',
+          dataIndex: 'is3'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '160px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      loadData: parameter => {
+        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+          res.data.list = res.data.list.map((item, index) => {
+            return {
+              ...item,
+              id: index + 1
+            }
+          })
+          return res.data
         })
+      },
+      selectedRowKeys: [],
+      selectedRows: [],
+      rowData: {
+        id: '',
+        name: '',
+        site: '',
+        principal: '',
+        participant: '',
+        progress: '',
+        imageUrl: '',
+        location: '1, 1'
       }
-    },
-    created () {
     }
-  }
+  },
+  components: { PageView, STable, Ellipsis, AddModule },
+  methods: {
+    goTo (record) {
+      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+    },
+    resetQuery () {
+      this.queryParam.status = ''
+      this.$refs.table.refresh(true)
+    },
+    handleEditOrNew (record) {
+      record
+        ? (this.rowData = record)
+        : (this.rowData = {
+            id: '',
+            name: '',
+            site: '',
+            principal: '',
+            participant: '',
+            progress: '',
+            imageUrl: '',
+            location: '1, 1'
+          })
+      this.$refs.taskModule.showModal(record)
+    },
+    handleDel (record) {
+      this.$confirm({
+        title: '删除操作',
+        content: `确定要删除${record.name}吗`,
+        onOk () {},
+        onCancel () {}
+      })
+    }
+  },
+  created () {}
+}
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
