@@ -11,12 +11,12 @@
           <div class="table-page-search-wrapper">
             <a-form layout="inline">
               <a-row :gutter="24">
-                <a-col :md="8" :sm="24">
+                <a-col :md="9" :sm="24">
                   <a-form-item label="姓名" style="margin-bottom: 0">
                     <a-input v-model="queryParam.name" placeholder=""/>
                   </a-form-item>
                 </a-col>
-                <a-col :md="8" :sm="24">
+                <a-col :md="9" :sm="24">
                   <a-form-item label="河湖长类型" style="margin-bottom: 0">
                     <a-select v-model="queryParam.status" placeholder="请选择" :default-value="0">
                       <a-select-option value="">全部</a-select-option>
@@ -26,7 +26,7 @@
                     </a-select>
                   </a-form-item>
                 </a-col>
-                <a-col :md="8" :sm="24">
+                <a-col :md="6" :sm="24">
                   <div style="float: right">
                     <a-button style="margin-right: 8px" @click="resetQuery">重置</a-button>
                     <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
