@@ -30,7 +30,7 @@
                       label="河湖名称:"
                       :label-col="{span:9}"
                       :wrapper-col="{span:15}">
-                      <a-input v-decorator="['name']"></a-input>
+                      <a-input v-model="form.name"></a-input>
                     </a-form-item>
                   </a-col>
                   <a-col :span="8">
@@ -38,7 +38,7 @@
                       label="河湖类型:"
                       :label-col="{span:9}"
                       :wrapper-col="{span:15}">
-                      <a-select
+                      <!-- <a-select
                         placeholder="全部"
                         @change="hehutypeSelectClick"
                         allowClear
@@ -47,6 +47,11 @@
                         <a-select-option value="river_reach">河段</a-select-option>
                         <a-select-option value="lake">湖泊</a-select-option>
                         <a-select-option value="reservoir">水库</a-select-option>
+                      </a-select> -->
+                      <a-select placeholder="全部" v-model="form.type" @change="hehutypeSelectClick">
+                        <a-select-option v-for="item in hhtypevalue" :key="item.key" :value="item.key">
+                          {{ item.name }}
+                        </a-select-option>
                       </a-select>
                     </a-form-item>
                   </a-col>
@@ -198,13 +203,10 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="河湖类型" prop="hehutypevalue" ref="hehutypevalue">
-                <a-select placeholder="全部" @change="selectChangeadd" v-model="form2.hehutypevalue">
-                  <a-select-option value="0">河流</a-select-option>
-                  <a-select-option value="1">河段</a-select-option>
-                  <a-select-option value="2">湖泊</a-select-option>
-                  <a-select-option value="3">湖泊片</a-select-option>
-                  <a-select-option value="4">水库</a-select-option>
-                  <a-select-option value="5">水库片</a-select-option>
+                <a-select placeholder="全部" v-model="form2.hehutype" @change="selectChangeadd">
+                  <a-select-option v-for="item in typevalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -216,22 +218,18 @@
             <a-col :span="12">
               <a-form-model-item label="河湖库层级" prop="hehucengji" ref="hehucengji">
                 <a-select placeholder="全部" v-model="form2.hehucengji">
-                  <a-select-option value="省级">省级</a-select-option>
-                  <a-select-option value="市级">市级</a-select-option>
-                  <a-select-option value="县级">县级</a-select-option>
-                  <a-select-option value="乡级">乡级</a-select-option>
-                  <a-select-option value="村级">村级</a-select-option>
+                  <a-select-option v-for="item in cengjivalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="河湖长" prop="hehuzhang" ref="hehuzhang">
                 <a-select placeholder="全部" v-model="form2.hehuzhang">
-                  <a-select-option value="省级">省级</a-select-option>
-                  <a-select-option value="市级">市级</a-select-option>
-                  <a-select-option value="县级">县级</a-select-option>
-                  <a-select-option value="乡级">乡级</a-select-option>
-                  <a-select-option value="村级">村级</a-select-option>
+                  <a-select-option v-for="item in hehuzhangvalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -250,16 +248,9 @@
               <a-col :span="12">
                 <a-form-item label="河流级别:" prop="heliujibie" ref="heliujibie">
                   <a-select placeholder="全部" v-model="form2.heliujibie">
-                    <a-select-option value="干河流">干河流</a-select-option>
-                    <a-select-option value="一级">一级</a-select-option>
-                    <a-select-option value="二级">二级</a-select-option>
-                    <a-select-option value="三级">三级</a-select-option>
-                    <a-select-option value="四级">四级</a-select-option>
-                    <a-select-option value="五级">五级</a-select-option>
-                    <a-select-option value="六级">六级</a-select-option>
-                    <a-select-option value="七级">七级</a-select-option>
-                    <a-select-option value="八级">八级</a-select-option>
-                    <a-select-option value="未定级别">未定级别</a-select-option>
+                    <a-select-option v-for="item in heliujibievalue" :key="item.key" :value="item.key">
+                      {{ item.name }}
+                    </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -299,12 +290,9 @@
               <a-col :span="12">
                 <a-form-item label="河段级别:" prop="heduanjibie" ref="heduanjibie">
                   <a-select placeholder="全部" v-model="form2.heduanjibie">
-                    <a-select-option value="1">国家级</a-select-option>
-                    <a-select-option value="2">自治区级</a-select-option>
-                    <a-select-option value="3">市级</a-select-option>
-                    <a-select-option value="4">县级</a-select-option>
-                    <a-select-option value="5">乡镇级</a-select-option>
-                    <a-select-option value="6">村级</a-select-option>
+                    <a-select-option v-for="item in heduanjibievalue" :key="item.key" :value="item.key">
+                      {{ item.name }}
+                    </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -358,9 +346,10 @@
               </a-col>
               <a-col :span="12">
                 <a-form-item label="咸淡水属性:" prop="xdsshuxing" ref="xdsshuxing">
-                  <a-select placeholder="全部" v-model="form.xdsshuxing">
-                    <a-select-option value="1">咸水</a-select-option>
-                    <a-select-option value="2">淡水</a-select-option>
+                  <a-select placeholder="全部" v-model="form2.xdsshuxing">
+                    <a-select-option v-for="item in xdsshuxingvalue" :key="item.key" :value="item.key">
+                      {{ item.name }}
+                    </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -497,11 +486,13 @@ export default {
       antialias: true,
       attributionControl: false, // 隐藏地图所属信息
       doubleClickZoom: false,
-      form: this.$form.createForm(this),
+      // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
-      form2: {
-        hehutypevalue: '0'
+      form: {
+        name: '',
+        type: ''
       },
+      
       rules: {
         name: [
           { required: true, message: '河湖库名称不能为空', trigger: 'blur' }
@@ -564,6 +555,176 @@ export default {
           dataIndex: 'action',
           width: '160px',
           scopedSlots: { customRender: 'action' }
+        }
+      ],
+      // 河湖类型--查询框
+      hhtypevalue: [
+        {
+          value: 'river',
+          name: '河道'
+        },
+        {
+          value: 'river_reach',
+          name: '河段'
+        },
+        {
+          value: 'lake',
+          name: '湖泊'
+        },
+        {
+          value: 'reservoir',
+          name: '水库'
+        }
+      ],
+      typevalue: [
+        {
+          value: '0',
+          name: '河流'
+        },
+        {
+          value: '1',
+          name: '河段'
+        },
+        {
+          value: '2',
+          name: '湖泊'
+        },
+        {
+          value: '3',
+          name: '湖泊片'
+        },
+        {
+          value: '4',
+          name: '水库'
+        },
+        {
+          value: '5',
+          name: '水库片'
+        }
+      ],
+      form2: {
+        hehutypevalue: '0'
+      },
+      cengjivalue: [
+        {
+          value: '0',
+          name: '省级'
+        },
+        {
+          value: '1',
+          name: '市级'
+        },
+        {
+          value: '2',
+          name: '县级'
+        },
+        {
+          value: '3',
+          name: '乡级'
+        },
+        {
+          value: '4',
+          name: '村级'
+        }
+      ],
+      hehuzhangvalue: [
+        {
+          value: '0',
+          name: '省级'
+        },
+        {
+          value: '1',
+          name: '市级'
+        },
+        {
+          value: '2',
+          name: '县级'
+        },
+        {
+          value: '3',
+          name: '乡级'
+        },
+        {
+          value: '4',
+          name: '村级'
+        }
+      ],
+      heliujibievalue: [
+        {
+          value: '0',
+          name: '干河流'
+        },
+        {
+          value: '1',
+          name: '一级'
+        },
+        {
+          value: '2',
+          name: '二级'
+        },
+        {
+          value: '3',
+          name: '三级'
+        },
+        {
+          value: '4',
+          name: '三级'
+        },
+        {
+          value: '5',
+          name: '五级'
+        },
+        {
+          value: '6',
+          name: '六级'
+        },
+        {
+          value: '7',
+          name: '七级'
+        },
+        {
+          value: '8',
+          name: '八级'
+        },
+        {
+          value: '9',
+          name: '未定级别'
+        }
+      ],
+      heduanjibievalue: [
+        {
+          value: '0',
+          name: '国家级'
+        },
+        {
+          value: '1',
+          name: '自治区级'
+        },
+        {
+          value: '2',
+          name: '市级'
+        },
+        {
+          value: '3',
+          name: '县级'
+        },
+        {
+          value: '4',
+          name: '乡镇级'
+        },
+        {
+          value: '5',
+          name: '村级'
+        }
+      ],
+      xdsshuxingvalue: [
+        {
+          value: '1',
+          name: '咸水'
+        },
+        {
+          value: '2',
+          name: '淡水'
         }
       ],
       jinweiduFlag: '1',
