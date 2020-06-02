@@ -4,36 +4,43 @@
       <a-col :span="24">
         <a-card
           :bordered="false"
-          :bodyStyle="{padding:'6px 24px 0px 0px'}">
-          <a-form
+          :bodyStyle="{padding:'6px 24px 0px 24px'}">
+          <a-form-model
             :form="form"
-            :style="{'margin-top':'16px'}">
+            :style="{'margin-top':'16px'}"
+            labelAlign="left"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol">
             <a-row>
               <a-col :span="8">
-                <a-form-item
-                  label="污染源名称:"
-                  :label-col="{span:9}"
-                  :wrapper-col="{span:15}">
+                <a-form-model-item label="污染源名称:" prop="name">
                   <a-input v-model="form.name"></a-input>
-                </a-form-item>
+                </a-form-model-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item
-                  label="污染源类型:"
-                  :label-col="{span:9}"
-                  :wrapper-col="{span:15}">
-                  <a-select placeholder="全部" @change="cjjgChange" v-model="form.wrytype">
-                    <a-select-option v-for="item in wrytypevalue" :key="item.key" :value="item.key">
+                <a-form-model-item label="污染源类型:" prop="wrytype">
+                  <!-- <a-select
+                    placeholder="全部"
+                    v-model="form.wrytype">
+                    <a-select-option
+                      v-for="item in wrytypevalue"
+                      :key="item.key"
+                      :value="item.key">
                       {{ item.name }}
                     </a-select-option>
+                  </a-select> -->
+                  <a-select v-model="form.wrytype" placeholder="全部">
+                    <a-select-option value="0">工业污染源</a-select-option>
+                    <a-select-option value="1">农业污染源</a-select-option>
+                    <a-select-option value="2">城镇污染源</a-select-option>
                   </a-select>
-                </a-form-item>
+                </a-form-model-item>
               </a-col>
               <a-col
                 :span="5"
                 :offset="3"
                 style="text-align:right;">
-                <a-form-item
+                <a-form-model-item
                   label
                   :label-col="{span:0}"
                   :wrapper-col="{span:24}">
@@ -45,10 +52,10 @@
                     class="resertBtn"
                     style="margin-left:8px;"
                     @click="resertClick">重置</a-button>
-                </a-form-item>
+                </a-form-model-item>
               </a-col>
             </a-row>
-          </a-form>
+          </a-form-model>
         </a-card>
       </a-col>
       <a-col
@@ -124,8 +131,7 @@
       width="60%"
       :visible="visible"
       @ok="handleOk"
-      @cancel="handleCancel"
-    >
+      @cancel="handleCancel">
       <a-spin :spinning="confirmLoading">
         <a-form-model
           ref="form2"
@@ -133,85 +139,146 @@
           labelAlign="left"
           :rules="rules"
           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
-        >
+          :wrapper-col="wrapperCol">
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-model-item label="污染源名称" prop="name" ref="name">
+              <a-form-model-item
+                label="污染源名称"
+                prop="name"
+                ref="name">
                 <a-input v-model="form2.name"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="污染源编码" prop="code" ref="code">
+              <a-form-model-item
+                label="污染源编码"
+                prop="code"
+                ref="code">
                 <a-input v-model="form2.code"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属河道" prop="suoshuhedao" ref="suoshuhedao">
-                <a-select placeholder="全部" v-model="form2.suoshuhedao">
-                  <a-select-option v-for="item in suoshuhedaovalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="所属河道"
+                prop="suoshuhedao"
+                ref="suoshuhedao">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.suoshuhedao">
+                  <a-select-option
+                    v-for="item in suoshuhedaovalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="suoshuquyu" ref="suoshuquyu">
-                <a-select placeholder="全部" v-model="form2.suoshuquyu">
-                  <a-select-option v-for="item in suoshuquyuvalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="所属区域"
+                prop="suoshuquyu"
+                ref="suoshuquyu">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.suoshuquyu">
+                  <a-select-option
+                    v-for="item in suoshuquyuvalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="详细地址" prop="address" ref="address">
+              <a-form-model-item
+                label="详细地址"
+                prop="address"
+                ref="address">
                 <a-input v-model="form2.address"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="污染源类型" prop="wuranyuantype" ref="wuranyuantype">
-                <a-select placeholder="全部" v-model="form2.wuranyuantype">
-                  <a-select-option v-for="item in wuranyuantypevalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="污染源类型"
+                prop="wuranyuantype"
+                ref="wuranyuantype">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.wuranyuantype">
+                  <a-select-option
+                    v-for="item in wuranyuantypevalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="jwd" ref="jwd">
+              <a-form-model-item
+                label="经纬度"
+                prop="jwd"
+                ref="jwd">
                 <!-- <a-input v-model="form.jwd" disabled>
                   <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
                 </a-input> -->
-                <mapInput v-model="form2.location" v-if="visible"></mapInput>
+                <mapInput
+                  v-model="form2.location"
+                  v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="关注类别" prop="guanzhujibie" ref="guanzhujibie">
-                <a-select placeholder="全部" v-model="form2.guanzhujibie">
-                  <a-select-option v-for="item in guanzhujibievalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="关注类别"
+                prop="guanzhujibie"
+                ref="guanzhujibie">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.guanzhujibie">
+                  <a-select-option
+                    v-for="item in guanzhujibievalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="发现时间" prop="time" ref="time">
-                <a-date-picker style="width:100%;" type="date" v-model="form2.time" placeholder="请选择时间"></a-date-picker>
+              <a-form-model-item
+                label="发现时间"
+                prop="time"
+                ref="time">
+                <a-date-picker
+                  style="width:100%;"
+                  type="date"
+                  v-model="form2.time"
+                  placeholder="请选择时间"></a-date-picker>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属河长" prop="sshezhang" ref="sshezhang">
+              <a-form-model-item
+                label="所属河长"
+                prop="sshezhang"
+                ref="sshezhang">
                 <a-input v-model="form2.sshezhang"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="影响范围" prop="yxfanwei" ref="yxfanwei">
+              <a-form-model-item
+                label="影响范围"
+                prop="yxfanwei"
+                ref="yxfanwei">
                 <a-input v-model="form2.yxfanwei"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="治理情况" prop="zhiliqk" ref="zhiliqk">
+              <a-form-model-item
+                label="治理情况"
+                prop="zhiliqk"
+                ref="zhiliqk">
                 <a-input v-model="form2.zhiliqk"></a-input>
               </a-form-model-item>
             </a-col>
@@ -224,10 +291,10 @@
             () => {
               this.visible = false
             }
-          "
-        >取消</a-button
-        >
-        <a-button type="primary" @click="savePopup">保存</a-button>
+          ">取消</a-button>
+        <a-button
+          type="primary"
+          @click="savePopup">保存</a-button>
       </template>
     </a-modal>
     <div
@@ -284,7 +351,7 @@ export default {
       confirmLoading: false,
       form: {
         name: '',
-        wrytype: ''
+        wrytype: undefined
       },
       form2: {
         name: '',
@@ -435,13 +502,13 @@ export default {
 
   },
   methods: {
-    // 污染源类型触发
+    // 污染源类型触发--查询框
     cjjgChange (value) {
       console.log(value)
     },
     // 查询按钮触发
     searchClick () {
-
+      console.log(this.form)
     },
     // 重置按钮触发
     resertClick () {
@@ -516,8 +583,8 @@ export default {
     gcAddClick () {
       this.visible = true
       setTimeout(() => {
-          this.$refs.form2.clearValidate()
-        }, 1)
+        this.$refs.form2.clearValidate()
+      }, 1)
     },
     savePopup () {
       this.$refs.form.validate(err => {

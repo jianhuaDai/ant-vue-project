@@ -31,7 +31,7 @@
           </div>
           <!--        </div>-->
           <div class="info-area" v-show="layerManager.activeLayerItem.id!==0" style="margin: 10px 0">
-            <div style="font-weight: 500;margin: 15px 0">{{ layerData.activeLayerBtn.name }}</div>
+            <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
             <a-input-search placeholder="请输入搜索内容" style="width: 240px;margin-bottom: 24px" @search="()=>{}"/>
             <a-table
               v-show="tableList.columns.length>0"
