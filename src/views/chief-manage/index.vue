@@ -19,12 +19,6 @@
                 <a-col :md="9" :sm="24">
                   <a-form-item label="河湖长类型" style="margin-bottom: 0">
                     <dictionary-select v-model="queryParam.status" :insert-option-all="true" :dictionary-type="DictionaryEnum.WATER_TYPE"></dictionary-select>
-                    <!--                    <a-select v-model="queryParam.status" placeholder="请选择" :default-value="0">-->
-                    <!--                      <a-select-option value="">全部</a-select-option>-->
-                    <!--                      <a-select-option :value="1">未制定方案</a-select-option>-->
-                    <!--                      <a-select-option :value="2">已制定方案</a-select-option>-->
-                    <!--                      <a-select-option :value="3">已完成</a-select-option>-->
-                    <!--                    </a-select>-->
                   </a-form-item>
                 </a-col>
                 <a-col :md="6" :sm="24">
