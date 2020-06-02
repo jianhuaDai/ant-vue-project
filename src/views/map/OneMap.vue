@@ -5,11 +5,11 @@
       <div class="nav-map" v-show="ready">
         <div
           @click="nav(item.id)"
-          :class="['nav-map-item',item.id===currentNav?'active':'']"
+          :class="['nav-map-item',item.id===layerManager.currentNav?'active':'']"
           :key="item.id"
           v-for="item in baseData.navs">
-          <a-icon :component="item.icon" v-show="item.id!==currentNav"></a-icon>
-          <a-icon :component="item.iconSelected" v-show="item.id===currentNav"></a-icon>
+          <a-icon :component="item.icon" v-show="item.id!==layerManager.currentNav"></a-icon>
+          <a-icon :component="item.iconSelected" v-show="item.id===layerManager.currentNav"></a-icon>
           <span class="title">{{ item.title }}</span>
           <div class="line"></div>
         </div>
@@ -21,7 +21,7 @@
             <div
               :key="item.id"
               @click="layerRadioHandle(item)"
-              v-for="item in baseData.layerItems[currentNav]"
+              v-for="item in baseData.layerItems[layerManager.currentNav]"
               :class="['layer-btn',layerManager.activeLayerItem.id===item.id?'active':'']">
               <span style="margin-right: 6px">{{ item.name }}</span>
               <a-checkbox
