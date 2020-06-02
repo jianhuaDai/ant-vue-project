@@ -20,5 +20,5 @@ Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 })
 
 Vue.filter('statusName', function (value) {
-  return value ? '启用' : '禁用'
+  return value === 1 ? '启用' : '禁用'
 })

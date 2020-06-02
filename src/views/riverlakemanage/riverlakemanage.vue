@@ -4,62 +4,55 @@
       <a-col :span="6">
         <a-card
           title="区域数据"
+          :bordered="false"
           :style="{height:leftTreeHeight + 'px'}"
           :bodyStyle="{padding:'10px 10px 10px 10px'}">
-          <!-- <div
-            style="border:0px solid #ddd; overflow:auto;"
-            :style="{height:treeHeight+'px'}"
-            class="tree-scroll">
-            <a-tree
-              :treeData="treeData"
-              @select="onSelecttree" />
-          </div> -->
-          <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
+          <div :style="{height: areadivHeight + 'px'}">
+            <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
+          </div>
         </a-card>
       </a-col>
       <a-col :span="18">
         <a-row :gutter="8">
           <a-col :span="24">
-            <a-card :bodyStyle="{padding:'10px 20px 10px 10px'}">
-              <a-form
-                :form="form"
-                :style="{'margin-top':'16px'}">
+            <a-card :bodyStyle="{padding:'10px 24px 10px 24px'}">
+              <a-form-model
+                :model="form"
+                :style="{'margin-top':'16px'}"
+                labelAlign="left"
+                :label-col="labelCol"
+                :wrapper-col="wrapperCol">
                 <a-row>
                   <a-col :span="8">
-                    <a-form-item
-                      label="河湖名称:"
-                      :label-col="{span:9}"
-                      :wrapper-col="{span:15}">
+                    <a-form-model-item label="河湖名称:" prop="name">
                       <a-input v-model="form.name"></a-input>
-                    </a-form-item>
+                    </a-form-model-item>
                   </a-col>
                   <a-col :span="8">
-                    <a-form-item
-                      label="河湖类型:"
-                      :label-col="{span:9}"
-                      :wrapper-col="{span:15}">
+                    <a-form-model-item label="河湖类型:" prop="type">
                       <!-- <a-select
                         placeholder="全部"
-                        @change="hehutypeSelectClick"
-                        allowClear
-                        v-decorator="['type']">
-                        <a-select-option value="river">河道</a-select-option>
-                        <a-select-option value="river_reach">河段</a-select-option>
-                        <a-select-option value="lake">湖泊</a-select-option>
-                        <a-select-option value="reservoir">水库</a-select-option>
-                      </a-select> -->
-                      <a-select placeholder="全部" v-model="form.type" @change="hehutypeSelectClick">
-                        <a-select-option v-for="item in hhtypevalue" :key="item.key" :value="item.key">
+                        v-model="form.type">
+                        <a-select-option
+                          v-for="item in hhtypevalue"
+                          :key="item.key"
+                          :value="item.key">
                           {{ item.name }}
                         </a-select-option>
+                      </a-select> -->
+                      <a-select v-model="form.wrytype" placeholder="全部">
+                        <a-select-option value="0">河道</a-select-option>
+                        <a-select-option value="1">河段</a-select-option>
+                        <a-select-option value="2">湖泊</a-select-option>
+                        <a-select-option value="3">水库</a-select-option>
                       </a-select>
-                    </a-form-item>
+                    </a-form-model-item>
                   </a-col>
                   <a-col
                     :span="5"
                     :offset="3"
                     style="text-align:right;">
-                    <a-form-item
+                    <a-form-model-item
                       label
                       :label-col="{span:0}"
                       :wrapper-col="{span:24}">
@@ -71,10 +64,10 @@
                         class="resertBtn"
                         style="margin-left:8px;"
                         @click="resertClick">重置</a-button>
-                    </a-form-item>
+                    </a-form-model-item>
                   </a-col>
                 </a-row>
-              </a-form>
+              </a-form-model>
             </a-card>
           </a-col>
           <a-col
@@ -193,88 +186,156 @@
           labelAlign="left"
           :rules="rules"
           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
-        >
+          :wrapper-col="wrapperCol">
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-model-item label="河湖库名称" prop="name" ref="name">
+              <a-form-model-item
+                label="河湖库名称"
+                prop="name"
+                ref="name">
                 <a-input v-model="form2.name"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="河湖类型" prop="hehutypevalue" ref="hehutypevalue">
-                <a-select placeholder="全部" v-model="form2.hehutype" @change="selectChangeadd">
-                  <a-select-option v-for="item in typevalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="河湖类型"
+                prop="hehutype"
+                ref="hehutype">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.hehutypevalue"
+                  @change="selectChangeadd">
+                  <a-select-option
+                    v-for="item in typevalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="河湖库编码" prop="code" ref="code">
+              <a-form-model-item
+                label="河湖库编码"
+                prop="code"
+                ref="code">
                 <a-input v-model="form2.code"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="河湖库层级" prop="hehucengji" ref="hehucengji">
-                <a-select placeholder="全部" v-model="form2.hehucengji">
-                  <a-select-option v-for="item in cengjivalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="河湖库层级"
+                prop="hehucengji"
+                ref="hehucengji">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.hehucengji">
+                  <a-select-option
+                    v-for="item in cengjivalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="河湖长" prop="hehuzhang" ref="hehuzhang">
-                <a-select placeholder="全部" v-model="form2.hehuzhang">
-                  <a-select-option v-for="item in hehuzhangvalue" :key="item.key" :value="item.key">
+              <a-form-model-item
+                label="河湖长"
+                prop="hehuzhang"
+                ref="hehuzhang">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.hehuzhang">
+                  <a-select-option
+                    v-for="item in hehuzhangvalue"
+                    :key="item.key"
+                    :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="上级河湖库" prop="sjhehuku" ref="sjhehuku">
+              <a-form-model-item
+                label="上级河湖库"
+                prop="sjhehuku"
+                ref="sjhehuku">
                 <a-input v-model="form2.sjhehuku"></a-input>
               </a-form-model-item>
             </a-col>
             <!-- 河流信息-----开始 -->
             <div v-show="heliuShow">
               <a-col :span="12">
-                <a-form-item label="河流长度:" prop="length" ref="length">
+                <a-form-item
+                  label="河流长度:"
+                  prop="length"
+                  ref="length">
                   <a-input v-model="form2.length"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="河流级别:" prop="heliujibie" ref="heliujibie">
-                  <a-select placeholder="全部" v-model="form2.heliujibie">
-                    <a-select-option v-for="item in heliujibievalue" :key="item.key" :value="item.key">
+                <a-form-item
+                  label="河流级别:"
+                  prop="heliujibie"
+                  ref="heliujibie">
+                  <a-select
+                    placeholder="全部"
+                    v-model="form2.heliujibie">
+                    <a-select-option
+                      v-for="item in heliujibievalue"
+                      :key="item.key"
+                      :value="item.key">
                       {{ item.name }}
                     </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="起点:" prop="start" ref="start">
+                <a-form-item
+                  label="起点:"
+                  prop="start"
+                  ref="start">
                   <a-input v-model="form2.start"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="终点:" prop="end" ref="end">
+                <a-form-item
+                  label="终点:"
+                  prop="end"
+                  ref="end">
                   <a-input v-model="form2.end"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="起点经纬度:" prop="startjwd" ref="startjwd">
-                  <a-input v-model="form2.startjwd" disabled>
-                    <a-icon @click="showMap1" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                <a-form-item
+                  label="起点经纬度:"
+                  prop="startjwd"
+                  ref="startjwd">
+                  <a-input
+                    v-model="form2.startjwd"
+                    disabled>
+                    <a-icon
+                      @click="showMap1"
+                      slot="addonAfter"
+                      type="search"
+                      :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="终点经纬度:" prop="endjwd" ref="endjwd">
-                  <a-input v-model="form2.endjwd" disabled>
-                    <a-icon @click="showMap2" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                <a-form-item
+                  label="终点经纬度:"
+                  prop="endjwd"
+                  ref="endjwd">
+                  <a-input
+                    v-model="form2.endjwd"
+                    disabled>
+                    <a-icon
+                      @click="showMap2"
+                      slot="addonAfter"
+                      type="search"
+                      :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -283,50 +344,91 @@
             <!-- 河段信息-----开始 -->
             <div v-show="heduanShow">
               <a-col :span="12">
-                <a-form-item label="河段长度:" prop="length2" ref="length2">
+                <a-form-item
+                  label="河段长度:"
+                  prop="length2"
+                  ref="length2">
                   <a-input v-model="form2.length2"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="河段级别:" prop="heduanjibie" ref="heduanjibie">
-                  <a-select placeholder="全部" v-model="form2.heduanjibie">
-                    <a-select-option v-for="item in heduanjibievalue" :key="item.key" :value="item.key">
+                <a-form-item
+                  label="河段级别:"
+                  prop="heduanjibie"
+                  ref="heduanjibie">
+                  <a-select
+                    placeholder="全部"
+                    v-model="form2.heduanjibie">
+                    <a-select-option
+                      v-for="item in heduanjibievalue"
+                      :key="item.key"
+                      :value="item.key">
                       {{ item.name }}
                     </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="行政区划:" prop="xzqh" ref="xzqh">
+                <a-form-item
+                  label="行政区划:"
+                  prop="xzqh"
+                  ref="xzqh">
                   <a-input v-model="form2.xzqh"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="位置:" prop="weizhi" ref="weizhi">
+                <a-form-item
+                  label="位置:"
+                  prop="weizhi"
+                  ref="weizhi">
                   <a-input v-model="form2.weizhi"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="起点:" prop="start2" ref="start2">
+                <a-form-item
+                  label="起点:"
+                  prop="start2"
+                  ref="start2">
                   <a-input v-model="form2.start2"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="终点:" prop="end2" ref="end2">
+                <a-form-item
+                  label="终点:"
+                  prop="end2"
+                  ref="end2">
                   <a-input v-model="form2.end2"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="起点经纬度:" prop="" ref="">
-                  <a-input v-model="form2.startjwd2" disabled>
-                    <a-icon @click="showMap3" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                <a-form-item
+                  label="起点经纬度:"
+                  prop=""
+                  ref="">
+                  <a-input
+                    v-model="form2.startjwd2"
+                    disabled>
+                    <a-icon
+                      @click="showMap3"
+                      slot="addonAfter"
+                      type="search"
+                      :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="终点经纬度:" prop="endjwd2" ref="endjwd2">
-                  <a-input v-model="form2.endjwd2" disabled>
-                    <a-icon @click="showMap4" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                <a-form-item
+                  label="终点经纬度:"
+                  prop="endjwd2"
+                  ref="endjwd2">
+                  <a-input
+                    v-model="form2.endjwd2"
+                    disabled>
+                    <a-icon
+                      @click="showMap4"
+                      slot="addonAfter"
+                      type="search"
+                      :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -335,19 +437,33 @@
             <!-- 湖泊信息-----开始 -->
             <div v-show="hupoShow">
               <a-col :span="12">
-                <a-form-item label="位置:" prop="weizhihupo" ref="weizhihupo">
+                <a-form-item
+                  label="位置:"
+                  prop="weizhihupo"
+                  ref="weizhihupo">
                   <a-input v-model="form.weizhihupo"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="面积:" prop="mianjihupo" ref="mianjihupo">
+                <a-form-item
+                  label="面积:"
+                  prop="mianjihupo"
+                  ref="mianjihupo">
                   <a-input v-model="form.mianjihupo"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="咸淡水属性:" prop="xdsshuxing" ref="xdsshuxing">
-                  <a-select placeholder="全部" v-model="form2.xdsshuxing">
-                    <a-select-option v-for="item in xdsshuxingvalue" :key="item.key" :value="item.key">
+                <a-form-item
+                  label="咸淡水属性:"
+                  prop="xdsshuxing"
+                  ref="xdsshuxing">
+                  <a-select
+                    placeholder="全部"
+                    v-model="form2.xdsshuxing">
+                    <a-select-option
+                      v-for="item in xdsshuxingvalue"
+                      :key="item.key"
+                      :value="item.key">
                       {{ item.name }}
                     </a-select-option>
                   </a-select>
@@ -358,12 +474,18 @@
             <!-- 湖泊片信息---开始 -->
             <div v-show="hupopianShow">
               <a-col :span="12">
-                <a-form-item label="位置:" prop="weizhihupopian" ref="weizhihupopian">
+                <a-form-item
+                  label="位置:"
+                  prop="weizhihupopian"
+                  ref="weizhihupopian">
                   <a-input v-model="form.weizhihupopian"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="面积:" prop="mianjihupopian" ref="mianjihupopian">
+                <a-form-item
+                  label="面积:"
+                  prop="mianjihupopian"
+                  ref="mianjihupopian">
                   <a-input v-model="form.mianjihupopian"></a-input>
                 </a-form-item>
               </a-col>
@@ -372,12 +494,18 @@
             <!-- 水库信息-----开始 -->
             <div v-show="shuikuShow">
               <a-col :span="12">
-                <a-form-item label="位置:" prop="weizhishuiku" ref="weizhishuiku">
+                <a-form-item
+                  label="位置:"
+                  prop="weizhishuiku"
+                  ref="weizhishuiku">
                   <a-input v-model="form.weizhishuiku"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="管理单位名称:" prop="gldwname" ref="gldwname">
+                <a-form-item
+                  label="管理单位名称:"
+                  prop="gldwname"
+                  ref="gldwname">
                   <a-input v-model="form.gldwname"></a-input>
                 </a-form-item>
               </a-col>
@@ -386,7 +514,10 @@
             <!-- 水库片信息---开始 -->
             <div v-show="shuikupianShow">
               <a-col :span="12">
-                <a-form-item label="位置:" prop="weizhishuikupian" ref="weizhishuikupian">
+                <a-form-item
+                  label="位置:"
+                  prop="weizhishuikupian"
+                  ref="weizhishuikupian">
                   <a-input v-model="form.weizhishuikupian"></a-input>
                 </a-form-item>
               </a-col>
@@ -400,10 +531,10 @@
             () => {
               this.visible = false
             }
-          "
-        >取消</a-button
-        >
-        <a-button type="primary" @click="savePopup">保存</a-button>
+          ">取消</a-button>
+        <a-button
+          type="primary"
+          @click="savePopup">保存</a-button>
       </template>
     </a-modal>
 
@@ -449,13 +580,15 @@ import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 import mapboxgl from 'mapbox-gl'
 import { treeData } from './data.js'
 import AreaTree from '@com/Hczy/AreaTree.vue'
+import getriverlakeList from '@/api/riverlakemanage'
 // import { Scene, Zoom, Scale, PointLayer, PolygonLayer } from '@antv/l7'
 // import { Scene, Scale, PointLayer, LineLayer, PolygonLayer, MarkerLayer, Marker } from '@antv/l7'
 // import { Mapbox } from '@antv/l7-maps'
 export default {
   components: {
     STable,
-    AreaTree
+    AreaTree,
+    getriverlakeList
   },
   data () {
     return {
@@ -470,6 +603,7 @@ export default {
       tableHeight: window.innerHeight - 420,
       listHeight: window.innerHeight - 225,
       leftTreeHeight: window.innerHeight - 115,
+      areadivHeight: window.innerHeight - 200,
       confirmLoading: false,
       visible: false,
       accessToken:
@@ -488,11 +622,11 @@ export default {
       doubleClickZoom: false,
       // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
+      regionalism_id: '',
       form: {
         name: '',
         type: ''
       },
-      
       rules: {
         name: [
           { required: true, message: '河湖库名称不能为空', trigger: 'blur' }
@@ -752,19 +886,22 @@ export default {
 
   },
   methods: {
-    getSelectNode (node) {},
+    getSelectNode (node) {
+      console.log(node)
+     },
     // 左侧树形触发
     onSelecttree () {
 
     },
     // 河湖类型--查询
     hehutypeSelectClick (value) {
+      console.log(value)
     },
     // 新增按钮触发
     gcAddClick (data = {}) {
       this.visible = true
-       this.form = { ...{}, ...data }
-       console.log(this.form)
+      this.form = { ...{}, ...data }
+      console.log(this.form)
       if (this.form.id) {
         this.title = '修改河湖信息'
       } else {
@@ -775,8 +912,8 @@ export default {
       }, 1)
     },
     // 河湖类型选择触发
-    selectChangeadd (value2) {
-      console.log(value2)
+    selectChangeadd () {
+      // console.log(value2)
       alert('123')
       // if (value2 === '0') {
       //   this.heliuShow = true
@@ -983,7 +1120,7 @@ export default {
     },
     // 保存按钮触发
     savePopup () {
-     this.$refs.form.validate(err => {
+      this.$refs.form.validate(err => {
         if (!err) {
           console.log(this.hehutypevalue)
           var reqData = {
