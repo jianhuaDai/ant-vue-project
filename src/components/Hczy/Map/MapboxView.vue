@@ -1,11 +1,12 @@
 <template>
-  <div id="mapView" class="map-view">
+  <div id="MapView" class="map-view" :style="{backgroundColor:backgroundColor}">
   </div>
 </template>
 
 <script>
   import 'mapbox-gl/dist/mapbox-gl.css'
   import mapboxgl from 'mapbox-gl'
+
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFuZ25hbnh4IiwiYSI6ImNqdmU2OWVuYTF5enI0ZHBmMjVkM3V4MDEifQ.lE08N8pOvVxWtKBzNS1PUg'
   export default {
     name: 'MapboxView',
@@ -19,6 +20,10 @@
         type: Object,
         default: () => {
         }
+      },
+      backgroundColor: {
+        type: String,
+        default: '#FFFFFF'
       }
     },
     mounted () {
@@ -32,7 +37,7 @@
               119.91202398644623,
               32.41659873015716
             ],
-            style: '/chiefStyle3',
+            style: '/bright',
             zoom: 6.5,
             minZoom: 6,
             maxZoom: 18,
@@ -42,10 +47,17 @@
           },
           ...this.options
         }
-        const map = new mapboxgl.Map({ ...options, ...{ container: 'mapView', token: MAPBOX_TOKEN } })
+        const map = new mapboxgl.Map({ ...options, ...{ container: 'MapView', token: MAPBOX_TOKEN } })
         // 地图加载、场景加载事件
         map.on('load', () => {
           this.$emit('mapLoaded', map)
+        })
+        map.on('resize', (eventData) => {
+          if (!eventData.manualTrigger) {
+            setTimeout(() => {
+              map.resize({ manualTrigger: true })
+            }, 1)
+          }
         })
       },
       getMap () {

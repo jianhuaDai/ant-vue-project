@@ -1,7 +1,7 @@
 <template>
   <mask-page-view>
     <div class="map">
-      <mapbox-view ref="map" @mapLoaded="mapLoaded"></mapbox-view>
+      <mapbox-view ref="map" :options="mapOptions" @mapLoaded="mapLoaded" :background-color="'rgba(207, 229, 246, 1)'"></mapbox-view>
       <div class="nav-map" v-show="ready">
         <div
           @click="nav(item.id)"
@@ -57,10 +57,15 @@
       Navs,
       LayerBtns
     } from './config/base'
+    let Map = null
     export default {
         name: 'OneMap',
         data () {
           return {
+            mapOptions: {
+              pitch: 30,
+              zoom: 7
+            },
             ready: false,
             baseData: {
               navs: Navs(),
@@ -70,7 +75,7 @@
             layerManager: {
               currentNav: 0,
               activeLayerItem: {},
-              visibleLayers: [11]
+              visibleLayers: []
             },
             tableList: {
               options: {
@@ -88,16 +93,63 @@
         },
         components: { MapboxView, MaskPageView },
         methods: {
+          initMap () {
+            this.nav(1)
+            fetch('/data/js.geojson').then(res => res.json()).then(data => {
+              Map.addSource('320000', {
+                'type': 'geojson',
+                'data': data
+              })
+              Map.addLayer({
+                'id': 'area',
+                'type': 'fill',
+                'source': '320000',
+                'layout': {},
+                'paint': {
+                  'fill-color': '#fff',
+                  'fill-outline-color': '#ccc'
+                }
+              }, 'landuse-residential')
+            })
+          },
           mapLoaded (map) {
+            Map = map
             this.ready = true
+            this.initMap()
           },
           nav (navId) {
+            if (this.layerManager.currentNav === navId) {
+              this.showInfoPanel = !this.showInfoPanel
+              return
+            }
             this.layerManager.currentNav = navId
+            this.showInfoPanel = true
+            this.layerRadioHandle(this.baseData.layerItems[navId][0])
+          },
+          layerManagerHandle (layerItem) {
+
           },
           //
           layerRadioHandle (layerItem) {
+            if (this.layerManager.activeLayerItem.id === layerItem.id) {
+              return
+            }
+            this.layerManager.activeLayerItem = layerItem
+            this.layerManager.visibleLayers = [layerItem.id]
+            this.layerManagerHandle(layerItem)
           },
-          layerCheckboxHandle (layerItem) {
+          layerCheckboxHandle (e, layerItem) {
+            e.stopPropagation()
+            if (this.layerManager.activeLayerItem.id === layerItem.id) {
+              return
+            }
+            const index = this.layerManager.visibleLayers.indexOf(layerItem.id)
+            if (index < 0) {
+              this.layerManager.visibleLayers.push(layerItem.id)
+            } else {
+              this.layerManager.visibleLayers.splice(index, 1)
+            }
+            this.layerManagerHandle(layerItem)
           },
           customRow (record, index) {
             return {
