@@ -11,7 +11,7 @@
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="河湖名称" style="margin-bottom: 0">
-                    <a-input v-model="queryParam.name" placeholder="" />
+                    <a-input v-model="queryParam.water_name" placeholder="" />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -22,7 +22,7 @@
                 <a-col :md="8" :sm="24">
                   <div style="float: right">
                     <a-button style="margin-right: 8px" @click="resetQuery">重置</a-button>
-                    <a-button type="primary">查询</a-button>
+                    <a-button type="primary" @click="search">查询</a-button>
                     <!-- <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button> -->
                   </div>
                 </a-col>
@@ -31,12 +31,12 @@
           </div>
         </a-card>
         <!-- <task-module ref="taskModule"></task-module> -->
-        <a-tabs v-model="activityKey" class="tabs-area">
+        <a-tabs v-model="activityKey" class="tabs-area" @change="tabsChange">
           <a-tab-pane key="stall" tab="一河一档">
-            <RiverAndStall ref="stall"/>
+            <RiverAndStall :queryParam="queryParam" ref="stall"/>
           </a-tab-pane>
           <a-tab-pane key="policy" tab="一河一策">
-            <RiverAndPolicy ref="policy" />
+            <RiverAndPolicy :queryParam="queryParam" ref="policy" />
           </a-tab-pane>
         </a-tabs>
       </a-col>
@@ -60,8 +60,14 @@ export default {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
     resetQuery () {
-      this.queryParam.name = ''
       this.queryParam.title = ''
+      this.queryParam.water_name = ''
+      this.$refs[this.activityKey].$refs.table.refresh(true)
+    },
+    search () {
+      this.$refs[this.activityKey].$refs.table.refresh(true)
+    },
+    tabsChange () {
       this.$refs[this.activityKey].$refs.table.refresh(true)
     }
   },

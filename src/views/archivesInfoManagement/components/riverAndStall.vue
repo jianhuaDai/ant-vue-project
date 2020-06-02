@@ -8,18 +8,14 @@
         :rowKey="record => record.id"
         :columns="columns"
         :data="loadData"
-        showPagination="true"
+        :showPagination="true"
       >
-        <span slot="name" slot-scope="text, record">
-          <a @click="goTo(record)">{{ text }}</a>
+        <span slot="status" slot-scope="text, record">
+          {{ text | statusName }}
         </span>
-
         <span slot="action" slot-scope="text, record, index">
           <template>
-            <a @click="() => {}" v-show="record.publish !== '1'" v-html="'&emsp;发布'"></a>
-            <span style="font-size: 14px" v-show="record.publish === '1'">已发布</span>
-            <a-divider type="vertical" />
-            <a @click="handleEditOrNew(record)">编辑</a>
+            <a @click="handleEditOrNew(record)">修改</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>
@@ -31,9 +27,9 @@
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import { getTasks } from '@/api/task' // 接口调用
+import { getArchivesList } from '@/api/infomanage' // 接口调用
 import { treeData } from '../data.js'
- import AddModule from '../modules/AddModule'
+import AddModule from '../modules/AddModule'
 const statusMap = {
   1: {
     status: 'default',
@@ -52,34 +48,20 @@ const statusMap = {
 export default {
   name: 'RiverAndStall',
   components: { STable, Ellipsis, AddModule },
-  methods: {
-    goTo (record) {
-      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
-    },
-    resetQuery () {
-      this.queryParam.status = ''
-      this.$refs.table.refresh(true)
-    },
-    handleEditOrNew (record) {
-      this.$refs.taskModule.showModal(record)
-    },
-    handleDel (record) {
-      this.$confirm({
-        title: '删除操作',
-        content: `确定要删除${record.name}吗`,
-        onOk () {},
-        onCancel () {}
-      })
+  props: {
+    queryParam: {
+      type: Object,
+      default: () => {
+        return {
+          title: '',
+          water_name: ''
+        }
+      }
     }
   },
-  created () {},
   data () {
     return {
       checkedKeys: [],
-      queryParam: {
-        name: '',
-        status: ''
-      },
       columns: [
         {
           title: '河湖名称',
@@ -88,15 +70,15 @@ export default {
         },
         {
           title: '标题',
-          dataIndex: 'site'
+          dataIndex: 'title'
         },
         {
           title: '附件',
-          dataIndex: 'principal'
+          dataIndex: 'attachment_url'
         },
         {
           title: '发布人',
-          dataIndex: 'person'
+          dataIndex: 'author'
         },
         {
           title: '时间',
@@ -115,17 +97,33 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      loadData: parameter => {
-        return getTasks(Object.assign(parameter, this.queryParam))
-          .then(res => {
-            return res.data
-          })
+      loadData: (parameter = { type: 1 }) => {
+        return getArchivesList(Object.assign(parameter, this.queryParam)).then(res => {
+          return res.data
+        })
       },
       selectedRowKeys: [],
       selectedRows: [],
       treeData: treeData
     }
   },
+  methods: {
+    goTo (record) {
+      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+    },
+    handleEditOrNew (record) {
+      this.$refs.taskModule.showModal(record)
+    },
+    handleDel (record) {
+      this.$confirm({
+        title: '删除操作',
+        content: `确定要删除${record.name}吗`,
+        onOk () {},
+        onCancel () {}
+      })
+    }
+  },
+  created () {},
   filters: {
     statusFilter (type) {
       return statusMap[type].text
