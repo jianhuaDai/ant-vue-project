@@ -183,7 +183,7 @@ export default {
       }
     }
   },
-  component: { mapInput },
+  components: { mapInput },
   data () {
     return {
       getWaterMethods: getWaterMethods,

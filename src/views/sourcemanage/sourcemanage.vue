@@ -14,7 +14,7 @@
                   label="污染源名称:"
                   :label-col="{span:9}"
                   :wrapper-col="{span:15}">
-                  <a-input></a-input>
+                  <a-input v-model="form.name"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="8">
@@ -22,13 +22,10 @@
                   label="污染源类型:"
                   :label-col="{span:9}"
                   :wrapper-col="{span:15}">
-                  <a-select
-                    placeholder="全部"
-                    @change="cjjgChange"
-                    style="width: 100%;">
-                    <a-select-option value="1">工业污染源</a-select-option>
-                    <a-select-option value="5">农业污染源</a-select-option>
-                    <a-select-option value="10">城镇污染源</a-select-option>
+                  <a-select placeholder="全部" @change="cjjgChange" v-model="form.wrytype">
+                    <a-select-option v-for="item in wrytypevalue" :key="item.key" :value="item.key">
+                      {{ item.name }}
+                    </a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -131,8 +128,8 @@
     >
       <a-spin :spinning="confirmLoading">
         <a-form-model
-          ref="form"
-          :model="form"
+          ref="form2"
+          :model="form2"
           labelAlign="left"
           :rules="rules"
           :label-col="labelCol"
@@ -141,80 +138,81 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-model-item label="污染源名称" prop="name" ref="name">
-                <a-input v-model="form.name"></a-input>
+                <a-input v-model="form2.name"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="污染源编码" prop="code" ref="code">
-                <a-input v-model="form.code"></a-input>
+                <a-input v-model="form2.code"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="所属河道" prop="suoshuhedao" ref="suoshuhedao">
-                <a-select v-model="form.suoshuhedao" placeholder="请选择">
-                  <a-select-option value="0">长江</a-select-option>
-                  <a-select-option value="1">秦淮河</a-select-option>
+                <a-select placeholder="全部" v-model="form2.suoshuhedao">
+                  <a-select-option v-for="item in suoshuhedaovalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="所属区域" prop="suoshuquyu" ref="suoshuquyu">
-                <a-select v-model="form.suoshuquyu" placeholder="请选择">
-                  <a-select-option value="0">南京</a-select-option>
-                  <a-select-option value="1">苏州</a-select-option>
-                  <a-select-option value="2">无锡</a-select-option>
+                <a-select placeholder="全部" v-model="form2.suoshuquyu">
+                  <a-select-option v-for="item in suoshuquyuvalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="详细地址" prop="address" ref="address">
-                <a-input v-model="form.address"></a-input>
+                <a-input v-model="form2.address"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="污染源类型" prop="wuranyuantype" ref="wuranyuantype">
-                <a-select v-model="form.wuranyuantype" placeholder="请选择">
-                  <a-select-option value="0">工业污染源</a-select-option>
-                  <a-select-option value="1">农业污染源</a-select-option>
-                  <a-select-option value="2">城镇污染源</a-select-option>
+                <a-select placeholder="全部" v-model="form2.wuranyuantype">
+                  <a-select-option v-for="item in wuranyuantypevalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="经纬度" prop="jwd" ref="jwd">
-                <a-input v-model="form.jwd" disabled>
+                <!-- <a-input v-model="form.jwd" disabled>
                   <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
-                </a-input>
+                </a-input> -->
+                <mapInput v-model="form2.location" v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="关注类别" prop="guanzhujibie" ref="guanzhujibie">
-                <a-select v-model="form.guanzhujibie" placeholder="全部">
-                  <a-select-option value="0">省级</a-select-option>
-                  <a-select-option value="1">市级</a-select-option>
-                  <a-select-option value="2">区级</a-select-option>
-                  <a-select-option value="3">县级</a-select-option>
+                <a-select placeholder="全部" v-model="form2.guanzhujibie">
+                  <a-select-option v-for="item in guanzhujibievalue" :key="item.key" :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="发现时间" prop="time" ref="time">
-                <a-date-picker style="width:100%;" type="date" v-model="form.time" placeholder="请选择时间"></a-date-picker>
+                <a-date-picker style="width:100%;" type="date" v-model="form2.time" placeholder="请选择时间"></a-date-picker>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="所属河长" prop="sshezhang" ref="sshezhang">
-                <a-input v-model="form.sshezhang"></a-input>
+                <a-input v-model="form2.sshezhang"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="影响范围" prop="yxfanwei" ref="yxfanwei">
-                <a-input v-model="form.yxfanwei"></a-input>
+                <a-input v-model="form2.yxfanwei"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="治理情况" prop="zhiliqk" ref="zhiliqk">
-                <a-input v-model="form.zhiliqk"></a-input>
+                <a-input v-model="form2.zhiliqk"></a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -271,10 +269,12 @@ import { STable } from '@/components'
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 import mapboxgl from 'mapbox-gl'
+import mapInput from '@/components/Hczy/mapInput.vue'
 // import { getSourceList } from '@/api/task' // 接口调用
 export default {
   components: {
-    STable
+    STable,
+    mapInput
   },
   data () {
     return {
@@ -284,14 +284,18 @@ export default {
       confirmLoading: false,
       form: {
         name: '',
+        wrytype: ''
+      },
+      form2: {
+        name: '',
         code: '',
-        suoshuhedao: '',
-        suoshuquyu: '',
+        suoshuhedao: undefined,
+        suoshuquyu: undefined,
         address: '',
-        wuranyuantype: '',
-        jwd: '',
-        guanzhujibie: '',
-        time: '',
+        wuranyuantype: undefined,
+        location: '',
+        guanzhujibie: undefined,
+        time: undefined,
         sshezhang: '',
         yxfanwei: '',
         zhiliqk: ''
@@ -313,6 +317,69 @@ export default {
           { required: true, message: '经纬度不能为空', trigger: 'blur' }
         ]
       },
+      // 污染源类型
+      wrytypevalue: [
+        {
+          value: '1',
+          name: '工业污染源'
+        },
+        {
+          value: '2',
+          name: '农业污染源'
+        }, {
+          value: '3',
+          name: '城镇污染源'
+        }
+      ],
+      // 所属河道
+      suoshuhedaovalue: [
+        {
+          value: '0',
+          name: '长江'
+        },
+        {
+          value: '1',
+          name: '秦淮河'
+        }
+      ],
+      // 所属区域
+      suoshuquyuvalue: [
+
+      ],
+      // 污染源类型
+      wuranyuantypevalue: [
+        {
+          value: '0',
+          name: '工业污染源'
+        },
+        {
+          value: '1',
+          name: '农业污染源'
+        },
+        {
+          value: '2',
+          name: '城镇污染源'
+        }
+      ],
+      // 关注类别
+      guanzhujibievalue: [
+        {
+          value: '0',
+          name: '省级'
+        },
+        {
+          value: '1',
+          name: '市级'
+        },
+        {
+          value: '2',
+          name: '区级'
+        },
+        {
+          value: '3',
+          name: '县级'
+        }
+      ],
       // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
       visible: false,
@@ -369,8 +436,8 @@ export default {
   },
   methods: {
     // 污染源类型触发
-    cjjgChange () {
-
+    cjjgChange (value) {
+      console.log(value)
     },
     // 查询按钮触发
     searchClick () {
@@ -448,6 +515,9 @@ export default {
     // 新增按钮触发
     gcAddClick () {
       this.visible = true
+      setTimeout(() => {
+          this.$refs.form2.clearValidate()
+        }, 1)
     },
     savePopup () {
       this.$refs.form.validate(err => {

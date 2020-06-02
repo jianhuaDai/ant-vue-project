@@ -5,12 +5,16 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="所属区域" style="margin-bottom: 0">
-                <a-input v-model="queryParam.name" placeholder="" />
+              <a-form-item label="排口类型" style="margin-bottom: 0">
+                <a-select v-model="queryParam.name" placeholder="">
+                  <a-select-option value="1">工业废水</a-select-option>
+                  <a-select-option value="2">生活污水</a-select-option>
+                  <a-select-option value="3">混合废污水</a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="取水口名称" style="margin-bottom: 0">
+              <a-form-item label="排污口名称" style="margin-bottom: 0">
                 <a-input v-model="queryParam.status" placeholder="" />
               </a-form-item>
             </a-col>
@@ -66,28 +70,28 @@ export default {
       },
       columns: [
         {
-          title: '取水口名称',
+          title: '排污口名称',
           dataIndex: 'name',
           scopedSlots: { customRender: 'name' }
         },
         {
-          title: '取水流量',
+          title: '位置',
           dataIndex: 'site'
         },
         {
-          title: '所属水源地',
+          title: '排污来源',
           dataIndex: 'principal'
         },
+        // {
+        //   title: '经纬度',
+        //   dataIndex: 'create_at'
+        // },
         {
-          title: '经纬度',
-          dataIndex: 'create_at'
-        },
-        {
-          title: '是否为引调水工程取水口',
+          title: '排水去向',
           dataIndex: 'is1'
         },
         {
-          title: '取水方式',
+          title: '排口类型',
           dataIndex: 'is2'
         },
         {

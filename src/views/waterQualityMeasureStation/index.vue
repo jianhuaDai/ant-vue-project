@@ -4,17 +4,22 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
               <a-form-item label="所属区域" style="margin-bottom: 0">
                 <a-input v-model="queryParam.name" placeholder="" />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="取水口名称" style="margin-bottom: 0">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="所属水体" style="margin-bottom: 0">
                 <a-input v-model="queryParam.status" placeholder="" />
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :md="6" :sm="24">
+              <a-form-item label="测站类型" style="margin-bottom: 0">
+                <a-input v-model="queryParam.status" placeholder="" />
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
               <div style="float: right">
                 <a-button style="margin-right: 8px" @click="resetQuery">重置</a-button>
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>

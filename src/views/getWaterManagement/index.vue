@@ -45,7 +45,7 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule" :formData="rowData"></add-module>
+      <add-module ref="getWaterModule" :formData="rowData"></add-module>
     </a-card>
   </div>
 </template>
@@ -148,7 +148,7 @@ export default {
             imageUrl: '',
             location: '1, 1'
           })
-      this.$refs.taskModule.showModal(record)
+      this.$refs.getWaterModule.showModal(record)
     },
     handleDel (record) {
       this.$confirm({

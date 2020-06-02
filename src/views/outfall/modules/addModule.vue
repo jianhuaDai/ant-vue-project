@@ -19,122 +19,102 @@
         >
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-model-item label="取水口名称" prop="name" ref="name">
+              <a-form-model-item label="排污口名称" prop="name" ref="name">
                 <a-input v-model="form.name" />
               </a-form-model-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name2" ref="name">
+            <!-- <a-col :span="12">
+              <a-form-model-item label="位置" prop="name2" ref="name">
                 <a-cascader :options="options" placeholder="" />
               </a-form-model-item>
-            </a-col>
+            </a-col> -->
             <a-col :span="12">
-              <a-form-model-item label="具体地址" prop="name3" ref="name">
+              <a-form-model-item label="排口来源" prop="name3" ref="name">
                 <a-input v-model="form.name3" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属水源地" prop="name4" ref="name">
-                <a-cascader :options="options" placeholder="" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name5" ref="name">
-                <mapInput v-model="form.location" v-if="visible"></mapInput>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="取水方式" prop="name6" ref="name">
-                <a-select v-model="form.name4">
-                  <a-select-option v-for="item in getWaterMethods" :key="item.key" :value="item.key">
-                    {{ item.name }}
+              <a-form-model-item label="排口类型" prop="name4" ref="name">
+                <a-select v-model="form.name4" placeholder="">
+                  <a-select-option v-for="itemType in outfallTypes" :key="itemType.key">
+                    {{ itemType.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水流量" prop="name7" ref="name">
+              <a-form-model-item label="经纬度" prop="name5" ref="name5">
+                <mapInput v-model="form.location" v-if="visible"></mapInput>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="所属区域" prop="name6" ref="name">
+                <a-cascader :options="options" placeholder="" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="监测频次" prop="name7" ref="name">
                 <a-input v-model="form.name5">
                   <template slot="addonAfter">
-                    m³/s
+                    次/月
                   </template>
                 </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="是否为引调水工程取水口"
-                prop="name8"
-                ref="name"
-                :labelCol="{ span: 12 }"
-                :wrapperCol="{ span: 10, offset: 1 }"
-              >
-                <a-switch checked-children="开" un-checked-children="关" default-checked />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="引调水工程名称" prop="name9" ref="name">
+              <a-form-model-item label="管径" prop="name9" ref="name">
                 <a-input v-model="form.name9" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="规模类型" prop="name10" ref="name">
+              <a-form-model-item label="排水去向" prop="name10" ref="name">
                 <a-select v-model="form.name10">
-                  <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
+                  <a-select-option v-for="item in drainageDirection" :key="item.key" :value="item.key">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水口工程名称" prop="name11" ref="name">
+              <a-form-model-item label="所属水体" prop="name11" ref="name">
                 <a-input v-model="form.name11" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="主要取水用途" prop="name12" ref="name">
+              <a-form-model-item label="关注级别" prop="name12" ref="name">
                 <a-select v-model="form.name12">
-                  <a-select-option v-for="item in purposes" :key="item.key" :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
+                  <a-select-option value="1">省级</a-select-option>
+                  <a-select-option value="2">市级</a-select-option>
+                  <a-select-option value="3">区县级</a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水许可证编号" prop="name13" ref="name">
+              <a-form-model-item label="所属河长" prop="name13" ref="name">
                 <a-input v-model="form.name13" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="供水范围" prop="name14" ref="name">
-                <a-input v-model="form.name14" />
+              <a-form-model-item label="设计入河量" prop="name14" ref="name">
+                <a-input v-model="form.name14">
+                  <template slot="addonAfter">
+                    t/a
+                  </template>
+                </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="开始取水时间" prop="name15" ref="name">
-                <a-date-picker v-model="form.date1" show-time type="date" placeholder="" style="width: 100%;" />
+              <a-form-model-item label="是否有视频" prop="name15" ref="name">
+                <a-switch checked-children="开" un-checked-children="关" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="图片" prop="name16" ref="name16">
-                <a-upload
-                  :customRequest="customRequest"
-                  :fileList="fileList"
-                  class="avatar-uploader"
-                  :show-upload-list="false"
-                  accept=".png,.jpg,.bmp"
-                  :headers="{ 'Content-Type': 'multipart/form-data' }"
-                >
-                  <img width="100" height="100" v-if="showImage" :src="form.imageUrl" alt="avatar" />
-                  <div v-else>
-                    <a-button> <a-icon type="upload" /> </a-button>
-                  </div>
-                </a-upload>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="备注" prop="name17" ref="name">
-                <a-input v-model="form.name17" />
+              <a-form-model-item label="排放方式" prop="name17" ref="name">
+                <a-select v-model="form.name17" placeholder="">
+                  <a-select-option value="1">连续</a-select-option>
+                  <a-select-option value="2">间接</a-select-option>
+                  <a-select-option value="3">季节</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -158,7 +138,7 @@
 
 <script>
 // import { saveEmploy } from '../../../../api/manage'
-import { getWaterMethods, scaleTypes, purposes } from '../data.js'
+import { outfallTypes, drainageDirection } from '../data.js'
 import { uploadSingle } from '@/api/upload'
 import mapInput from '@/components/Hczy/mapInput.vue'
 export default {
@@ -183,12 +163,11 @@ export default {
       }
     }
   },
-  component: { mapInput },
+  components: { mapInput },
   data () {
     return {
-      getWaterMethods: getWaterMethods,
-      scaleTypes: scaleTypes,
-      purposes: purposes,
+      outfallTypes,
+      drainageDirection,
       getWaterModule: 'getWaterModule',
       fileList: [],
       title: '新建',
@@ -273,9 +252,9 @@ export default {
       this.visible = true
       this.form = { ...{}, ...data }
       if (this.form.id) {
-        this.title = '修改取水口'
+        this.title = '修改排污口'
       } else {
-        this.title = '新增取水口'
+        this.title = '新增排污口'
       }
       setTimeout(() => {
         this.$refs.form.clearValidate()
