@@ -66,33 +66,37 @@ export default {
       },
       columns: [
         {
-          title: '取水口名称',
+          title: '测站名称',
           dataIndex: 'name',
           scopedSlots: { customRender: 'name' }
         },
         {
-          title: '取水流量',
+          title: '测站编码',
           dataIndex: 'site'
         },
         {
-          title: '所属水源地',
+          title: '所属水体',
           dataIndex: 'principal'
         },
         {
-          title: '经纬度',
+          title: '所属区域',
           dataIndex: 'create_at'
         },
         {
-          title: '是否为引调水工程取水口',
+          title: '测站类别',
           dataIndex: 'is1'
         },
         {
-          title: '取水方式',
+          title: '监测方式',
           dataIndex: 'is2'
         },
         {
-          title: '所属区域',
+          title: '监测频次',
           dataIndex: 'is3'
+        },
+        {
+          title: '所属部门',
+          dataIndex: 'is4'
         },
         {
           title: '操作',
