@@ -17,6 +17,7 @@ import MultiTab from '@/components/MultiTab'
 import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
+import DictionarySelect from '@/components/Hczy/DictionarySelect/index'
 
 VueClipboard.config.autoSetContainer = true
 
@@ -27,6 +28,7 @@ Vue.use(VueStorage, config.storageOptions)
 Vue.use(VueClipboard)
 Vue.use(PermissionHelper)
 Vue.use(VueCropper)
+Vue.use(DictionarySelect)
 
 Vue.component(VeLine.name, VeLine)
 Vue.component(VeHisTogram.name, VeHisTogram)
