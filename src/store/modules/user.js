@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
+// import { login, getInfo, logout } from '@/api/login'
+import { login, getInfo, logout } from '@/api/microApi/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 import { userRole } from '@/config/custom.config'
@@ -54,8 +55,8 @@ const user = {
         getInfo().then(response => {
           const result = response.data
           if (result.roles) {
-            const role = result.roles[0].role
-            role.permissions = userRole[role.name].permissions
+            const role = result.roles[0]
+            role.permissions = userRole[role.role].permissions
             role.permissions.map(per => {
               if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
                 const action = per.actionEntitySet.map(action => {
@@ -73,12 +74,13 @@ const user = {
             reject(new Error('getInfo: roles must be a non-null array !'))
           }
 
-          commit('SET_NAME', { name: result.user.name, welcome: welcome() })
-          commit('SET_AVATAR', result.user.pic_url)
+          commit('SET_NAME', { name: result.username, welcome: welcome() })
+          commit('SET_AVATAR', result.pic_url)
 
-          resolve(result.roles[0].role)
+          resolve(result.roles[0])
           // resolve(response)
         }).catch(error => {
+          console.log(error)
           reject(error)
         })
       })
