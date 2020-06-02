@@ -15,3 +15,14 @@ export function uploadSingle (parameter) {
     }
   })
 }
+
+export function uploadMulti (params) {
+  return axios({
+    url: '/common/file_upload_multi',
+    method: 'post',
+    data: params,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

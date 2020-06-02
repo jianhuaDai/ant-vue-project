@@ -40,6 +40,14 @@ export function addArchivesInfo (params) {
     data: params
   })
 }
+// 编辑档案信息
+export function updateArchivesInfo (id, params) {
+    return axios({
+        url: `/documents/${id}`,
+        method: 'put',
+        data: params
+    })
+}
 // 删除档案（逻辑删除）
 export function deleteArchivesInfo (id) {
     return axios({
@@ -74,6 +82,15 @@ export function deleteArchivesInfo (id) {
 export function getArchivesList (params) {
     return axios({
         url: api.GETARCHIVESINFOLIST,
+        method: 'post',
+        data: params
+    })
+}
+
+// 分页查询河湖
+export function getRiversAndLakes (params) {
+    return axios({
+        url: '/water_infos/page_query',
         method: 'post',
         data: params
     })

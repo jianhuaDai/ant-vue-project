@@ -15,7 +15,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="河湖标题" style="margin-bottom: 0">
+                  <a-form-item label="标题" style="margin-bottom: 0">
                     <a-input v-model="queryParam.title" placeholder="" />
                   </a-form-item>
                 </a-col>
@@ -33,7 +33,7 @@
         <!-- <task-module ref="taskModule"></task-module> -->
         <a-tabs v-model="activityKey" class="tabs-area" @change="tabsChange">
           <a-tab-pane key="stall" tab="一河一档">
-            <RiverAndStall :queryParam="queryParam" ref="stall"/>
+            <RiverAndStall :queryParam="queryParam" ref="stall" />
           </a-tab-pane>
           <a-tab-pane key="policy" tab="一河一策">
             <RiverAndPolicy :queryParam="queryParam" ref="policy" />
@@ -55,7 +55,9 @@ export default {
   name: 'ArchivesInfoManagement',
   components: { STable, Ellipsis, RiverAndStall, RiverAndPolicy, AreaTree },
   methods: {
-    getSelectNode (node) {},
+    getSelectNode (node) {
+      this.queryParam.regionalism_id = node[0]
+    },
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
@@ -68,7 +70,9 @@ export default {
       this.$refs[this.activityKey].$refs.table.refresh(true)
     },
     tabsChange () {
-      this.$refs[this.activityKey].$refs.table.refresh(true)
+      this.$nextTick(() => {
+        this.$refs[this.activityKey].$refs.table.refresh(true)
+      })
     }
   },
   created () {},
@@ -77,8 +81,9 @@ export default {
       checkedKeys: [],
       treeData: treeData,
       queryParam: {
-        name: '',
-        title: ''
+        water_name: '',
+        title: '',
+        regionalism_id: ''
       },
       activityKey: 'stall'
     }

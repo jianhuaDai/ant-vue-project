@@ -10,6 +10,11 @@
         :data="loadData"
         :showPagination="true"
       >
+        <template slot="attachment_url" slot-scope="text">
+          <div v-for="(item, index) in text" :key="index">
+            {{ item.name }}
+          </div>
+        </template>
         <span slot="status" slot-scope="text, record">
           {{ text | statusName }}
         </span>
@@ -20,14 +25,14 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule"></add-module>
+      <add-module ref="taskModule" :type="1" @refreshTable="$refs.table.refresh(true)"></add-module>
     </a-card>
   </div>
 </template>
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import { getArchivesList } from '@/api/infomanage' // 接口调用
+import { getArchivesList, deleteArchivesInfo } from '@/api/infomanage' // 接口调用
 import { treeData } from '../data.js'
 import AddModule from '../modules/AddModule'
 const statusMap = {
@@ -65,8 +70,8 @@ export default {
       columns: [
         {
           title: '河湖名称',
-          dataIndex: 'name',
-          scopedSlots: { customRender: 'name' }
+          dataIndex: 'water_name',
+          scopedSlots: { customRender: 'water_name' }
         },
         {
           title: '标题',
@@ -74,7 +79,8 @@ export default {
         },
         {
           title: '附件',
-          dataIndex: 'attachment_url'
+          dataIndex: 'attachment_url',
+          scopedSlots: { customRender: 'attachment_url' }
         },
         {
           title: '发布人',
@@ -93,12 +99,12 @@ export default {
         {
           title: '操作',
           dataIndex: 'action',
-          width: '160px',
+          width: '100px',
           scopedSlots: { customRender: 'action' }
         }
       ],
-      loadData: (parameter = { type: 1 }) => {
-        return getArchivesList(Object.assign(parameter, this.queryParam)).then(res => {
+      loadData: parameter => {
+        return getArchivesList(Object.assign(parameter, this.queryParam, { type: 1 })).then(res => {
           return res.data
         })
       },
@@ -111,14 +117,20 @@ export default {
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
-    handleEditOrNew (record) {
+    handleEditOrNew (record = {}) {
       this.$refs.taskModule.showModal(record)
     },
     handleDel (record) {
+      const _this = this
       this.$confirm({
         title: '删除操作',
-        content: `确定要删除${record.name}吗`,
-        onOk () {},
+        content: `确定要删除${record.water_name}吗`,
+        onOk () {
+          deleteArchivesInfo(record.document_id).then((res) => {
+            _this.$message.success('删除成功！')
+            _this.$refs.table.refresh(true)
+          })
+        },
         onCancel () {}
       })
     }
