@@ -1,5 +1,9 @@
 <template>
-  <a-select :mode="mode" :disabled="disabled" :default-value="value" :placeholder="placeholder" @change="handleChange">
+  <a-select
+    :mode="mode"
+    :disabled="disabled"
+    v-model="val"
+    :placeholder="placeholder">
     <a-spin v-if="fetching" slot="notFoundContent" />
     <a-select-option v-for="item in data" :key="item.id">{{ item.name }}</a-select-option>
   </a-select>
@@ -39,9 +43,15 @@
             default: '请选择'
           }
         },
+        watch: {
+          val: function (val, oldVal) {
+            this.handleChange(val)
+          }
+        },
         data: function () {
           return {
             fetching: false,
+            val: '',
             data: []
           }
         },
@@ -53,12 +63,16 @@
                 this.data.unshift({ id: '', name: '全部' })
               }
               this.data = this.data.concat(res.data || [])
+              if (this.data.length > 0 && this.value === '') {
+                this.val = this.data[0].id
+              } else {
+                this.val = this.value
+              }
             }).finally(() => {
               this.fetching = false
             })
           },
-          handleChange (value, ...rest) {
-            console.log('==change:', value)
+          handleChange (value) {
             this.$emit('change', value)
           }
         },

@@ -64,7 +64,8 @@
           return {
             mapOptions: {
               pitch: 30,
-              zoom: 7
+              zoom: 7,
+              style: '/bright2'
             },
             ready: false,
             baseData: {

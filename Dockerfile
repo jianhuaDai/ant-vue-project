@@ -1,6 +1,6 @@
 FROM node:alpine3.10 as node
 
-WORKDIR /myapp/esea-admin-front
+WORKDIR /myapp/river-chief-web
 
 COPY . .
 
