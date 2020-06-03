@@ -50,6 +50,9 @@
         watch: {
           val: function (val, oldVal) {
             this.handleChange(val)
+          },
+          value: function (val, oldVal) {
+            this.val = this.value
           }
         },
         data: function () {
