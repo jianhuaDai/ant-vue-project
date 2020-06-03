@@ -27,6 +27,13 @@ export const asyncRouterMap = [
         component: () => import('@/views/map/OneMap'),
         meta: { title: '一张图', icon: map, iconSelected: mapSelected, hiddenBread: true, hideHeader: true, permission: ['dashboard'], hiddenHeaderContent: true }
       },
+      // // 一张图
+      // {
+      //   path: '/map2',
+      //   name: 'MapIndex2',
+      //   component: () => import('@/views/map/MapDemo'),
+      //   meta: { title: '一张图2', icon: map, iconSelected: mapSelected, hiddenBread: true, hideHeader: true, permission: ['dashboard'], hiddenHeaderContent: true }
+      // },
       // 信息管理
       {
         path: '/info-manage',
