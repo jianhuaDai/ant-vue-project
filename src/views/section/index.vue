@@ -41,7 +41,7 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule" :formData="rowData"></add-module>
+      <add-module ref="taskModule" :isAdd="isAdd" @refreshTable="$refs.table.refresh(true)"></add-module>
     </a-card>
   </div>
 </template>
@@ -98,42 +98,21 @@ export default {
           return res.data
         })
       },
-      selectedRowKeys: [],
-      selectedRows: [],
-      rowData: {
-        id: '',
-        name: '',
-        site: '',
-        principal: '',
-        participant: '',
-        progress: '',
-        imageUrl: '',
-        location: '1, 1'
-      }
+      isAdd: false
     }
   },
   components: { PageView, STable, Ellipsis, AddModule },
   methods: {
-    goTo (record) {
-      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
-    },
     resetQuery () {
       this.queryParam.status = ''
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
-      record
-        ? (this.rowData = record)
-        : (this.rowData = {
-            id: '',
-            name: '',
-            site: '',
-            principal: '',
-            participant: '',
-            progress: '',
-            imageUrl: '',
-            location: '1, 1'
-          })
+      if (record) {
+        this.isAdd = false
+      } else {
+        this.isAdd = true
+      }
       this.$refs.taskModule.showModal(record)
     },
     handleDel (record) {

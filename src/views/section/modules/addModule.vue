@@ -145,45 +145,25 @@
 </template>
 
 <script>
-// import { saveEmploy } from '../../../../api/manage'
-import { outfallTypes, drainageDirection } from '../data.js'
-import { uploadSingle } from '@/api/upload'
+import { outfallTypes } from '../data.js'
+import { addSection, editSection } from '@/api/section'
 import mapInput from '@/components/Hczy/mapInput.vue'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 export default {
   props: {
-    orgData: {
-      type: Array,
-      default: () => []
-    },
-    formData: {
-      type: Object,
-      default: function () {
-        return {
-          id: '',
-          name: '',
-          site: '',
-          principal: '',
-          participant: '',
-          progress: '',
-          imageUrl: '',
-          location: '',
-          target: 0
-        }
-      }
+    isAdd: {
+      type: Boolean,
+      default: true
     }
   },
   components: { mapInput, uploadSingleImg },
   data () {
     return {
       outfallTypes,
-      drainageDirection,
       getWaterModule: 'getWaterModule',
-      fileList: [],
       title: '新建',
       labelCol: { span: 8 },
       wrapperCol: { span: 15, offset: 1 },
-      status: true,
       confirmLoading: false,
       form: {},
       rules: {
@@ -192,9 +172,7 @@ export default {
         principal: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
         participant: [{ required: true, message: '参与人不能为空', trigger: 'blur' }]
       },
-      layout: 'horizontal',
       visible: false,
-      showImage: false,
       options: [
         {
           value: 'zhejiang',
@@ -231,40 +209,17 @@ export default {
       ]
     }
   },
-  watch: {
-    orgData (value) {
-      this.treeData = this.buildTreeData(value, [])
-    },
-    form: {
-      handler (value) {
-        this.showImage = value.image_url
-      },
-      deep: true
-    }
-  },
+  watch: {},
   mounted () {},
-  created () {
-    this.form = this.formData
-  },
+  created () {},
   methods: {
-    onOk () {},
-    customRequest (data) {
-      const formData = new FormData()
-      formData.append('file', data.file)
-      uploadSingle(formData)
-        .then(res => {
-          this.$set(this.form, 'image_url', res.data)
-        })
-        .catch(() => {})
-      this.fileList = [data.file]
-    },
     showModal (data = {}) {
       this.visible = true
       this.form = { ...{}, ...data }
-      if (this.form.id) {
-        this.title = '修改排污口'
+      if (this.isAdd) {
+        this.title = '修改断面'
       } else {
-        this.title = '新增排污口'
+        this.title = '新增断面'
       }
       setTimeout(() => {
         this.$refs.form.clearValidate()
@@ -274,26 +229,21 @@ export default {
       const _this = this
       this.$refs.form.validate(valid => {
         if (valid) {
-          _this.confirmLoading = true
-          let params = _this.form
-          let isEdit = true
-          if (!_this.form.employee_id) {
-            isEdit = false
-            params = {
-              employee_form_list: [_this.form]
-            }
+          if (_this.isAdd) {
+            // 新增
+            addSection(this.form).then(res => {
+              _this.$message.success('新增成功！')
+              _this.$emit('refreshTable')
+              _this.visible = false
+            })
+          } else {
+            // 修改
+            editSection(this.form).then(res => {
+              _this.$message.success('修改成功！')
+              _this.$emit('refreshTable')
+              _this.visible = false
+            })
           }
-          _this.visible = false
-          // saveEmploy(params, isEdit).then((res) => {
-          //   _this.$message.success('保存成功')
-          //   _this.visible = false
-          //   _this.$refs.userForm.resetFields()
-          //   _this.$emit('ok')
-          // }).catch((err) => {
-          //   _this.$message.error(err.msg || '保存失败')
-          // }).finally(() => {
-          //   _this.confirmLoading = false
-          // })
         }
       })
     }
