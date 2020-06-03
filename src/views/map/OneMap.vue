@@ -51,7 +51,10 @@
 </template>
 
 <script>
-    import MapboxView from '../../components/Hczy/Map/MapboxView'
+  import Vue from 'vue'
+  import MapboxView from '../../components/Hczy/Map/MapboxView'
+    import mapboxgl from 'mapbox-gl'
+    import HcMarker from './components/HcMarker'
     import { MaskPageView } from '@/layouts'
     import {
       Navs,
@@ -112,6 +115,7 @@
                 }
               }, 'landuse-residential')
             })
+            this.renderMarker()
           },
           mapLoaded (map) {
             Map = map
@@ -130,7 +134,6 @@
           layerManagerHandle (layerItem) {
 
           },
-          //
           layerRadioHandle (layerItem) {
             if (this.layerManager.activeLayerItem.id === layerItem.id) {
               return
@@ -151,6 +154,26 @@
               this.layerManager.visibleLayers.splice(index, 1)
             }
             this.layerManagerHandle(layerItem)
+          },
+          // 渲染marker
+          renderMarker (layerId) {
+            const el = document.createElement('div')
+            el.className = 'hc-marker-container'
+            const child = document.createElement('div')
+            el.appendChild(child)
+            const MarkerInstance = Vue.extend(HcMarker)
+            new MarkerInstance({
+              propsData: {
+              }
+            }).$mount(child)
+            const marker = new mapboxgl.Marker({
+              element: el
+            })
+              .setLngLat([
+                119.91202398644623,
+                32.41659873015716
+              ])
+              .addTo(Map)
           },
           customRow (record, index) {
             return {
