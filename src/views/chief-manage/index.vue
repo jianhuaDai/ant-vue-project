@@ -18,7 +18,7 @@
                 </a-col>
                 <a-col :md="9" :sm="24">
                   <a-form-item label="河湖长类型" style="margin-bottom: 0">
-                    <dictionary-select v-model="queryParam.status" :insert-option-all="false" :select-first="true" :dictionary-type="DictionaryEnum.WATER_TYPE"></dictionary-select>
+                    <dictionary-select v-model="queryParam.status" :insert-option-all="true" :select-first="true" :dictionary-type="DictionaryEnum.WATER_TYPE"></dictionary-select>
                   </a-form-item>
                 </a-col>
                 <a-col :md="6" :sm="24">
