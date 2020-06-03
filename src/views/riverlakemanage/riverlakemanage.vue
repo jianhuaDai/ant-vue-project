@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-row :gutter="8">
-      <a-col :span="6">
+      <a-col :span="4">
         <a-card
           title="区域数据"
           :bordered="false"
@@ -12,7 +12,7 @@
           </div>
         </a-card>
       </a-col>
-      <a-col :span="18">
+      <a-col :span="20">
         <a-row :gutter="8">
           <a-col :span="24">
             <a-card :bodyStyle="{padding:'10px 24px 10px 24px'}">
@@ -24,28 +24,21 @@
                 :wrapper-col="wrapperCol">
                 <a-row>
                   <a-col :span="8">
-                    <a-form-model-item label="河湖名称:" prop="name">
+                    <a-form-model-item
+                      label="河湖名称:"
+                      prop="name">
                       <a-input v-model="form.name"></a-input>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="8">
-                    <a-form-model-item label="河湖类型:" prop="type">
-                      <!-- <a-select
-                        placeholder="全部"
-                        v-model="form.type">
-                        <a-select-option
-                          v-for="item in hhtypevalue"
-                          :key="item.key"
-                          :value="item.key">
-                          {{ item.name }}
-                        </a-select-option>
-                      </a-select> -->
-                      <a-select v-model="form.wrytype" placeholder="全部">
-                        <a-select-option value="0">河道</a-select-option>
-                        <a-select-option value="1">河段</a-select-option>
-                        <a-select-option value="2">湖泊</a-select-option>
-                        <a-select-option value="3">水库</a-select-option>
-                      </a-select>
+                    <a-form-model-item
+                      label="河湖类型:"
+                      prop="type">
+                      <dictionary-select
+                        v-model="form.type"
+                        :insert-option-all="true"
+                        :dictionary-type="DictionaryEnum.WATER_TYPE">
+                      </dictionary-select>
                     </a-form-model-item>
                   </a-col>
                   <a-col
@@ -118,12 +111,44 @@
                   :columns="columns"
                   :data="loadData"
                   showPagination="true">
+                  <template
+                    slot="water_type"
+                    slot-scope="text, record">
+                    <div v-if="record.water_type === 1">
+                      <span>河流</span>
+                    </div>
+                    <div v-if="record.water_type === 4">
+                      <span>河段</span>
+                    </div>
+                    <div v-if="record.water_type === 5">
+                      <span>湖泊</span>
+                    </div>
+                    <div v-if="record.water_type === 6">
+                      <span>湖泊片</span>
+                    </div>
+                    <div v-if="record.water_type === 7">
+                      <span>水库</span>
+                    </div>
+                    <div v-if="record.water_type === 8">
+                      <span>水库片</span>
+                    </div>
+                  </template>
+                  <template
+                    slot="status"
+                    slot-scope="text, record">
+                    <div v-if="record.water_type === 1">
+                      <span>启用</span>
+                    </div>
+                    <div v-if="record.water_type === 0">
+                      <span>禁用</span>
+                    </div>
+                  </template>
                   <!-- <span
                     slot="serial"
                     slot-scope="text, record, index">
                     {{ index + 1 }}
                   </span> -->
-                  <span
+                  <!-- <span
                     slot="status"
                     slot-scope="text">
                     <a-badge
@@ -134,21 +159,21 @@
                     slot="name"
                     slot-scope="text, record">
                     <a @click="goTo(record)">{{ text }}</a>
-                  </span>
+                  </span> -->
 
                   <span
                     slot="action"
                     slot-scope="text, record, index">
                     <template>
-                      <a
+                      <!-- <a
                         @click="() => {}"
                         v-show="record.publish !== '1'"
-                        v-html="'&emsp;发布'"></a>
-                      <span
+                        v-html="'&emsp;发布'"></a> -->
+                      <!-- <span
                         style="font-size: 14px"
-                        v-show="record.publish === '1'">已发布</span>
-                      <a-divider type="vertical" />
-                      <a @click="handleEditOrNew(record)">编辑</a>
+                        v-show="record.publish === '1'">已发布</span> -->
+                      <!-- <a-divider type="vertical" /> -->
+                      <a @click="handleEditOrNew(record)">修改</a>
                       <a
                         @click="handleDel(record)"
                         style="margin-left: 10px;color: red">删除</a>
@@ -201,7 +226,7 @@
                 label="河湖类型"
                 prop="hehutype"
                 ref="hehutype">
-                <a-select
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehutypevalue"
                   @change="selectChangeadd">
@@ -211,7 +236,11 @@
                     :value="item.key">
                     {{ item.name }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.hehutype"
+                  :dictionary-type="DictionaryEnum.WATER_TYPE">
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -227,7 +256,7 @@
                 label="河湖库层级"
                 prop="hehucengji"
                 ref="hehucengji">
-                <a-select
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehucengji">
                   <a-select-option
@@ -236,7 +265,11 @@
                     :value="item.key">
                     {{ item.name }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.hehucengji"
+                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -244,7 +277,7 @@
                 label="河湖长"
                 prop="hehuzhang"
                 ref="hehuzhang">
-                <a-select
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehuzhang">
                   <a-select-option
@@ -253,7 +286,11 @@
                     :value="item.key">
                     {{ item.name }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.hehuzhang"
+                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -537,6 +574,13 @@
           @click="savePopup">保存</a-button>
       </template>
     </a-modal>
+    <a-modal
+      title="河湖信息删除"
+      :visible="visibledel"
+      @ok="handleOk"
+      @cancel="handleCancelDel">
+      <p>确定删除该条记录?</p>
+    </a-modal>
 
     <div
       id="distance"
@@ -580,15 +624,14 @@ import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 import mapboxgl from 'mapbox-gl'
 import { treeData } from './data.js'
 import AreaTree from '@com/Hczy/AreaTree.vue'
-import getriverlakeList from '@/api/riverlakemanage'
+import { getRiverlakeList, delRiverlake } from '@/api/riverlakemanage'
 // import { Scene, Zoom, Scale, PointLayer, PolygonLayer } from '@antv/l7'
 // import { Scene, Scale, PointLayer, LineLayer, PolygonLayer, MarkerLayer, Marker } from '@antv/l7'
 // import { Mapbox } from '@antv/l7-maps'
 export default {
   components: {
     STable,
-    AreaTree,
-    getriverlakeList
+    AreaTree
   },
   data () {
     return {
@@ -606,6 +649,8 @@ export default {
       areadivHeight: window.innerHeight - 200,
       confirmLoading: false,
       visible: false,
+      visibledel: false,
+      rowData: '',
       accessToken:
         'pk.eyJ1IjoibWFvcmV5IiwiYSI6ImNqNWhrenIwcDFvbXUyd3I2bTJxYzZ4em8ifQ.KHZIehQuWW9AsMaGtATdwA',
       style: '',
@@ -659,55 +704,36 @@ export default {
         },
         {
           title: '河湖编号',
-          dataIndex: 'site'
+          dataIndex: 'chief_id'
         },
         {
           title: '河长名称',
-          dataIndex: 'personname'
+          dataIndex: 'chief_name'
         },
         {
           title: '起点',
-          dataIndex: 'start'
+          dataIndex: 'destination'
         },
         {
           title: '终点',
-          dataIndex: 'end'
+          dataIndex: 'origin'
           // sorter: true
         },
         {
           title: '类型',
-          dataIndex: 'type'
-          // sorter: true
+          dataIndex: 'water_type',
+          scopedSlots: { customRender: 'water_type' }
         },
         {
           title: '状态',
-          dataIndex: 'status'
-          // sorter: true
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' }
         },
         {
           title: '操作',
           dataIndex: 'action',
           width: '160px',
           scopedSlots: { customRender: 'action' }
-        }
-      ],
-      // 河湖类型--查询框
-      hhtypevalue: [
-        {
-          value: 'river',
-          name: '河道'
-        },
-        {
-          value: 'river_reach',
-          name: '河段'
-        },
-        {
-          value: 'lake',
-          name: '湖泊'
-        },
-        {
-          value: 'reservoir',
-          name: '水库'
         }
       ],
       typevalue: [
@@ -871,14 +897,27 @@ export default {
       heduanweidu1: '',
       heduanjindu2: '',
       heduanweidu2: '',
+      // 查询参数
+      queryParam: {
+        regionalism_id: '',
+        name: '',
+        page: 1,
+        page_size: 10,
+        water_type: 0
+      },
       // 加载表格数据
       loadData: parameter => {
-        // alert('123')
-        return [{ name: 'sss' }]
-        // return getTasks(Object.assign(parameter, this.queryParam))
-        //   .then(res => {
-        //     return res.data
-        //   })
+        // console.log(this.form.type)
+        // var reqData = {
+        //   regionalism_id: this.regionalism_id,
+        //   name: this.form.name,
+        //   water_type: this.form.type
+        // }
+        // return [{ name: 'sss' }]
+        return getRiverlakeList(Object.assign(parameter, this.queryParam)).then(res => {
+          console.log(res)
+          return res.data
+        })
       }
     }
   },
@@ -888,7 +927,8 @@ export default {
   methods: {
     getSelectNode (node) {
       console.log(node)
-     },
+      this.regionalism_id = node[0]
+    },
     // 左侧树形触发
     onSelecttree () {
 
@@ -896,6 +936,10 @@ export default {
     // 河湖类型--查询
     hehutypeSelectClick (value) {
       console.log(value)
+    },
+
+    heliuSelect () {
+
     },
     // 新增按钮触发
     gcAddClick (data = {}) {
@@ -1180,19 +1224,39 @@ export default {
     handleCancelAdd () {
       this.visible = false
     },
-    handleOk () {
-
-    },
-    handleCancelDel () {
-      this.visible = false
-    },
     // 查询按钮触发
     searchClick () {
-
+      // var reqData = {
+      //   regionalism_id: this.regionalism_id,
+      //   name: this.form.name,
+      //   water_type: this.form.type
+      // }
+      this.queryParam.water_type = this.form.type === '' ? 0 : this.form.type
+      console.log(this.queryParam)
+      // this.$refs[this.queryParam].$refs.table.refresh(true)
+      this.$refs.table.refresh(true)
+      // console.log(reqData)
     },
     // 重置按钮触发
     resertClick () {
 
+    },
+    // 河湖删除
+    handleDel (value) {
+      console.log(value)
+      this.rowData = value.water_id
+      this.visibledel = true
+    },
+    // 河湖信息删除
+    handleOk () {
+      delRiverlake(this.rowData).then((res) => {
+        console.log(res)
+        // this.$message.success('删除成功！')
+        // this.$refs.table.refresh(true)
+      })
+    },
+    handleCancelDel () {
+      this.visibledel = false
     }
   }
 }
