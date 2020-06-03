@@ -41,6 +41,10 @@
           placeholder: {
             type: String,
             default: '请选择'
+          },
+          selectFirst: {
+            type: Boolean,
+            default: false
           }
         },
         watch: {
@@ -63,7 +67,7 @@
                 this.data.unshift({ id: '', name: '全部' })
               }
               this.data = this.data.concat(res.data || [])
-              if (this.data.length > 0 && this.value === '') {
+              if (this.selectFirst && this.data.length > 0 && this.value === '') {
                 this.val = this.data[0].id
               } else {
                 this.val = this.value

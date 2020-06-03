@@ -20,10 +20,11 @@ _说明：_字典表组件
 
 ```javascript
 // 使用示例
- <a-form-item label="河湖长类型" style="margin-bottom: 0">
-     <dictionary-select v-model="queryParam.status" :insert-option-all="true" 
-     :dictionary-type="DictionaryEnum.WATER_TYPE">
-     </dictionary-select>
- </a-form-item>
+  <a-form-item label="河湖长类型" style="margin-bottom: 0">
+     <dictionary-select v-model="queryParam.status" 
+            :insert-option-all="false" :select-first="true" 
+            :dictionary-type="DictionaryEnum.WATER_TYPE">
+    </dictionary-select>
+  </a-form-item>
 ```
 
