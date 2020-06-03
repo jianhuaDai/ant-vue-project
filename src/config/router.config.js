@@ -54,6 +54,12 @@ export const asyncRouterMap = [
             meta: { title: '档案信息管理', keepAlive: true, permission: ['dashboard'] }
           },
           {
+            path: '/info-manage/section',
+            name: 'SectionManagement',
+            component: () => import('@/views/section/index.vue'),
+            meta: { title: '断面', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
             path: '/info-manage/sourcemanage',
             name: 'sourcemanage',
             component: () => import('@/views/sourcemanage/sourcemanage'),
