@@ -14,7 +14,9 @@
               :treeData="treeData"
               @select="onSelecttree" />
           </div> -->
-          <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
+          <div :style="{height: carddivHeight + 'px'}">
+            <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
+          </div>
         </a-card>
       </a-col>
       <a-col :span="18">
@@ -95,6 +97,7 @@ export default {
       tableHeight: window.innerHeight - 420,
       listHeight: window.innerHeight - 225,
       leftTreeHeight: window.innerHeight - 115,
+      carddivHeight: window.innerHeight - 200,
       visible: false,
       hehutypevalue: '0',
       treeSelectData: {},
