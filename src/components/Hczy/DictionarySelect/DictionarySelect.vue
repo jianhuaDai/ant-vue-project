@@ -5,7 +5,7 @@
     v-model="val"
     :placeholder="placeholder">
     <a-spin v-if="fetching" slot="notFoundContent" />
-    <a-select-option v-for="item in data" :key="item.id">{{ item.name }}</a-select-option>
+    <a-select-option v-for="item in data" :key="item.value">{{ item.name }}</a-select-option>
   </a-select>
 </template>
 
@@ -68,11 +68,11 @@
             this.fetching = true
             getDictionary(this.dictionaryType).then(res => {
               if (this.insertOptionAll) {
-                this.data.unshift({ id: '', name: '全部' })
+                this.data.unshift({ value: '', name: '全部' })
               }
               this.data = this.data.concat(res.data || [])
               if (this.selectFirst && this.data.length > 0 && this.value === '') {
-                this.val = this.data[0].id
+                this.val = this.data[0].value
               } else {
                 this.val = this.value
               }
