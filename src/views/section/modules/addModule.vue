@@ -44,13 +44,18 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="详细地址" prop="location" ref="location">
-                <a-input v-model="form.location">
-                </a-input>
+                <a-input v-model="form.location"> </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="属性" prop="fracture_property" ref="fracture_property">
-                <a-input v-model="form.fracture_property" />
+                <dictionary-select
+                  v-model="form.fracture_property"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.FRACTURE_PROPERTY"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -60,11 +65,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="断面类型" prop="fracture_type" ref="fracture_type">
-                <a-select v-model="form.fracture_type">
-                  <a-select-option v-for="item in drainageDirection" :key="item.key" :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
+                <dictionary-select
+                  v-model="form.fracture_type"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.FRACTURE_TYPE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -77,23 +84,30 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="达十三五目标年限(年份)" prop="target_year" ref="target_year">
-                <a-select v-model="form.target_year">
-                  <a-select-option value="1">省级</a-select-option>
-                  <a-select-option value="2">市级</a-select-option>
-                  <a-select-option value="3">区县级</a-select-option>
-                </a-select>
+              <a-form-model-item label="达十三五目标年限" prop="target_year" ref="target_year">
+                <a-input v-model="form.target_year" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="当年考核目标" prop="current_target" ref="current_target">
-                <a-input v-model="form.current_target" />
+                <dictionary-select
+                  v-model="form.current_target"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.WATER_TARGET"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="十三五目标" prop="target" ref="target">
-                <a-input v-model="form.target">
-                </a-input>
+                <dictionary-select
+                  v-model="form.target"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.WATER_TARGET"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -103,14 +117,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="状态" prop="status" ref="status">
-                <a-input v-model="form.status">
-                </a-input>
+                <a-input v-model="form.status"> </a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="备注" prop="note" ref="note">
-                <a-input type="textarea" v-model="form.note">
-                </a-input>
+                <a-input type="textarea" v-model="form.note"> </a-input>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -155,7 +167,8 @@ export default {
           participant: '',
           progress: '',
           imageUrl: '',
-          location: ''
+          location: '',
+          target: 0
         }
       }
     }
@@ -234,6 +247,7 @@ export default {
     this.form = this.formData
   },
   methods: {
+    onOk () {},
     customRequest (data) {
       const formData = new FormData()
       formData.append('file', data.file)

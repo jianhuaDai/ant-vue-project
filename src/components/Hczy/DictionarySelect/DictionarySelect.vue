@@ -20,7 +20,7 @@
         },
         props: {
           value: {
-            type: String,
+            type: null,
             default: ''
           },
           insertOptionAll: {
