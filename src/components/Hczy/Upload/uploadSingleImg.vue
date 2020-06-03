@@ -25,7 +25,8 @@ export default {
   data () {
     return {
       image_url: '',
-      fileList: []
+      fileList: [],
+      showImage: false
     }
   },
   methods: {

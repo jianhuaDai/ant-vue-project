@@ -155,7 +155,7 @@ export default {
           participant: '',
           progress: '',
           imageUrl: '',
-          location: '1, 1'
+          location: ''
         }
       }
     }
