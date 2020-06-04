@@ -5,10 +5,10 @@
       :title="title"
       :destroyOnClose="true"
       :footer="null"
-      width="720px"
+      width="800px"
       @cancel="cancel"
     >
-      <component :is="detailModal"></component>
+      <component :is="detailModal" :dataId="dataId"></component>
     </a-modal>
   </div>
 </template>
@@ -17,6 +17,7 @@
   import anxianDetail from '../../../components/Hczy/anxianDetail'
   import getWaterDialog from '../components/getWaterDialog.vue'
   import getWaterFun from '../components/getWaterFun.vue'
+  import GetWaterDetail from '../components/GetWaterDetail'
 
   export default {
     props: {
@@ -24,7 +25,8 @@
     components: {
       anxianDetail,
       getWaterDialog,
-      getWaterFun
+      getWaterFun,
+      GetWaterDetail
     },
     data () {
       return {
