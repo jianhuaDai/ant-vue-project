@@ -1,5 +1,5 @@
 <template>
-  <span class="hc-marker">
+  <span class="hc-marker" :data-id="dataId">
     <img :src="icon"/>
     <span class="detail" v-show="info!==''||name!==''" :style="{backgroundColor: bgColor}">
       <span v-if="info!==''" class="info" :style="{color: bgColor}">{{ info }}</span>
@@ -12,6 +12,10 @@
   export default {
     name: 'HcMarker',
     props: {
+      dataId: {
+        type: null,
+        default: ''
+      },
       icon: {
         type: String,
         default: '/icons/intake.svg'
