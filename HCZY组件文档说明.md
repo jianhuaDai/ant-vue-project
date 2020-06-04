@@ -28,3 +28,10 @@ _说明：_字典表组件
   </a-form-item>
 ```
 
+
+###2.uploadSingleImg  单图片上传
+```javascript
+// 使用demo
+import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
+<uploadSingleImg v-model="form.image_url"></uploadSingleImg>
+```
