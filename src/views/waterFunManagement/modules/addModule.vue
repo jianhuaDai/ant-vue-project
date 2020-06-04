@@ -13,7 +13,6 @@
           ref="form"
           :model="form"
           :rules="rules"
-          labelAlign="left"
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
         >
@@ -60,7 +59,7 @@
                 label="是否为考核水功能区"
                 prop="is_examine"
                 ref="is_examine"
-                :labelCol="{ span: 12 }"
+                :labelCol="{ span: 10 }"
                 :wrapperCol="{ span: 10 }"
               >
                 <a-switch v-model="form.is_examine" checked-children="开" un-checked-children="关" default-checked />
@@ -83,8 +82,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="断面名称" prop="fracture_name" ref="fracture_name">
-                <a-select v-model="form.fracture_name">
+              <a-form-model-item label="断面名称" prop="fracture_id" ref="fracture_id">
+                <a-select v-model="form.fracture_id">
                   <a-select-option v-for="item in fractureList" :key="item.fracture_id" :value="item.fracture_id">
                     {{ item.fracture_name }}
                   </a-select-option>
@@ -154,7 +153,7 @@ export default {
       fileList: [],
       title: '新建',
       labelCol: { span: 7 },
-      wrapperCol: { span: 15, offset: 1 },
+      wrapperCol: { span: 15 },
       status: true,
       confirmLoading: false,
       loading: false,

@@ -17,7 +17,7 @@
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
         >
-          <a-row :gutter="24">
+          <a-row :gutter="24" v-if="visible">
             <a-col :span="12">
               <a-form-model-item label="断面名称" prop="fracture_name" ref="fracture_name">
                 <a-input v-model="form.fracture_name" />
@@ -38,9 +38,9 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name6" ref="name">
+              <a-form-model-item label="所属区域" prop="regionalism_id" ref="regionalism_id">
                 <!-- <a-cascader :options="options" placeholder="" /> -->
-                <a-tree-select :treeData="treeData">
+                <a-tree-select v-model="form.regionalism_id" :treeData="treeData">
                 </a-tree-select>
               </a-form-model-item>
             </a-col>
@@ -218,6 +218,7 @@ export default {
   created () {},
   methods: {
     showModal (data = {}) {
+      console.log(data, 'kkkkkkk')
       this.visible = true
       this.form = { ...{}, ...data }
       if (this.isAdd) {
@@ -233,16 +234,19 @@ export default {
       const _this = this
       this.$refs.form.validate(valid => {
         if (valid) {
+          const params = Object.assign({}, _this.form, {
+            monitoring_frequency: _this.form.monitoring_frequency * 1
+          })
           if (_this.isAdd) {
             // 新增
-            addSection(this.form).then(res => {
+            addSection(params).then(res => {
               _this.$message.success('新增成功！')
               _this.$emit('refreshTable')
               _this.visible = false
             })
           } else {
             // 编辑
-            editSection(this.form).then(res => {
+            editSection(params).then(res => {
               _this.$message.success('编辑成功！')
               _this.$emit('refreshTable')
               _this.visible = false
