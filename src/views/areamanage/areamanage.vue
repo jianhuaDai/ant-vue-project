@@ -70,7 +70,7 @@
                         type="primary"
                         class="resertBtn"
                         style="margin-left:8px;"
-                        @click="modifyClick">修改</a-button>
+                        @click="modifyClick">编辑</a-button>
                     </a-form-item>
                   </a-col>
                 </a-row>
@@ -194,7 +194,7 @@ export default {
     delClick () {
 
     },
-    // 修改按钮触发
+    // 编辑按钮触发
     modifyClick () {
 
     },

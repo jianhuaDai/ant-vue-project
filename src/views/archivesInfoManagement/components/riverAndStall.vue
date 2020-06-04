@@ -16,11 +16,11 @@
           </div>
         </template>
         <span slot="status" slot-scope="text, record">
-          {{ text | statusName }}
+          <a-badge :status="text | statusBadge" :text="text | statusName" />
         </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
-            <a @click="handleEditOrNew(record)">修改</a>
+            <a @click="handleEditOrNew(record)">编辑</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>

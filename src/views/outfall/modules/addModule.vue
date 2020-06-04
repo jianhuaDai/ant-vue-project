@@ -252,7 +252,7 @@ export default {
       this.visible = true
       this.form = { ...{}, ...data }
       if (this.form.id) {
-        this.title = '修改排污口'
+        this.title = '编辑排污口'
       } else {
         this.title = '新增排污口'
       }

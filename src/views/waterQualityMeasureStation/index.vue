@@ -45,7 +45,7 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEditOrNew(record)">修改</a>
+            <a @click="handleEditOrNew(record)">编辑</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>

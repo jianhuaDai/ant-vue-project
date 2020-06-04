@@ -11,7 +11,7 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="级别类型" style="margin-bottom: 0">
-                <a-cascader :options="options" placeholder="" />
+                <a-tree-select v-model="queryParam.functional_type" :allowClear="true" :treeData="treeData" :treeDataSimpleMode="true" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -34,81 +34,72 @@
         :data="loadData"
         showPagination="auto"
       >
-        <span slot="name" slot-scope="text, record">
-          <a @click="goTo(record)">{{ text }}</a>
+        <span slot="is_examine" slot-scope="text">
+          {{ text | isExamineName }}
         </span>
-
         <span slot="action" slot-scope="text, record, index">
           <template>
-            <a @click="handleEditOrNew(record)">修改</a>
+            <a @click="handleEditOrNew(record)">编辑</a>
             <a @click="handleDel(record)" style="margin-left: 10px;color: red">删除</a>
           </template>
         </span>
       </s-table>
-      <add-module ref="waterFunModule" :formData="rowData"></add-module>
+      <add-module ref="waterFunModule" :treeData="treeData" @refreshTable="$refs.table.refresh(true)"></add-module>
     </a-card>
   </div>
 </template>
 
 <script>
-import PageView from '../../layouts/PageView'
+import { getDictionary } from '@/api/dictionary'
+import { getWaterFunList } from '@/api/waterfun'
 import { STable, Ellipsis } from '@/components'
-import { getTasks } from '@/api/getWater'
 import AddModule from './modules/addModule'
 import { options } from './data.js'
 import { columns } from './columns.js'
 export default {
   name: 'WaterFunManagement',
-  components: { PageView, STable, Ellipsis, AddModule },
+  components: { STable, Ellipsis, AddModule },
   data () {
     return {
       queryParam: {
         name: '',
-        status: ''
+        functional_type: null
       },
       columns,
+      treeData: [],
       loadData: parameter => {
-        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+        return getWaterFunList(Object.assign(parameter, this.queryParam)).then(res => {
           return res.data
         })
       },
       selectedRowKeys: [],
       selectedRows: [],
       options: options,
-      showAddModule: false,
-      rowData: {
-        id: '',
-        name: '',
-        site: '',
-        principal: '',
-        participant: '',
-        progress: '',
-        imageUrl: '',
-        location: '1, 1'
-      }
+      showAddModule: false
     }
   },
+  created () {
+    this.getTreeData()
+  },
   methods: {
-    goTo (record) {
-      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+    getTreeData () {
+      getDictionary('functional_type').then((res) => {
+        this.treeData = res.data.map((item) => {
+          return {
+            ...item,
+            label: item.name,
+            pId: item.pid,
+            id: item.value
+          }
+        })
+      })
     },
     resetQuery () {
-      this.queryParam.status = ''
+      this.queryParam.functional_type = null
+      this.queryParam.name = ''
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
-      record
-        ? (this.rowData = record)
-        : (this.rowData = {
-            id: '',
-            name: '',
-            site: '',
-            principal: '',
-            participant: '',
-            progress: '',
-            imageUrl: '',
-            location: '1, 1'
-          })
       this.$refs.waterFunModule.showModal(record)
     },
     handleDel (record) {
@@ -120,7 +111,6 @@ export default {
       })
     }
   },
-  created () {},
   filters: {}
 }
 </script>

@@ -21,7 +21,7 @@
         props: {
           value: {
             type: null,
-            default: ''
+            default: null
           },
           insertOptionAll: {
             type: Boolean,
@@ -52,8 +52,11 @@
           val: function (val, oldVal) {
             this.handleChange(val)
           },
-          value: function (val, oldVal) {
-            this.val = this.value
+          value: {
+            handler (val, oldVal) {
+              this.val = this.value === 0 ? null : this.value
+            },
+            immediate: true
           }
         },
         data: function () {

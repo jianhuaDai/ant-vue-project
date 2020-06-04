@@ -47,6 +47,7 @@
         </div>
       </div>
     </div>
+    <detail-modal ref="detailModal"></detail-modal>
   </mask-page-view>
 </template>
 
@@ -62,6 +63,7 @@
       GetDataByLayer,
       GetTableRowKey
     } from './config/base'
+  import DetailModal from './modules/DetailModal'
     let Map = null
     export default {
         name: 'OneMap',
@@ -98,7 +100,7 @@
             }
           }
         },
-        components: { MapboxView, MaskPageView },
+        components: { DetailModal, MapboxView, MaskPageView },
         methods: {
           initMap () {
             this.nav(1)
@@ -118,7 +120,7 @@
                 }
               }, 'landuse-residential')
             })
-            this.renderMarker()
+            // this.renderMarker()
           },
           mapLoaded (map) {
             Map = map
@@ -141,22 +143,27 @@
             }
             for (const key in this.layerManager.existLayerGroup) {
               const intLayerId = parseInt(key)
-              this.toggleLayer(intLayerId, this.layerManager.visibleLayerIds.includes(intLayerId), layerItem.extraLayer)
+              this.toggleLayer(layerItem, this.layerManager.visibleLayerIds.includes(intLayerId), layerItem.extraLayer)
             }
           },
-          toggleLayer (layerId, isShow = true, extraLayer = false) {
-            const layerGroup = this.layerManager.existLayerGroup[layerId]
+          toggleLayer (layerItem, isShow = true, extraLayer = false) {
+            const layerGroup = this.layerManager.existLayerGroup[layerItem.id]
             if (isShow) {
-              this.loadLayer(layerId)
+              this.loadLayer(layerItem)
             } else {
-
+              if (layerGroup.markerGroup) {
+               layerGroup.markerGroup.forEach((marker) => {
+                  marker.remove()
+                })
+                layerGroup.markerGroup.clear()
+              }
             }
           },
-          loadLayer (layerId) {
-            GetDataByLayer(layerId).then(res => {
+          loadLayer (layerItem) {
+            GetDataByLayer(layerItem.id).then(res => {
               if (res) {
                 setTimeout(() => {
-                  this.renderLayer(layerId, res)
+                  this.renderLayer(layerItem, res)
                 }, 200)
               }
             })
@@ -185,26 +192,32 @@
             this.layerManagerHandle(layerItem)
           },
           // 渲染Layer
-          renderLayer (layerId, res) {
+          renderLayer (layerItem, res) {
             const geoData = res.data.geo_info
-            switch (layerId) {
+            switch (layerItem.id) {
               case 31: {
                 geoData.features.forEach((v) => {
-                  this.renderMarker(v.geometry.coordinates, layerId, v.properties.id, '/icons/intake.svg', '#3677fe', v.properties.name, '关键信息展示')
+                  this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/intake.svg', '#3677fe', v.properties.name, v.properties.info)
                 })
                 break
               }
               default: {
                 geoData.features.forEach((v) => {
-                  this.renderMarker(v.geometry.coordinates, layerId, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
+                  this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
                 })
               }
             }
           },
+          markerClick (dataId, layerItem) {
+            console.log(dataId, layerItem)
+            if (layerItem.detailModal) {
+              this.$refs.detailModal.showModal(dataId, layerItem.detailModal, layerItem.detailTitle)
+            }
+          },
           // 渲染marker
-          renderMarker (coordinates, layerId, dataId, icon, bgColor, name, info) {
-            if (!this.layerManager.existLayerGroup[layerId].markerGroup) {
-              this.layerManager.existLayerGroup[layerId].markerGroup = new Set()
+          renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
+            if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
+              this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
             }
             const el = document.createElement('div')
             el.className = 'hc-marker-container'
@@ -225,7 +238,11 @@
             })
               .setLngLat(coordinates)
               .addTo(Map)
-            this.layerManager.existLayerGroup[layerId].markerGroup.add(marker)
+            this.layerManager.existLayerGroup[layerItem.id].markerGroup.add(marker)
+            el.addEventListener('click', (e) => {
+              e.stopPropagation()
+              this.markerClick(dataId, layerItem)
+            })
           },
           customRow (record, index) {
             return {
@@ -402,39 +419,6 @@
     background-color: rgba(63, 212, 162, 0.25);
   }
 
-  .marker-info {
-    height: 24px;
-    display: inline-block;
-    line-height: 24px;
-    color: #fff;
-    font-size: 12px;
-    padding-right: 10px;
-    border-radius: 5px;
-    position: relative;
-  }
-  .marker-info>span {
-    height: 20px;
-    display: inline-block;
-    line-height: 20px;
-    color: #fff;
-    font-size: 12px;
-    padding-right: 10px;
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
-    padding-left: 15px;
-  }
-
-  .marker-info img {
-    height: 100%;
-    font-size: 12px;
-    color: #fff;
-    position: absolute;
-    left: -12px;
-  }
-  .marker-info.hide {
-    display: none !important;
-  }
-
   .map .area-select {
     position: absolute;
     left: 24px;
@@ -443,4 +427,5 @@
     z-index: 999;
     /*display: none;*/
   }
+
 </style>

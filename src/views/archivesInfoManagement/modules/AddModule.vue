@@ -18,11 +18,11 @@
           </a-form-model-item>
           <a-form-model-item label="上传文件" prop="file" ref="leader">
             <a-upload :customRequest="customRequest" :showUploadList="false" :multiple="true">
-              <a-button> <a-icon type="upload" /> Upload </a-button>
+              <a-button> <a-icon type="upload" /> 上传文件 </a-button>
             </a-upload>
-            <div v-for="(item, index) in fileList" :key="index">
+            <div class="file-list" v-for="(item, index) in fileList" :key="index">
               {{ item.name }}
-              <span @click="fileList.splice(index, 1)"><a-icon type="delete" /></span>
+              <span @click="fileList.splice(index, 1)" class="icon-area"><a-icon class="icon-delete" type="delete" /></span>
             </div>
           </a-form-model-item>
           <a-form-model-item label="发布人">
@@ -53,10 +53,6 @@ import { addArchivesInfo, getRiversAndLakes, updateArchivesInfo } from '@/api/in
 import { uploadSingle } from '@/api/upload'
 export default {
   props: {
-    orgData: {
-      type: Array,
-      default: () => []
-    },
     type: {
       type: Number,
       default: () => 1
@@ -179,7 +175,7 @@ export default {
           } else {
             // 编辑
             updateArchivesInfo(_this.form.document_id, params).then(res => {
-              this.$message.success('修改成功！')
+              this.$message.success('编辑成功！')
               this.$emit('refreshTable')
               _this.visible = false
             })
@@ -203,4 +199,18 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.file-list {
+  height: 30px;
+  line-height: 30px;
+  &:hover {
+    background: #e6f7ff;
+  }
+  .icon-area {
+    float: right;
+    .icon-delete {
+      cursor: pointer;
+    }
+  }
+}
+</style>
