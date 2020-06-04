@@ -3,7 +3,7 @@
     <img :src="icon"/>
     <span class="detail" v-show="info!==''||name!==''" :style="{backgroundColor: bgColor}">
       <span v-if="info!==''" class="info" :style="{color: bgColor}">{{ info }}</span>
-      <span class="name">{{ name }}</span>
+      <span v-if="name!==''" class="name">{{ name }}</span>
     </span>
   </span>
 </template>
@@ -70,9 +70,10 @@
         background-color: #FFFFFF;
         height: @height - 10px;
         line-height: @height - 10px;
+        margin-right: 5px;
       }
       .name {
-        padding: 0 5px;
+        margin-right: 5px;
       }
       span {
         &:first-child {
