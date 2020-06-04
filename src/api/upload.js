@@ -1,4 +1,3 @@
-// common/file_upload_single
 import { axios } from '@/utils/request'
 
 const api = {

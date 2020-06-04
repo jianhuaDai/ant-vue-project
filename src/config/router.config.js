@@ -87,7 +87,7 @@ export const asyncRouterMap = [
             path: '/info-manage/waterFunManagement',
             name: 'waterFunManagement',
             component: () => import('@/views/waterFunManagement/index.vue'),
-            meta: { title: '水功能管理', keepAlive: true, permission: ['dashboard'] }
+            meta: { title: '水功能区管理', keepAlive: true, permission: ['dashboard'] }
           },
           {
             path: '/info-manage/project-info',
