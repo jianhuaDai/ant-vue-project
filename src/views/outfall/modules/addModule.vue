@@ -265,13 +265,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           _this.confirmLoading = true
-          let params = _this.form
-          let isEdit = true
           if (!_this.form.employee_id) {
-            isEdit = false
-            params = {
-              employee_form_list: [_this.form]
-            }
           }
           _this.visible = false
           // saveEmploy(params, isEdit).then((res) => {
