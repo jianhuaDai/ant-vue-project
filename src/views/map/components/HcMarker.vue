@@ -2,7 +2,7 @@
   <span class="hc-marker" :data-id="dataId">
     <img :src="icon"/>
     <span class="detail" v-show="info!==''||name!==''" :style="{backgroundColor: bgColor}">
-      <span v-if="info!==''" class="info" :style="{color: bgColor}">{{ info }}</span>
+      <span v-if="info!==''" class="info" :style="{color: bgColor}" v-html="info"></span>
       <span v-if="name!==''" class="name">{{ name }}</span>
     </span>
   </span>
@@ -37,7 +37,7 @@
 </script>
 
 <style lang="less" scoped>
-  @height: 24px;
+  @height: 28px;
   .hc-marker {
     position: relative;
     display: flex;
@@ -79,6 +79,9 @@
         &:first-child {
           padding-left: 12px;
         }
+      }
+      sub,sup {
+        transform: scale(0.1);
       }
     }
     &:hover {

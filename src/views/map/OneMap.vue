@@ -215,7 +215,7 @@
             }
           },
           // 渲染marker
-          renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '哈哈哈哈哈哈', info) {
+          renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
             if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
               this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
             }
