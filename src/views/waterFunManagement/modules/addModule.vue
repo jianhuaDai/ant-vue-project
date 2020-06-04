@@ -161,7 +161,8 @@ export default {
         func_name: [{ required: true, message: '功能区名称不能为空', trigger: ['blur', 'change'] }],
         regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }],
         functional_type: [{ required: true, message: '级别类型不能为空', trigger: ['blur', 'change'] }],
-        lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }]
+        lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
+        fracture_id: [{ required: true, message: '断面名称不能为空', trigger: ['blur', 'change'] }]
       },
       layout: 'horizontal',
       visible: false,

@@ -5,10 +5,6 @@ export const columns = [
     scopedSlots: { customRender: 'func_name' }
   },
   {
-    title: '级别',
-    dataIndex: 'func_grade_name'
-  },
-  {
     title: '类型',
     dataIndex: 'functional_type_name'
   },

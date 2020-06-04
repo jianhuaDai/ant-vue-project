@@ -34,3 +34,14 @@ export function deleteSection (id) {
     method: 'delete'
   })
 }
+
+// 批量删除
+export function deleteSections (ids) {
+  return axios({
+    url: `/fracture/delete/${ids}`,
+    method: 'post',
+    data: {
+      ids
+    }
+  })
+}
