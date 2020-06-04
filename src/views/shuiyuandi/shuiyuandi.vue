@@ -24,7 +24,7 @@
                     <a-select-option value="1">农业污染源</a-select-option>
                     <a-select-option value="2">城镇污染源</a-select-option>
                   </a-select> -->
-                  <a-tree-select v-model="form.regionalism_id" :treeData="options"> </a-tree-select>
+                  <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select>
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
@@ -82,7 +82,7 @@
                 :columns="columns"
                 :data="loadData"
                 showPagination="true">
-                <span
+                <!-- <span
                   slot="serial"
                   slot-scope="text, record, index">
                   {{ index + 1 }}
@@ -98,21 +98,21 @@
                   slot="name"
                   slot-scope="text, record">
                   <a @click="goTo(record)">{{ text }}</a>
-                </span>
+                </span> -->
 
                 <span
                   slot="action"
                   slot-scope="text, record, index">
                   <template>
-                    <a
+                    <!-- <a
                       @click="() => {}"
                       v-show="record.publish !== '1'"
                       v-html="'&emsp;发布'"></a>
                     <span
                       style="font-size: 14px"
                       v-show="record.publish === '1'">已发布</span>
-                    <a-divider type="vertical" />
-                    <a @click="handleEditOrNew(record)">编辑</a>
+                    <a-divider type="vertical" /> -->
+                    <a @click="gcAddClick(record)">编辑</a>
                     <a
                       @click="handleDel(record)"
                       style="margin-left: 10px;color: red">删除</a>
@@ -135,7 +135,6 @@
         <a-form-model
           ref="form2"
           :model="form2"
-          labelAlign="left"
           :rules="rules"
           :label-col="labelCol"
           :wrapper-col="wrapperCol">
@@ -197,7 +196,7 @@
                 label="所属区域"
                 prop="suoshuquyu"
                 ref="suoshuquyu">
-                <a-tree-select v-model="form2.regionalism_id2" :treeData="options2"> </a-tree-select>
+                <a-tree-select v-model="form2.area2" :treeData="options2"> </a-tree-select>
                 <!-- <a-select
                   placeholder="全部"
                   v-model="form2.suoshuquyu">
@@ -242,12 +241,12 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <!-- <a-input v-model="form.jwd" disabled>
+                <a-input v-model="form2.jwd" disabled>
                   <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
-                </a-input> -->
-                <mapInput
-                  v-model="form2.location"
-                  v-if="visible"></mapInput>
+                </a-input>
+                <!-- <mapInput
+                  v-model="form2.jwd"
+                  v-if="visible"></mapInput> -->
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -305,7 +304,7 @@
                 prop="czlx"
                 ref="czlx">
                 <a-select
-                  v-model="form2.sswkhmb">
+                  v-model="form2.czlx">
                   <a-select-option value="1">泵站</a-select-option>
                   <a-select-option value="2">闸站</a-select-option>
                   <a-select-option value="3">阀站</a-select-option>
@@ -318,6 +317,11 @@
                 prop="beizhu"
                 ref="beizhu">
                 <a-input v-model="form2.beizhu"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="图片" prop="image_url" ref="image_url">
+                <uploadSingleImg v-model="form2.image_url"></uploadSingleImg>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -334,6 +338,14 @@
           type="primary"
           @click="savePopup">保存</a-button>
       </template>
+    </a-modal>
+    <!-- 水源地信息删除 -->
+    <a-modal
+      title="水源地信息删除"
+      :visible="visibledel"
+      @ok="handleOk"
+      @cancel="handleCancelDel">
+      <p>确定删除该条记录?</p>
     </a-modal>
     <div
       id="distance"
@@ -373,7 +385,9 @@
 import { STable } from '@/components'
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { treeData } from '@/config/areaTree'
+import { getShuiyuandiList, delShuiyuandi } from '@/api/shuiyuandi'
+import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
+import { treeData } from '@/config/areaTreeSelectData'
 import mapboxgl from 'mapbox-gl'
 import mapInput from '@/components/Hczy/mapInput.vue'
 // import { getSourceList } from '@/api/task' // 接口调用
@@ -381,46 +395,46 @@ export default {
   components: {
     STable,
     mapInput,
-    treeData
+    treeData,
+    uploadSingleImg
   },
   data () {
     return {
       cardHeight: window.innerHeight - 207,
-      labelCol: { span: 6 },
+      labelCol: { span: 7 },
       wrapperCol: { span: 16 },
       confirmLoading: false,
       form: {
         name: '',
-        wrytype: undefined
+        area: '',
+        type: ''
       },
       options: treeData,
       options2: treeData,
       form2: {
         name: '',
         code: '',
-        suoshuhedao: undefined,
-        suoshuquyu: undefined,
-        address: '',
-        wuranyuantype: undefined,
-        location: '',
-        guanzhujibie: undefined,
-        time: undefined,
-        sshezhang: '',
-        yxfanwei: '',
-        zhiliqk: ''
+        pointname: '',
+        image_url: ''
       },
       rules: {
         name: [
-          { required: true, message: '污染源名称不能为空', trigger: 'blur' }
+          { required: true, message: '水源地名称不能为空', trigger: 'blur' }
         ],
-        suoshuhedao: [
-          { required: true, message: '所属河道不能为空', trigger: 'blur' }
+        pointname: [
+          { required: true, message: '点位名称不能为空', trigger: 'blur' }
         ],
-        suoshuquyu: [
+        weizhi: [
+          { required: true, message: '位置不能为空', trigger: 'blur' }
+        ],
+        suoshushuiti: [
+          { required: true, message: '所属水体不能为空', trigger: 'blur' }
+        ],
+        area2: [
           { required: true, message: '所属区域不能为空', trigger: 'blur' }
         ],
-        wuranyuantype: [
-          { required: true, message: '污染源类型不能为空', trigger: 'blur' }
+        type2: [
+          { required: true, message: '属性不能为空', trigger: 'blur' }
         ],
         jwd: [
           { required: true, message: '经纬度不能为空', trigger: 'blur' }
@@ -492,8 +506,11 @@ export default {
       // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
       visible: false,
+      visibledel: false,
       handleCancelMap: false,
       sureBtnShow: true,
+      rowData: {},
+      addmodifyFlag: '1',
       jindu: '',
       weidu: '',
       columns: [
@@ -508,15 +525,15 @@ export default {
         },
         {
           title: '水源地编码',
-          dataIndex: 'site'
+          dataIndex: 'source_id'
         },
         {
           title: '点位名称',
-          dataIndex: 'principal'
+          dataIndex: 'point'
         },
         {
           title: '经纬度',
-          dataIndex: 'person'
+          dataIndex: 'lon_lat'
         },
         {
           title: '属性',
@@ -540,10 +557,18 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
+       // 查询参数
+      queryParam: {
+        name: '',
+        area: '',
+        type: ''
+      },
       loadData: parameter => {
         // alert('123')
-        return [{ name: 'sss' }]
-        // return getTasks(Object.assign(parameter, this.queryParam))
+        return getShuiyuandiList(Object.assign(parameter, this.queryParam)).then(res => {
+          console.log(res)
+          return res.data
+        })// return getTasks(Object.assign(parameter, this.queryParam))
         //   .then(res => {
         //     return res.data
         //   })
@@ -554,6 +579,23 @@ export default {
 
   },
   methods: {
+    // 水源地删除
+    handleDel (value) {
+      console.log(value)
+      this.rowData = value.id
+      this.visibledel = true
+    },
+    handleOk () {
+      delShuiyuandi(this.rowData).then((res) => {
+        console.log(res)
+        this.$message.success('删除成功！')
+        this.$refs.table.refresh(true)
+        this.visibledel = false
+      })
+    },
+    handleCancelDel () {
+      this.visibledel = false
+    },
     // 污染源类型触发--查询框
     cjjgChange (value) {
       console.log(value)
@@ -561,6 +603,9 @@ export default {
     // 查询按钮触发
     searchClick () {
       console.log(this.form)
+      getShuiyuandiList().then(res => {
+        console.log(res)
+      })
     },
     // 重置按钮触发
     resertClick () {
@@ -587,7 +632,8 @@ export default {
       } else {
         var a = this.jindu
         var b = this.weidu
-        this.form2.setFieldsValue({ startjwd: a + ',' + b })
+        // this.form2.setFieldsValue({ startjwd: a + ',' + b })
+        this.form2.jwd = a + ',' + b
         this.handleCancelMap = false
       }
     },
@@ -631,9 +677,19 @@ export default {
     selectChangearea () {
       //
     },
-    // 新增按钮触发
-    gcAddClick () {
+    // 新增编辑按钮触发
+    gcAddClick (data = {}) {
       this.visible = true
+      this.form = { ...{}, ...data }
+      console.log(this.form)
+      if (this.form.id) {
+        this.addmodifyFlag = '2'
+        this.title = '修改水源地信息'
+        this.setFormValue(this.form)
+      } else {
+        this.addmodifyFlag = '1'
+        this.title = '新增水源地信息'
+      }
       setTimeout(() => {
         this.$refs.form2.clearValidate()
       }, 1)
@@ -647,9 +703,6 @@ export default {
     },
     handleCancelAdd () {
       this.visible = false
-    },
-    handleOk () {
-
     },
     handleCancel () {
       this.visible = false

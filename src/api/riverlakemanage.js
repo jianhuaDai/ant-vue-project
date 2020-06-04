@@ -4,7 +4,8 @@ const api = {
     getriverlakeList: '/water_infos/page_query',
     delriverlake: '/water_infos/delete/',
     addriverlake: '/water_infos',
-    updateriverlake: '/water_infos/'
+    updateriverlake: '/water_infos/',
+    getgldwdata: '/enterprise_book/'
 }
 
 // 查询河湖列表接口
@@ -36,5 +37,13 @@ export function updateRiverlake (id, parameter) {
       url: api.updateriverlake + id,
       method: 'put',
       data: parameter
+  })
+}
+// 查询管理单位下拉数据
+export function getGldwdata (parameter) {
+  return axios({
+      url: api.getgldwdata + parameter,
+      method: 'get'
+      // params: parameter
   })
 }
