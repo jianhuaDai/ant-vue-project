@@ -5,10 +5,6 @@ export const columns = [
     scopedSlots: { customRender: 'func_name' }
   },
   {
-    title: '级别',
-    dataIndex: 'func_grade_name'
-  },
-  {
     title: '类型',
     dataIndex: 'functional_type_name'
   },
@@ -18,7 +14,8 @@ export const columns = [
   },
   {
     title: '是否为考核水功能区',
-    dataIndex: 'is_examine'
+    dataIndex: 'is_examine',
+    scopedSlots: { customRender: 'is_examine' }
   },
   {
     title: '水质目标',

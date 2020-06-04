@@ -61,8 +61,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name5" ref="name5">
-                <mapInput v-model="form.location" v-if="visible"></mapInput>
+              <a-form-model-item label="经纬度" prop="lon_lat" ref="lon_lat">
+                <mapInput v-model="form.lon_lat" v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -118,8 +118,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="状态" prop="status" ref="status">
-                <a-input v-model="form.status"> </a-input>
+              <a-form-model-item label="状态" prop="state" ref="state">
+                <a-switch v-model="form.state" checked-children="启用" un-checked-children="停用" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -171,10 +171,12 @@ export default {
       confirmLoading: false,
       form: {},
       rules: {
-        name: [{ required: true, message: '取水口名称不能为空', trigger: 'blur' }],
-        site: [{ required: true, message: '地点不能为空', trigger: 'blur' }],
-        principal: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
-        participant: [{ required: true, message: '参与人不能为空', trigger: 'blur' }]
+        fracture_name: [{ required: true, message: '断面名称不能为空', trigger: ['blur', 'change'] }],
+        water_id: [{ required: true, message: '所属水体不能为空', trigger: ['blur', 'change'] }],
+        regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }],
+        lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
+        fracture_property: [{ required: true, message: '属性不能为空', trigger: ['blur', 'change'] }],
+        monitoring_frequency: [{ pattern: /^[0-9]+$/, message: '监测频率必须为整数', trigger: ['blur', 'change'] }]
       },
       visible: false,
       options: [
@@ -218,7 +220,9 @@ export default {
   created () {},
   methods: {
     showModal (data = {}) {
-      console.log(data, 'kkkkkkk')
+      if (JSON.stringify(data) !== '{}') {
+        data.state = data.state === 1
+      }
       this.visible = true
       this.form = { ...{}, ...data }
       if (this.isAdd) {
@@ -235,7 +239,8 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           const params = Object.assign({}, _this.form, {
-            monitoring_frequency: _this.form.monitoring_frequency * 1
+            monitoring_frequency: _this.form.monitoring_frequency * 1,
+            state: _this.form.state ? 1 : 0
           })
           if (_this.isAdd) {
             // 新增

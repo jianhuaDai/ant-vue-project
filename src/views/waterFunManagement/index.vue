@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="级别类型" style="margin-bottom: 0">
+              <a-form-item label="类型" style="margin-bottom: 0">
                 <a-tree-select v-model="queryParam.functional_type" :allowClear="true" :treeData="treeData" :treeDataSimpleMode="true" placeholder="" />
               </a-form-item>
             </a-col>
@@ -34,6 +34,9 @@
         :data="loadData"
         showPagination="auto"
       >
+        <span slot="is_examine" slot-scope="text">
+          {{ text | isExamineName }}
+        </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
             <a @click="handleEditOrNew(record)">编辑</a>
@@ -48,7 +51,7 @@
 
 <script>
 import { getDictionary } from '@/api/dictionary'
-import { getWaterFunList } from '@/api/waterfun'
+import { getWaterFunList, deleteWaterFun } from '@/api/waterfun'
 import { STable, Ellipsis } from '@/components'
 import AddModule from './modules/addModule'
 import { options } from './data.js'
@@ -100,10 +103,16 @@ export default {
       this.$refs.waterFunModule.showModal(record)
     },
     handleDel (record) {
+      const _this = this
       this.$confirm({
         title: '删除操作',
-        content: `确定要删除${record.name}吗`,
-        onOk () {},
+        content: `确定要删除${record.func_name}吗`,
+        onOk () {
+          deleteWaterFun(record.func_id).then(() => {
+            _this.$message.success('删除成功！')
+            _this.$refs.table.refresh(true)
+          })
+        },
         onCancel () {}
       })
     }

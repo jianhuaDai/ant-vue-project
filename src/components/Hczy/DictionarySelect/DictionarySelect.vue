@@ -53,7 +53,7 @@
             this.handleChange(val)
           },
           value: {
-            handler: function (val, oldVal) {
+            handler (val, oldVal) {
               this.val = this.value === 0 ? null : this.value
             },
             immediate: true
