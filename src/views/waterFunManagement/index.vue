@@ -34,6 +34,9 @@
         :data="loadData"
         showPagination="auto"
       >
+        <span slot="is_examine" slot-scope="text">
+          {{ text | isExamineName }}
+        </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
             <a @click="handleEditOrNew(record)">编辑</a>

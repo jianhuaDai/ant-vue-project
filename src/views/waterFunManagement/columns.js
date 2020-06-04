@@ -18,7 +18,8 @@ export const columns = [
   },
   {
     title: '是否为考核水功能区',
-    dataIndex: 'is_examine'
+    dataIndex: 'is_examine',
+    scopedSlots: { customRender: 'is_examine' }
   },
   {
     title: '水质目标',

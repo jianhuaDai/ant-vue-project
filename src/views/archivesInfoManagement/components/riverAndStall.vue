@@ -16,7 +16,7 @@
           </div>
         </template>
         <span slot="status" slot-scope="text, record">
-          {{ text | statusName }}
+          <a-badge :status="text | statusBadge" :text="text | statusName" />
         </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
