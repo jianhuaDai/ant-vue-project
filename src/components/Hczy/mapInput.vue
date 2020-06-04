@@ -17,6 +17,7 @@
 
 <script>
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
 export default {
   name: 'MapInput',

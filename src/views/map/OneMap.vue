@@ -25,7 +25,7 @@
               :class="['layer-btn',layerManager.activeLayerItem.id===item.id?'active':'']">
               <span style="margin-right: 6px">{{ item.name }}</span>
               <a-checkbox
-                :checked="layerManager.visibleLayers.includes(item.id)"
+                :checked="layerManager.visibleLayerIds.includes(item.id)"
                 @click="layerCheckboxHandle($event,item)"></a-checkbox>
             </div>
           </div>
@@ -58,7 +58,9 @@
     import { MaskPageView } from '@/layouts'
     import {
       Navs,
-      LayerBtns
+      LayerBtns,
+      GetDataByLayer,
+      GetTableRowKey
     } from './config/base'
     let Map = null
     export default {
@@ -79,7 +81,8 @@
             layerManager: {
               currentNav: 0,
               activeLayerItem: {},
-              visibleLayers: []
+              visibleLayerIds: [],
+              existLayerGroup: {} // 已存在的对应图层相关group
             },
             tableList: {
               options: {
@@ -132,14 +135,40 @@
             this.layerRadioHandle(this.baseData.layerItems[navId][0])
           },
           layerManagerHandle (layerItem) {
+            this.clearSelect()
+            if (!this.layerManager.existLayerGroup[layerItem.id]) {
+              this.layerManager.existLayerGroup[layerItem.id] = {}
+            }
+            for (const key in this.layerManager.existLayerGroup) {
+              const intLayerId = parseInt(key)
+              this.toggleLayer(intLayerId, this.layerManager.visibleLayerIds.includes(intLayerId), layerItem.extraLayer)
+            }
+          },
+          toggleLayer (layerId, isShow = true, extraLayer = false) {
+            const layerGroup = this.layerManager.existLayerGroup[layerId]
+            if (isShow) {
+              this.loadLayer(layerId)
+            } else {
 
+            }
+          },
+          loadLayer (layerId) {
+            GetDataByLayer(layerId).then(res => {
+              if (res) {
+                setTimeout(() => {
+                  this.renderLayer(layerId, res)
+                }, 200)
+              }
+            })
+          },
+          clearSelect () {
           },
           layerRadioHandle (layerItem) {
             if (this.layerManager.activeLayerItem.id === layerItem.id) {
               return
             }
             this.layerManager.activeLayerItem = layerItem
-            this.layerManager.visibleLayers = [layerItem.id]
+            this.layerManager.visibleLayerIds = [layerItem.id]
             this.layerManagerHandle(layerItem)
           },
           layerCheckboxHandle (e, layerItem) {
@@ -147,16 +176,36 @@
             if (this.layerManager.activeLayerItem.id === layerItem.id) {
               return
             }
-            const index = this.layerManager.visibleLayers.indexOf(layerItem.id)
+            const index = this.layerManager.visibleLayerIds.indexOf(layerItem.id)
             if (index < 0) {
-              this.layerManager.visibleLayers.push(layerItem.id)
+              this.layerManager.visibleLayerIds.push(layerItem.id)
             } else {
-              this.layerManager.visibleLayers.splice(index, 1)
+              this.layerManager.visibleLayerIds.splice(index, 1)
             }
             this.layerManagerHandle(layerItem)
           },
+          // 渲染Layer
+          renderLayer (layerId, res) {
+            const geoData = res.data.geo_info
+            switch (layerId) {
+              case 31: {
+                geoData.features.forEach((v) => {
+                  this.renderMarker(v.geometry.coordinates, layerId, v.properties.id, '/icons/intake.svg', '#3677fe', v.properties.name, '关键信息展示')
+                })
+                break
+              }
+              default: {
+                geoData.features.forEach((v) => {
+                  this.renderMarker(v.geometry.coordinates, layerId, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
+                })
+              }
+            }
+          },
           // 渲染marker
-          renderMarker (layerId) {
+          renderMarker (coordinates, layerId, dataId, icon, bgColor, name, info) {
+            if (!this.layerManager.existLayerGroup[layerId].markerGroup) {
+              this.layerManager.existLayerGroup[layerId].markerGroup = new Set()
+            }
             const el = document.createElement('div')
             el.className = 'hc-marker-container'
             const child = document.createElement('div')
@@ -164,16 +213,19 @@
             const MarkerInstance = Vue.extend(HcMarker)
             new MarkerInstance({
               propsData: {
+                dataId: dataId,
+                icon: icon,
+                bgColor: bgColor,
+                name: name,
+                info: info
               }
             }).$mount(child)
             const marker = new mapboxgl.Marker({
               element: el
             })
-              .setLngLat([
-                119.91202398644623,
-                32.41659873015716
-              ])
+              .setLngLat(coordinates)
               .addTo(Map)
+            this.layerManager.existLayerGroup[layerId].markerGroup.add(marker)
           },
           customRow (record, index) {
             return {
