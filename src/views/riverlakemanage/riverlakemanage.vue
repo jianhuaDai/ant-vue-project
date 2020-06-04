@@ -1050,7 +1050,7 @@ export default {
     heliuSelect () {
 
     },
-    // 新增修改按钮触发
+    // 新增编辑按钮触发
     gcAddClick (data = {}) {
       this.visible = true
       this.form = { ...{}, ...data }
@@ -1058,7 +1058,7 @@ export default {
       this.rowData = this.form
       if (this.form.water_id) {
         this.addmodifyFlag = '2'
-        this.title = '修改河湖信息'
+        this.title = '编辑河湖信息'
         this.setFormValue(this.form)
       } else {
         this.addmodifyFlag = '1'
@@ -1079,7 +1079,7 @@ export default {
         this.$refs.form2.clearValidate()
       }, 1)
     },
-    // 修改按钮触发
+    // 编辑按钮触发
     gcModifyClick (data) {
 
     },
@@ -1487,7 +1487,7 @@ export default {
               this.visible = false
               // this.form2.resetFields()
               this.$refs.form2.clearValidate()
-              this.$message.success('修改河湖库成功!')
+              this.$message.success('编辑河湖库成功!')
             })
           }
         }
@@ -1501,7 +1501,7 @@ export default {
     handleOkAdd () {
       console.log(this.hehutypevalue)
     },
-    // 修改按钮触发
+    // 编辑按钮触发
     handleEditOrNew (value) {
       console.log(value)
     },

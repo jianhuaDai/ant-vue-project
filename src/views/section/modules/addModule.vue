@@ -221,7 +221,7 @@ export default {
       this.visible = true
       this.form = { ...{}, ...data }
       if (this.isAdd) {
-        this.title = '修改断面'
+        this.title = '编辑断面'
       } else {
         this.title = '新增断面'
       }
@@ -241,9 +241,9 @@ export default {
               _this.visible = false
             })
           } else {
-            // 修改
+            // 编辑
             editSection(this.form).then(res => {
-              _this.$message.success('修改成功！')
+              _this.$message.success('编辑成功！')
               _this.$emit('refreshTable')
               _this.visible = false
             })
