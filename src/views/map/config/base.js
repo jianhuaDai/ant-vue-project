@@ -405,10 +405,16 @@ export function GetDataByLayer (layerId) {
       })
     }
     case 31: {
-      return loadGetWater({
+      return loadProject({
         page_size: 0,
         province_id: 32
+      }).then(res => {
+        return Promise.resolve(res.data)
       })
+      // return loadGetWater({
+      //   page_size: 0,
+      //   province_id: 32
+      // })
     }
     case 32: {
       return loadWaterFunction({
