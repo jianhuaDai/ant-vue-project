@@ -66,6 +66,12 @@ export const asyncRouterMap = [
             meta: { title: '污染源管理', keepAlive: true, permission: ['dashboard'] }
           },
           {
+            path: '/info-manage/shuiyuandimanage',
+            name: 'shuiyuandimanage',
+            component: () => import('@/views/shuiyuandi/shuiyuandi'),
+            meta: { title: '水源地管理', keepAlive: true, permission: ['dashboard'] }
+          },
+          {
             path: '/info-manage/areamanage',
             name: 'areamanage',
             component: () => import('@/views/areamanage/areamanage'),

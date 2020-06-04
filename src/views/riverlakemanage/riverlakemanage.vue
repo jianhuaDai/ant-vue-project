@@ -2,11 +2,10 @@
   <div>
     <a-row :gutter="8">
       <a-col :span="4">
-        <a-card
-          title="区域数据"
-          :bordered="false"
-          :style="{height:leftTreeHeight + 'px'}"
-          :bodyStyle="{padding:'10px 10px 10px 10px'}">
+        <a-card title="区域数据"
+                :bordered="false"
+                :style="{height:leftTreeHeight + 'px'}"
+                :bodyStyle="{padding:'10px 10px 10px 10px'}">
           <div :style="{height: areadivHeight + 'px'}">
             <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
           </div>
@@ -16,130 +15,95 @@
         <a-row :gutter="8">
           <a-col :span="24">
             <a-card :bodyStyle="{padding:'10px 24px 10px 24px'}">
-              <a-form-model
-                :model="form"
-                :style="{'margin-top':'16px'}"
-                labelAlign="left"
-                :label-col="labelCol"
-                :wrapper-col="wrapperCol">
+              <a-form-model :model="form"
+                            ref="from"
+                            :style="{'margin-top':'16px'}"
+                            labelAlign="left"
+                            :label-col="labelCol"
+                            :wrapper-col="wrapperCol">
                 <a-row>
                   <a-col :span="8">
-                    <a-form-model-item
-                      label="河湖名称:"
-                      prop="name">
-                      <a-input v-model="form.name"></a-input>
+                    <a-form-model-item label="河湖名称:"
+                                       prop="namesearch">
+                      <a-input v-model="form.namesearch"></a-input>
                     </a-form-model-item>
                   </a-col>
                   <a-col :span="8">
-                    <a-form-model-item
-                      label="河湖类型:"
-                      prop="type">
-                      <dictionary-select
-                        v-model="form.type"
-                        :insert-option-all="true"
-                        :dictionary-type="DictionaryEnum.WATER_TYPE">
+                    <a-form-model-item label="河湖类型:"
+                                       prop="type">
+                      <dictionary-select v-model="form.type"
+                                         :insert-option-all="true"
+                                         :dictionary-type="DictionaryEnum.WATER_TYPE">
                       </dictionary-select>
                     </a-form-model-item>
                   </a-col>
-                  <a-col
-                    :span="5"
-                    :offset="3"
-                    style="text-align:right;">
-                    <a-form-model-item
-                      label
-                      :label-col="{span:0}"
-                      :wrapper-col="{span:24}">
-                      <a-button
-                        type="primary"
-                        @click="searchClick">查询</a-button>
-                      <a-button
-                        type="default"
-                        class="resertBtn"
-                        style="margin-left:8px;"
-                        @click="resertClick">重置</a-button>
+                  <a-col :span="5"
+                         :offset="3"
+                         style="text-align:right;">
+                    <a-form-model-item label
+                                       :label-col="{span:0}"
+                                       :wrapper-col="{span:24}">
+                      <a-button type="primary"
+                                @click="searchClick">查询</a-button>
+                      <a-button type="default"
+                                class="resertBtn"
+                                style="margin-left:8px;"
+                                @click="resertClick">重置</a-button>
                     </a-form-model-item>
                   </a-col>
                 </a-row>
               </a-form-model>
             </a-card>
           </a-col>
-          <a-col
-            :span="24"
-            style="margin-top:8px;">
-            <a-card
-              title="查询列表:"
-              :bodyStyle="{padding:'16px'}"
-              :style="{height: listHeight + 'px'}">
-              <a-button
-                slot="extra"
-                type="primary"
-                icon="plus"
-                @click="gcAddClick">新增</a-button>
-              <a-button
-                slot="extra"
-                style="margin-left:8px;"
-                type="primary">打印</a-button>
-              <a-button
-                slot="extra"
-                style="margin-left:8px;"
-                type="primary">导入</a-button>
+          <a-col :span="24"
+                 style="margin-top:8px;">
+            <a-card title="查询列表:"
+                    :bodyStyle="{padding:'2px'}"
+                    :style="{height: listHeight + 'px'}">
+              <a-button slot="extra"
+                        type="primary"
+                        icon="plus"
+                        @click="gcAddClick">新增</a-button>
+              <a-button slot="extra"
+                        style="margin-left:8px;"
+                        type="primary">打印</a-button>
+              <a-button slot="extra"
+                        style="margin-left:8px;"
+                        type="primary">导入</a-button>
               <a-col :span="24">
-                <!-- <a-table
-                  :dataSource="data"
-                  :pagination="false"
-                  :scroll="{x:860,y:tableHeight }"
-                  :columns="columns">
-                  <template
-                    slot="action"
-                    slot-scope="text, record">
-                    <span class="btnGroup1">
-                      <a-button
-                        size="small"
-                        class="modifyClass"
-                        @click="modifyRow(record)">修改</a-button>&nbsp;
-                      <a-button
-                        size="small"
-                        class="delClass"
-                        @click="deleteRow(record)">删除</a-button>&nbsp;
-                    </span>
-                  </template>
-                </a-table> -->
-                <s-table
-                  ref="table"
-                  size="default"
-                  :rowKey="record => record.id"
-                  :columns="columns"
-                  :data="loadData"
-                  showPagination="true">
-                  <template
-                    slot="water_type"
-                    slot-scope="text, record">
+                <s-table ref="table"
+                         size="default"
+                         :rowKey="record => record.water_id"
+                         :columns="columns"
+                         :data="loadData"
+                         :showPagination="true">
+                  <template slot="water_type"
+                            slot-scope="text, record">
                     <div v-if="record.water_type === 1">
                       <span>河流</span>
                     </div>
-                    <div v-if="record.water_type === 4">
+                    <div v-if="record.water_type === 2">
                       <span>河段</span>
                     </div>
-                    <div v-if="record.water_type === 5">
+                    <div v-if="record.water_type === 3">
                       <span>湖泊</span>
                     </div>
-                    <div v-if="record.water_type === 6">
+                    <div v-if="record.water_type === 4">
                       <span>湖泊片</span>
                     </div>
-                    <div v-if="record.water_type === 7">
+                    <div v-if="record.water_type === 5">
                       <span>水库</span>
                     </div>
-                    <div v-if="record.water_type === 8">
+                    <div v-if="record.water_type === 6">
                       <span>水库片</span>
                     </div>
                   </template>
-                  <template
-                    slot="status"
-                    slot-scope="text, record">
-                    <div v-if="record.water_type === 1">
+                  <template slot="status"
+                            slot-scope="text, record">
+                    <div v-if="record.status === 1">
                       <span>启用</span>
                     </div>
-                    <div v-if="record.water_type === 0">
+                    <div v-if="record.status === -1">
                       <span>禁用</span>
                     </div>
                   </template>
@@ -161,9 +125,8 @@
                     <a @click="goTo(record)">{{ text }}</a>
                   </span> -->
 
-                  <span
-                    slot="action"
-                    slot-scope="text, record, index">
+                  <span slot="action"
+                        slot-scope="text, record, index">
                     <template>
                       <!-- <a
                         @click="() => {}"
@@ -173,10 +136,9 @@
                         style="font-size: 14px"
                         v-show="record.publish === '1'">已发布</span> -->
                       <!-- <a-divider type="vertical" /> -->
-                      <a @click="handleEditOrNew(record)">修改</a>
-                      <a
-                        @click="handleDel(record)"
-                        style="margin-left: 10px;color: red">删除</a>
+                      <a @click="gcAddClick(record)">编辑</a>
+                      <a @click="handleDel(record)"
+                         style="margin-left: 10px;color: red">删除</a>
                     </template>
                   </span>
                 </s-table>
@@ -197,35 +159,31 @@
       </a-col>
     </a-row>
     <!-- 河湖新增 -->
-    <a-modal
-      :title="title"
-      :visible="visible"
-      width="60%"
-      @ok="handleOk"
-      @cancel="handleCancelDel">
+    <a-modal :title="title"
+             :visible="visible"
+             width="60%"
+             @ok="handleOkAdd"
+             @cancel="handleCancelAdd">
 
       <a-spin :spinning="confirmLoading">
-        <a-form-model
-          ref="form"
-          :model="form2"
-          labelAlign="left"
-          :rules="rules"
-          :label-col="labelCol"
-          :wrapper-col="wrapperCol">
+        <a-form-model ref="form2"
+                      :model="form2"
+                      labelAlign="left"
+                      :rules="rules"
+                      :label-col="labelCol"
+                      :wrapper-col="wrapperCol">
           <a-row :gutter="24">
             <a-col :span="12">
-              <a-form-model-item
-                label="河湖库名称"
-                prop="name"
-                ref="name">
+              <a-form-model-item label="河湖库名称"
+                                 prop="name"
+                                 ref="name">
                 <a-input v-model="form2.name"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="河湖类型"
-                prop="hehutype"
-                ref="hehutype">
+              <a-form-model-item label="河湖类型"
+                                 prop="hehutypevalue"
+                                 ref="hehutypevalue">
                 <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehutypevalue"
@@ -237,25 +195,32 @@
                     {{ item.name }}
                   </a-select-option>
                 </a-select> -->
-                <dictionary-select
-                  v-model="form2.hehutype"
+                <a-select placeholder="全部"
+                          v-model="hehutypevalue">
+                  <a-select-option value="1">河流</a-select-option>
+                  <a-select-option value="2">河段</a-select-option>
+                  <a-select-option value="3">湖泊</a-select-option>
+                  <a-select-option value="4">湖泊片</a-select-option>
+                  <a-select-option value="5">水库</a-select-option>
+                  <a-select-option value="6">水库片</a-select-option>
+                </a-select>
+                <!-- <dictionary-select
+                  v-model="hehutype"
                   :dictionary-type="DictionaryEnum.WATER_TYPE">
-                </dictionary-select>
+                </dictionary-select> -->
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="河湖库编码"
-                prop="code"
-                ref="code">
+              <a-form-model-item label="河湖库编码"
+                                 prop="code"
+                                 ref="code">
                 <a-input v-model="form2.code"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="河湖库层级"
-                prop="hehucengji"
-                ref="hehucengji">
+              <a-form-model-item label="河湖库层级"
+                                 prop="hehucengji"
+                                 ref="hehucengji">
                 <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehucengji">
@@ -266,17 +231,21 @@
                     {{ item.name }}
                   </a-select-option>
                 </a-select> -->
-                <dictionary-select
+                <!-- <dictionary-select
                   v-model="form2.hehucengji"
                   :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
-                </dictionary-select>
+                </dictionary-select> -->
+                <a-select v-model="form2.hehucengji">
+                  <a-select-option value="0">省级</a-select-option>
+                  <a-select-option value="1">市级</a-select-option>
+                  <a-select-option value="2">区县级</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="河湖长"
-                prop="hehuzhang"
-                ref="hehuzhang">
+              <a-form-model-item label="河湖长"
+                                 prop="hehuzhang"
+                                 ref="hehuzhang">
                 <!-- <a-select
                   placeholder="全部"
                   v-model="form2.hehuzhang">
@@ -287,48 +256,59 @@
                     {{ item.name }}
                   </a-select-option>
                 </a-select> -->
-                <dictionary-select
+                <!-- <dictionary-select
                   v-model="form2.hehuzhang"
                   :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
-                </dictionary-select>
+                </dictionary-select> -->
+                <a-select v-model="form2.hehuzhang">
+                  <a-select-option value="0">省级</a-select-option>
+                  <a-select-option value="1">市级</a-select-option>
+                  <a-select-option value="2">区县级</a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="上级河湖库"
-                prop="sjhehuku"
-                ref="sjhehuku">
+              <a-form-model-item label="上级河湖库"
+                                 prop="sjhehuku"
+                                 ref="sjhehuku">
                 <a-input v-model="form2.sjhehuku"></a-input>
               </a-form-model-item>
             </a-col>
             <!-- 河流信息-----开始 -->
             <div v-show="heliuShow">
               <a-col :span="12">
-                <a-form-item
-                  label="河流长度:"
-                  prop="length"
-                  ref="length">
+                <a-form-item label="河流长度:"
+                             prop="length"
+                             ref="length">
                   <a-input v-model="form2.length"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="河流级别:"
-                  prop="heliujibie"
-                  ref="heliujibie">
-                  <a-select
-                    placeholder="全部"
-                    v-model="form2.heliujibie">
-                    <a-select-option
+                <a-form-item label="河流级别:"
+                             prop="heliujibie"
+                             ref="heliujibie">
+                  <a-select placeholder="全部"
+                            v-model="form2.heliujibie">
+                    <!-- <a-select-option
                       v-for="item in heliujibievalue"
                       :key="item.key"
                       :value="item.key">
                       {{ item.name }}
-                    </a-select-option>
+                    </a-select-option> -->
+                    <a-select-option value="0">干河流</a-select-option>
+                    <a-select-option value="1">一级</a-select-option>
+                    <a-select-option value="2">二级</a-select-option>
+                    <a-select-option value="3">三级</a-select-option>
+                    <a-select-option value="4">四级</a-select-option>
+                    <a-select-option value="5">五级</a-select-option>
+                    <a-select-option value="6">六级</a-select-option>
+                    <a-select-option value="7">七级</a-select-option>
+                    <a-select-option value="8">八级</a-select-option>
+                    <a-select-option value="9">未定级别</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
+              <!-- <a-col :span="12">
                 <a-form-item
                   label="起点:"
                   prop="start"
@@ -343,36 +323,30 @@
                   ref="end">
                   <a-input v-model="form2.end"></a-input>
                 </a-form-item>
-              </a-col>
+              </a-col> -->
               <a-col :span="12">
-                <a-form-item
-                  label="起点经纬度:"
-                  prop="startjwd"
-                  ref="startjwd">
-                  <a-input
-                    v-model="form2.startjwd"
-                    disabled>
-                    <a-icon
-                      @click="showMap1"
-                      slot="addonAfter"
-                      type="search"
-                      :style="{ color: '#0D7DD9' }" />
+                <a-form-item label="起点经纬度:"
+                             prop="startjwd"
+                             ref="startjwd">
+                  <a-input v-model="form2.startjwd"
+                           disabled>
+                    <a-icon @click="showMap1"
+                            slot="addonAfter"
+                            type="search"
+                            :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="终点经纬度:"
-                  prop="endjwd"
-                  ref="endjwd">
-                  <a-input
-                    v-model="form2.endjwd"
-                    disabled>
-                    <a-icon
-                      @click="showMap2"
-                      slot="addonAfter"
-                      type="search"
-                      :style="{ color: '#0D7DD9' }" />
+                <a-form-item label="终点经纬度:"
+                             prop="endjwd"
+                             ref="endjwd">
+                  <a-input v-model="form2.endjwd"
+                           disabled>
+                    <a-icon @click="showMap2"
+                            slot="addonAfter"
+                            type="search"
+                            :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -381,47 +355,48 @@
             <!-- 河段信息-----开始 -->
             <div v-show="heduanShow">
               <a-col :span="12">
-                <a-form-item
-                  label="河段长度:"
-                  prop="length2"
-                  ref="length2">
+                <a-form-item label="河段长度:"
+                             prop="length2"
+                             ref="length2">
                   <a-input v-model="form2.length2"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="河段级别:"
-                  prop="heduanjibie"
-                  ref="heduanjibie">
-                  <a-select
-                    placeholder="全部"
-                    v-model="form2.heduanjibie">
-                    <a-select-option
+                <a-form-item label="河段级别:"
+                             prop="heduanjibie"
+                             ref="heduanjibie">
+                  <a-select placeholder="全部"
+                            v-model="form2.heduanjibie">
+                    <!-- <a-select-option
                       v-for="item in heduanjibievalue"
                       :key="item.key"
                       :value="item.key">
                       {{ item.name }}
-                    </a-select-option>
+                    </a-select-option> -->
+                    <a-select-option value="11">国家级</a-select-option>
+                    <a-select-option value="12">自治区级</a-select-option>
+                    <a-select-option value="13">市级</a-select-option>
+                    <a-select-option value="14">县级</a-select-option>
+                    <a-select-option value="15">乡镇级</a-select-option>
+                    <a-select-option value="16">村级</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="行政区划:"
-                  prop="xzqh"
-                  ref="xzqh">
+                <a-form-item label="行政区划:"
+                             prop="xzqh"
+                             ref="xzqh">
                   <a-input v-model="form2.xzqh"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="位置:"
-                  prop="weizhi"
-                  ref="weizhi">
+                <a-form-item label="位置:"
+                             prop="weizhi"
+                             ref="weizhi">
                   <a-input v-model="form2.weizhi"></a-input>
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
+              <!-- <a-col :span="12">
                 <a-form-item
                   label="起点:"
                   prop="start2"
@@ -436,36 +411,30 @@
                   ref="end2">
                   <a-input v-model="form2.end2"></a-input>
                 </a-form-item>
-              </a-col>
+              </a-col> -->
               <a-col :span="12">
-                <a-form-item
-                  label="起点经纬度:"
-                  prop=""
-                  ref="">
-                  <a-input
-                    v-model="form2.startjwd2"
-                    disabled>
-                    <a-icon
-                      @click="showMap3"
-                      slot="addonAfter"
-                      type="search"
-                      :style="{ color: '#0D7DD9' }" />
+                <a-form-item label="起点经纬度:"
+                             prop=""
+                             ref="">
+                  <a-input v-model="form2.startjwd2"
+                           disabled>
+                    <a-icon @click="showMap3"
+                            slot="addonAfter"
+                            type="search"
+                            :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="终点经纬度:"
-                  prop="endjwd2"
-                  ref="endjwd2">
-                  <a-input
-                    v-model="form2.endjwd2"
-                    disabled>
-                    <a-icon
-                      @click="showMap4"
-                      slot="addonAfter"
-                      type="search"
-                      :style="{ color: '#0D7DD9' }" />
+                <a-form-item label="终点经纬度:"
+                             prop="endjwd2"
+                             ref="endjwd2">
+                  <a-input v-model="form2.endjwd2"
+                           disabled>
+                    <a-icon @click="showMap4"
+                            slot="addonAfter"
+                            type="search"
+                            :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
               </a-col>
@@ -474,35 +443,33 @@
             <!-- 湖泊信息-----开始 -->
             <div v-show="hupoShow">
               <a-col :span="12">
-                <a-form-item
-                  label="位置:"
-                  prop="weizhihupo"
-                  ref="weizhihupo">
-                  <a-input v-model="form.weizhihupo"></a-input>
+                <a-form-item label="位置:"
+                             prop="weizhihupo"
+                             ref="weizhihupo">
+                  <a-input v-model="form2.weizhihupo"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="面积:"
-                  prop="mianjihupo"
-                  ref="mianjihupo">
-                  <a-input v-model="form.mianjihupo"></a-input>
+                <a-form-item label="面积:"
+                             prop="mianjihupo"
+                             ref="mianjihupo">
+                  <a-input v-model="form2.mianjihupo"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="咸淡水属性:"
-                  prop="xdsshuxing"
-                  ref="xdsshuxing">
-                  <a-select
-                    placeholder="全部"
-                    v-model="form2.xdsshuxing">
-                    <a-select-option
+                <a-form-item label="咸淡水属性:"
+                             prop="xdsshuxing"
+                             ref="xdsshuxing">
+                  <a-select placeholder="全部"
+                            v-model="form2.xdsshuxing">
+                    <a-select-option value="-1">咸水</a-select-option>
+                    <a-select-option value="1">淡水</a-select-option>
+                    <!-- <a-select-option
                       v-for="item in xdsshuxingvalue"
                       :key="item.key"
                       :value="item.key">
                       {{ item.name }}
-                    </a-select-option>
+                    </a-select-option> -->
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -511,19 +478,17 @@
             <!-- 湖泊片信息---开始 -->
             <div v-show="hupopianShow">
               <a-col :span="12">
-                <a-form-item
-                  label="位置:"
-                  prop="weizhihupopian"
-                  ref="weizhihupopian">
-                  <a-input v-model="form.weizhihupopian"></a-input>
+                <a-form-item label="位置:"
+                             prop="weizhihupopian"
+                             ref="weizhihupopian">
+                  <a-input v-model="form2.weizhihupopian"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="面积:"
-                  prop="mianjihupopian"
-                  ref="mianjihupopian">
-                  <a-input v-model="form.mianjihupopian"></a-input>
+                <a-form-item label="面积:"
+                             prop="mianjihupopian"
+                             ref="mianjihupopian">
+                  <a-input v-model="form2.mianjihupopian"></a-input>
                 </a-form-item>
               </a-col>
             </div>
@@ -531,31 +496,80 @@
             <!-- 水库信息-----开始 -->
             <div v-show="shuikuShow">
               <a-col :span="12">
-                <a-form-item
-                  label="位置:"
-                  prop="weizhishuiku"
-                  ref="weizhishuiku">
-                  <a-input v-model="form.weizhishuiku"></a-input>
+                <a-form-item label="位置:"
+                             prop="weizhishuiku"
+                             ref="weizhishuiku">
+                  <a-input v-model="form2.weizhishuiku"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item
-                  label="管理单位名称:"
-                  prop="gldwname"
-                  ref="gldwname">
-                  <a-input v-model="form.gldwname"></a-input>
+                <a-form-item label="管理单位名称:"
+                             prop="gldwname"
+                             ref="gldwname">
+                  <a-input v-model.number="form2.gldwname"></a-input>
                 </a-form-item>
               </a-col>
+              <a-col :span="12">
+                <a-form-item label="总库容:"
+                             prop="zkr"
+                             ref="zkr">
+                  <a-input v-model="form2.zkr">
+                    <template slot="addonAfter">
+                      万立米
+                    </template>
+                  </a-input>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="工程等级:"
+                             prop="gcdj"
+                             ref="gcdj">
+                  <a-select v-model="form2.gcdj">
+                    <a-select-option value="1">I类</a-select-option>
+                    <a-select-option value="2">II类</a-select-option>
+                    <a-select-option value="3">III类</a-select-option>
+                    <a-select-option value="4">IV类</a-select-option>
+                    <a-select-option value="5">V类</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="水库类型:"
+                             prop="sklx"
+                             ref="sklx">
+                  <a-select v-model="form2.sklx">
+                    <a-select-option value="1">小（二）型10-100万立米</a-select-option>
+                    <a-select-option value="2">小（一）型100-1000万立米</a-select-option>
+                    <a-select-option value="3">中型1000万立米-1亿立米</a-select-option>
+                    <a-select-option value="4">大（二）型1—回10亿立米</a-select-option>
+                    <a-select-option value="5">大（一）型大于10亿立米</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <!-- <a-col :span="12">
+                <a-form-item
+                  label=""
+                  prop="sklx2"
+                  ref="sklx2">
+                  <a-select>
+                    <a-select-option
+                      v-for="item in sklxvalue2"
+                      :key="item.key"
+                      :value="item.key">
+                      {{ item.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col> -->
             </div>
             <!-- 水库信息-----结束 -->
             <!-- 水库片信息---开始 -->
             <div v-show="shuikupianShow">
               <a-col :span="12">
-                <a-form-item
-                  label="位置:"
-                  prop="weizhishuikupian"
-                  ref="weizhishuikupian">
-                  <a-input v-model="form.weizhishuikupian"></a-input>
+                <a-form-item label="位置:"
+                             prop="weizhishuikupian"
+                             ref="weizhishuikupian">
+                  <a-input v-model="form2.weizhishuikupian"></a-input>
                 </a-form-item>
               </a-col>
             </div>
@@ -563,55 +577,46 @@
         </a-form-model>
       </a-spin>
       <template slot="footer">
-        <a-button
-          @click="
+        <a-button @click="
             () => {
               this.visible = false
             }
           ">取消</a-button>
-        <a-button
-          type="primary"
-          @click="savePopup">保存</a-button>
+        <a-button type="primary"
+                  @click="savePopup">保存</a-button>
       </template>
     </a-modal>
-    <a-modal
-      title="河湖信息删除"
-      :visible="visibledel"
-      @ok="handleOk"
-      @cancel="handleCancelDel">
+    <!-- 河湖信息删除 -->
+    <a-modal title="河湖信息删除"
+             :visible="visibledel"
+             @ok="handleOk"
+             @cancel="handleCancelDel">
       <p>确定删除该条记录?</p>
     </a-modal>
 
-    <div
-      id="distance"
-      class="distance-container"
-      v-show="handleCancelMap"></div>
-    <div
-      class="add-mask"
-      v-show="handleCancelMap"></div>
-    <div
-      class="add-map-box"
-      v-show="handleCancelMap">
+    <div id="distance"
+         class="distance-container"
+         v-show="handleCancelMap"></div>
+    <div class="add-mask"
+         v-show="handleCancelMap"></div>
+    <div class="add-map-box"
+         v-show="handleCancelMap">
       <!-- <div id="add-map" style="width:100%;height:428px" v-show="handleCancelMap"></div> -->
-      <div
-        id="add-map"
-        class="map-view"
-        style="width:100%;height:428px"></div>
+      <div id="add-map"
+           class="map-view"
+           style="width:100%;height:428px"></div>
       <div class="add-map-submit">
-        <a-button
-          class="add-map-submit-btn"
-          type="primary"
-          @click="AddDraw"
-          v-if="sureBtnShow"
-          disabled>确定</a-button>
-        <a-button
-          class="add-map-submit-btn"
-          type="primary"
-          @click="AddDraw"
-          v-if="!sureBtnShow">确定</a-button>
-        <a-button
-          class="add-map-submit-btn"
-          @click="cancelAddDraw">取消</a-button>
+        <a-button class="add-map-submit-btn"
+                  type="primary"
+                  @click="AddDraw"
+                  v-if="sureBtnShow"
+                  disabled>确定</a-button>
+        <a-button class="add-map-submit-btn"
+                  type="primary"
+                  @click="AddDraw"
+                  v-if="!sureBtnShow">确定</a-button>
+        <a-button class="add-map-submit-btn"
+                  @click="cancelAddDraw">取消</a-button>
       </div>
     </div>
   </div>
@@ -624,7 +629,7 @@ import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 import mapboxgl from 'mapbox-gl'
 import { treeData } from './data.js'
 import AreaTree from '@com/Hczy/AreaTree.vue'
-import { getRiverlakeList, delRiverlake } from '@/api/riverlakemanage'
+import { getRiverlakeList, delRiverlake, addRiverlake, updateRiverlake } from '@/api/riverlakemanage'
 // import { Scene, Zoom, Scale, PointLayer, PolygonLayer } from '@antv/l7'
 // import { Scene, Scale, PointLayer, LineLayer, PolygonLayer, MarkerLayer, Marker } from '@antv/l7'
 // import { Mapbox } from '@antv/l7-maps'
@@ -633,7 +638,91 @@ export default {
     STable,
     AreaTree
   },
+  watch: {
+    // 3--河流  4--河段  5--湖泊  6-- 湖泊片  7--水库  8--水库片
+    hehutypevalue (value2, oldval) {
+      if (value2 === '1') {
+        this.heliuShow = true
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+      } else if (value2 === '2') {
+        this.heliuShow = false
+        this.heduanShow = true
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+      } else if (value2 === '3') {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = true
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+      } else if (value2 === '4') {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = true
+        this.shuikuShow = false
+        this.shuikupianShow = false
+      } else if (value2 === '5') {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = true
+        this.shuikupianShow = false
+      } else if (value2 === '6') {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = true
+      }
+    },
+    zkr (value) {
+      if (value === '0' || value === '1') {
+        this.sklxvalue = [
+          {
+            value: '0',
+            name: '小型水库'
+          }
+        ]
+      } else if (value === '2') {
+        this.sklxvalue = [
+          {
+            value: '1',
+            name: '中型水库'
+          }
+        ]
+      } else if (value === '3' || value === '4') {
+        this.sklxvalue = [
+          {
+            value: '2',
+            name: '大型水库'
+          }
+        ]
+      }
+    },
+    sklx (value) {
+      console.log(value)
+    }
+  },
   data () {
+    const checkNumber = (rule, value, callback) => {
+      const reg = /^[0-9]+(.[0-9]{2})?$/
+      if (!reg.test(value)) {
+        // eslint-disable-next-line standard/no-callback-literal
+        callback('数据不符合规范!')
+        return
+      }
+      callback()
+    }
     return {
       heliuShow: true,
       heduanShow: false,
@@ -644,8 +733,8 @@ export default {
       title: '新建',
       treeHeight: window.innerHeight - 205,
       tableHeight: window.innerHeight - 420,
-      listHeight: window.innerHeight - 225,
-      leftTreeHeight: window.innerHeight - 115,
+      listHeight: window.innerHeight - 220,
+      leftTreeHeight: window.innerHeight - 110,
       areadivHeight: window.innerHeight - 200,
       confirmLoading: false,
       visible: false,
@@ -659,6 +748,10 @@ export default {
       center: [118.806266, 32.059868],
       zoom: 12,
       pitch: 0,
+      hehutypevalue: '1',
+      zkr: '',
+      gcdj: '',
+      sklx: '',
       // bearing: -17.6,
       bearing: 0,
       container: 'add-map',
@@ -669,8 +762,23 @@ export default {
       // form2: this.$form.createForm(this),
       regionalism_id: '',
       form: {
-        name: '',
+        namesearch: '',
         type: ''
+      },
+      form2: {
+        name: '',
+        hehutypevalue: '1',
+        code: '',
+        hehucengji: '',
+        hehuzhang: '',
+        sjhehuku: '',
+        length: '',
+        startjwd: '',
+        endjwd: '',
+        weizhishuikupian: '',
+        zkr: '',
+        gcdj: '',
+        sklx: ''
       },
       rules: {
         name: [
@@ -687,6 +795,9 @@ export default {
         ],
         hehuzhang: [
           { required: true, message: '河湖长不能为空', trigger: 'blur' }
+        ],
+        zkr: [
+          { required: true, message: '河湖层级不能为空', trigger: 'change' }
         ]
       },
       labelCol: { span: 6 },
@@ -762,9 +873,9 @@ export default {
           name: '水库片'
         }
       ],
-      form2: {
-        hehutypevalue: '0'
-      },
+      addmodifyFlag: '1',
+      sklxvalue: [],
+      sklxvalue2: [],
       cengjivalue: [
         {
           value: '0',
@@ -901,8 +1012,6 @@ export default {
       queryParam: {
         regionalism_id: '',
         name: '',
-        page: 1,
-        page_size: 10,
         water_type: 0
       },
       // 加载表格数据
@@ -941,68 +1050,175 @@ export default {
     heliuSelect () {
 
     },
-    // 新增按钮触发
+    // 新增修改按钮触发
     gcAddClick (data = {}) {
       this.visible = true
       this.form = { ...{}, ...data }
       console.log(this.form)
-      if (this.form.id) {
+      this.rowData = this.form
+      if (this.form.water_id) {
+        this.addmodifyFlag = '2'
         this.title = '修改河湖信息'
+        this.setFormValue(this.form)
       } else {
+        this.addmodifyFlag = '1'
         this.title = '新增河湖信息'
+        // this.$refs.form2.resetFields()
+        this.hehutypevalue = '1'
+        this.form2.name = ''
+        this.form2.code = ''
+        this.form2.hehucengji = ''
+        this.form2.hehuzhang = ''
+        this.form2.sjhehuku = ''
+        this.form2.length = ''
+        this.form2.heliujibie = ''
+        this.form2.startjwd = ''
+        this.form2.endjwd = ''
       }
       setTimeout(() => {
-        this.$refs.form.clearValidate()
+        this.$refs.form2.clearValidate()
       }, 1)
     },
-    // 河湖类型选择触发
-    selectChangeadd () {
-      // console.log(value2)
-      alert('123')
-      // if (value2 === '0') {
-      //   this.heliuShow = true
-      //   this.heduanShow = false
-      //   this.hupoShow = false
-      //   this.hupopianShow = false
-      //   this.shuikuShow = false
-      //   this.shuikupianShow = false
-      // } else if (value2 === '1') {
-      //   this.heliuShow = false
-      //   this.heduanShow = true
-      //   this.hupoShow = false
-      //   this.hupopianShow = false
-      //   this.shuikuShow = false
-      //   this.shuikupianShow = false
-      // } else if (value2 === '2') {
-      //   this.heliuShow = false
-      //   this.heduanShow = false
-      //   this.hupoShow = true
-      //   this.hupopianShow = false
-      //   this.shuikuShow = false
-      //   this.shuikupianShow = false
-      // } else if (value2 === '3') {
-      //   this.heliuShow = false
-      //   this.heduanShow = false
-      //   this.hupoShow = false
-      //   this.hupopianShow = true
-      //   this.shuikuShow = false
-      //   this.shuikupianShow = false
-      // } else if (value2 === '4') {
-      //   this.heliuShow = false
-      //   this.heduanShow = false
-      //   this.hupoShow = false
-      //   this.hupopianShow = false
-      //   this.shuikuShow = true
-      //   this.shuikupianShow = false
-      // } else if (value2 === '5') {
-      //   this.heliuShow = false
-      //   this.heduanShow = false
-      //   this.hupoShow = false
-      //   this.hupopianShow = false
-      //   this.shuikuShow = false
-      //   this.shuikupianShow = true
-      // }
+    // 修改按钮触发
+    gcModifyClick (data) {
+
     },
+    setFormValue (value) {
+      if (value.water_type === 1) {
+        this.heliuShow = true
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+        this.setheliu(value)
+      } else if (value.water_type === 2) {
+        this.heliuShow = false
+        this.heduanShow = true
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+        this.setheduan(value)
+      } else if (value.water_type === 3) {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = true
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = false
+        this.sethupo(value)
+      } else if (value.water_type === 4) {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = true
+        this.shuikuShow = false
+        this.shuikupianShow = false
+        this.sethupopian(value)
+      } else if (value.water_type === 5) {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = true
+        this.shuikupianShow = false
+        this.setshuiku(value)
+      } else if (value.water_type === 6) {
+        this.heliuShow = false
+        this.heduanShow = false
+        this.hupoShow = false
+        this.hupopianShow = false
+        this.shuikuShow = false
+        this.shuikupianShow = true
+        this.setshuikupian(value)
+      }
+    },
+    // 设置河流表单值
+    setheliu (data) {
+      this.form2.name = data.name
+      // this.form2.hehutypevalue = data.water_type
+      this.hehutypevalue = '1'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.length = data.length
+      this.form2.heliujibie = data.water_level.toString()
+      this.form2.startjwd = data.origin[0]
+      this.form2.endjwd = data.destination[0]
+      // console.log(data.origin.substring(1, data.origin.length - 1))
+      console.log(data.origin)
+    },
+    // 设置河段表单值
+    setheduan (data) {
+      this.form2.name = data.name
+      // this.form2.hehutypevalue = '2'
+      this.hehutypevalue = '2'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.length2 = data.length
+      this.form2.heduanjibie = data.water_level.toString()
+      this.form2.xzqh = data.regionalism_id
+      this.form2.weizhi = data.location
+      this.form2.startjwd2 = data.origin[0]
+      this.form2.endjwd2 = data.destination[0]
+      // reqData.water_level = parseInt(this.form2.heduanjibie)
+      //       reqData.regionalism_id = this.form2.xzqh
+      //       reqData.location = this.form2.weizhi
+      //       reqData.origin = [this.form2.startjwd2]
+      //       reqData.destination = [this.form2.endjwd2]
+    },
+    // 设置湖泊表单值
+    sethupo (data) {
+      this.form2.name = data.name
+      this.hehutypevalue = '3'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.weizhihupo = data.location
+      this.form2.mianjihupo = data.area
+      this.form2.xdsshuxing = data.is_salt.toString()
+      // reqData.location = this.form2.weizhihupo
+      //       reqData.area = parseInt(this.form2.mianjihupo)
+      //       reqData.is_salt = parseInt(this.form2.xdsshuxing)
+    },
+    // 设置湖泊片表单值
+    sethupopian (data) {
+      this.form2.name = data.name
+      this.hehutypevalue = '4'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.weizhihupopian = data.location
+      this.form2.mianjihupopian = data.area
+    },
+    // 设置水库表单值
+    setshuiku (data) {
+      this.form2.name = data.name
+      this.hehutypevalue = '5'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.weizhishuikupian = data.location
+    },
+    // 设置水库片表单值
+    setshuikupian (data) {
+      this.form2.name = data.name
+      this.hehutypevalue = '6'
+      this.form2.code = data.water_id
+      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehuzhang = '0'
+      this.form2.sjhehuku = data.pid
+      this.form2.weizhishuikupian = data.location
+    },
+    // 河湖类型选择触发
+    selectChangeadd () { },
     // 河流起点经纬度获取
     getMapPoint1 () {
       this.jinweiduFlag = '1'
@@ -1052,54 +1268,90 @@ export default {
       }, 500)
     },
     showMap1 () {
-
+      this.jinweiduFlag = '1'
+      this.handleCancelMap = true
+      this.sureBtnShow = true
+      this.heliujindu1 = ''
+      this.heliuweidu1 = ''
+      setTimeout(() => {
+        this.initMap()
+        // this.initLanguage()
+      }, 500)
     },
     showMap2 () {
-
+      this.jinweiduFlag = '2'
+      this.handleCancelMap = true
+      this.sureBtnShow = true
+      this.heliujindu2 = ''
+      this.heliuweidu2 = ''
+      setTimeout(() => {
+        this.initMap()
+        // this.initLanguage()
+      }, 500)
     },
     showMap3 () {
-
+      this.jinweiduFlag2 = '1'
+      this.handleCancelMap = true
+      this.sureBtnShow = true
+      this.heduanjindu1 = ''
+      this.heduanweidu1 = ''
+      setTimeout(() => {
+        this.initMap()
+        // this.initLanguage()
+      }, 500)
     },
     showMap4 () {
-
+      this.jinweiduFlag2 = '2'
+      this.handleCancelMap = true
+      this.sureBtnShow = true
+      this.heduanjindu2 = ''
+      this.heduanjindu2 = ''
+      setTimeout(() => {
+        this.initMap()
+        // this.initLanguage()
+      }, 500)
     },
     AddDraw () {
       console.log(this.hehutypevalue)
       this.disabled = false
-      if (this.hehutypevalue === '0' && this.jinweiduFlag === '1') {
+      if (this.hehutypevalue === '1' && this.jinweiduFlag === '1') {
         if (this.heliujindu1 === '' || this.heliuweidu1 === '') {
           this.$message.info('请点击地图')
         } else {
           var a1 = this.heliujindu1
           var b1 = this.heliuweidu1
-          this.form2.setFieldsValue({ startjwd: a1 + ',' + b1 })
+          // this.form2.setFieldsValue({ startjwd: a1 + ',' + b1 })
+          this.form2.startjwd = a1 + ',' + b1
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '0' && this.jinweiduFlag === '2') {
+      } else if (this.hehutypevalue === '1' && this.jinweiduFlag === '2') {
         if (this.heliujindu2 === '' || this.heliuweidu2 === '') {
           this.$message.info('请点击地图')
         } else {
           var a2 = this.heliujindu2
           var b2 = this.heliuweidu2
-          this.form2.setFieldsValue({ endjwd: a2 + ',' + b2 })
+          // this.form2.setFieldsValue({ endjwd: a2 + ',' + b2 })
+          this.form2.endjwd = a2 + ',' + b2
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag2 === '1') {
+      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '1') {
         if (this.heduanjindu1 === '' || this.heduanweidu1 === '') {
           this.$message.info('请点击地图')
         } else {
           var a3 = this.heduanjindu1
           var b3 = this.heduanweidu1
-          this.form2.setFieldsValue({ startjwd2: a3 + ',' + b3 })
+          // this.form2.setFieldsValue({ startjwd2: a3 + ',' + b3 })
+          this.form2.startjwd2 = a3 + ',' + b3
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag2 === '2') {
+      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '2') {
         if (this.heduanjindu2 === '' || this.heduanweidu2 === '') {
           this.$message.info('请点击地图')
         } else {
           var a4 = this.heduanjindu2
           var b4 = this.heduanweidu2
-          this.form2.setFieldsValue({ endjwd2: a4 + ',' + b4 })
+          // this.form2.setFieldsValue({ endjwd2: a4 + ',' + b4 })
+          this.form2.endjwd2 = a4 + ',' + b4
           this.handleCancelMap = false
         }
       }
@@ -1144,16 +1396,17 @@ export default {
     },
     closeMap (e) {
       console.log(this.hehutypevalue)
-      if (this.hehutypevalue === '0' && this.jinweiduFlag === '1') {
+      console.log(this.jinweiduFlag2)
+      if (this.hehutypevalue === '1' && this.jinweiduFlag === '1') {
         this.heliujindu1 = e.lngLat.lng.toFixed(6)
         this.heliuweidu1 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '0' && this.jinweiduFlag === '2') {
+      } else if (this.hehutypevalue === '1' && this.jinweiduFlag === '2') {
         this.heliujindu2 = e.lngLat.lng.toFixed(6)
         this.heliuweidu2 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag2 === '1') {
+      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '1') {
         this.heduanjindu1 = e.lngLat.lng.toFixed(6)
         this.heduanweidu1 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag2 === '2') {
+      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '2') {
         this.heduanjindu2 = e.lngLat.lng.toFixed(6)
         this.heduanweidu2 = e.lngLat.lat.toFixed(6)
       }
@@ -1164,65 +1417,93 @@ export default {
     },
     // 保存按钮触发
     savePopup () {
-      this.$refs.form.validate(err => {
-        if (!err) {
-          console.log(this.hehutypevalue)
+      this.$refs.form2.validate(err => {
+        // console.log(err)
+        // console.log(parseInt(this.hehutypevalue))
+        if (err) {
+          // console.log(this.hehutypevalue)
           var reqData = {
-            name: this.form2.getFieldValue('name'),
-            type: this.hehutypevalue,
-            code: this.form2.getFieldValue('code'),
-            cengji: this.form2.getFieldValue('hehucengji'),
-            hehuzhang: this.form2.getFieldValue('hehuzhang'),
-            sjhehuku: this.form2.getFieldValue('sjhehuku')
+            name: this.form2.name,
+            water_type: parseInt(this.hehutypevalue),
+            water_id: this.form2.code,
+            water_grade: parseInt(this.form2.hehucengji),
+            // chief_id: this.form2.hehuzhang.toString(),
+            chief_id: '136486667551768577',
+            pid: this.form2.sjhehuku
+
           }
-          if (this.hehutypevalue === '0') {
-            reqData.length = this.form2.getFieldValue('length')
-            reqData.heliujibie = this.form2.getFieldValue('heliujibie')
-            reqData.start = this.form2.getFieldValue('start')
-            reqData.end = this.form2.getFieldValue('end')
-            reqData.startjwd = this.form2.getFieldValue('startjwd')
-            reqData.endjwd = this.form2.getFieldValue('endjwd')
-          } else if (this.hehutypevalue === '1') {
-            reqData.length2 = this.form2.getFieldValue('length2')
-            reqData.heduanjibie = this.form2.getFieldValue('heduanjibie')
-            reqData.xzqh = this.form2.getFieldValue('xzqh')
-            reqData.weizhi = this.form2.getFieldValue('weizhi')
-            reqData.start2 = this.form2.getFieldValue('start2')
-            reqData.end2 = this.form2.getFieldValue('end2')
-            reqData.startjwd2 = this.form2.getFieldValue('startjwd2')
-            reqData.endjwd2 = this.form2.getFieldValue('endjwd2')
+          if (this.hehutypevalue === '1') {
+            reqData.length = parseInt(this.form2.length)
+            // reqData.heliujibie = this.form2.heliujibie
+            reqData.water_level = parseInt(this.form2.heliujibie)
+            reqData.origin = [this.form2.startjwd]
+            reqData.destination = [this.form2.endjwd]
+            // reqData.start = this.form2.start
+            // reqData.end = this.form2.end
+            // reqData.startjwd = this.form2.startjwd
+            // reqData.endjwd = this.form2.endjwd
           } else if (this.hehutypevalue === '2') {
-            reqData.weizhihupo = this.form2.getFieldValue('weizhihupo')
-            reqData.mianjihupo = this.form2.getFieldValue('mianjihupo')
-            reqData.xdsshuxing = this.form2.getFieldValue('xdsshuxing')
+            reqData.length = parseInt(this.form2.length2)
+            reqData.water_level = parseInt(this.form2.heduanjibie)
+            reqData.regionalism_id = this.form2.xzqh
+            reqData.location = this.form2.weizhi
+            reqData.origin = [this.form2.startjwd2]
+            reqData.destination = [this.form2.endjwd2]
+            // reqData.start2 = this.form2.start2
+            // reqData.end2 = this.form2.end2
+            // reqData.startjwd2 = this.form2.startjwd2
+            // reqData.endjwd2 = this.form2.endjwd2
           } else if (this.hehutypevalue === '3') {
-            reqData.weizhihupopian = this.form2.getFieldValue('weizhihupopian')
-            reqData.mianjihupopian = this.form2.getFieldValue('mianjihupopian')
+            reqData.location = this.form2.weizhihupo
+            reqData.area = parseInt(this.form2.mianjihupo)
+            reqData.is_salt = parseInt(this.form2.xdsshuxing)
           } else if (this.hehutypevalue === '4') {
-            reqData.weizhishuiku = this.form2.getFieldValue('weizhishuiku')
-            reqData.gldwname = this.form2.getFieldValue('gldwname')
+            reqData.location = this.form2.weizhihupopian
+            reqData.area = parseInt(this.form2.mianjihupopian)
           } else if (this.hehutypevalue === '5') {
-            reqData.weizhishuikupian = this.form2.getFieldValue('weizhishuikupian')
+            reqData.weizhishuiku = this.form2.weizhishuiku
+            reqData.gldwname = this.form2.gldwname
+            reqData.capacity = parseInt(this.form2.zkr)
+            reqData.reservoir_project_level = parseInt(this.form2.gcdj)
+            reqData.reservoir_type = parseInt(this.form2.sklx)
+          } else if (this.hehutypevalue === '6') {
+            reqData.location = this.form2.weizhishuikupian
           }
           console.log(reqData)
-          // this.visible = false
-          // var reqData = {
-          //   name: this.form2.getFieldValue('name2'),
-          //   powerType: this.form2.getFieldValue('type2')
-          // }
-          // console.log(reqData)
-          // addStation(reqData).then(res => {
-          //   console.log(res)
-          //   this.searchClick()
-          //   this.form2.resetFields()
-          //   this.$message.success('新增发电站成功!')
-          // })
+          if (this.addmodifyFlag === '1') {
+            addRiverlake(reqData).then(res => {
+              console.log(res)
+              this.searchClick()
+              this.visible = false
+              // this.form2.resetFields()
+              this.$refs.form2.clearValidate()
+              this.$message.success('新增河湖库成功!')
+            })
+          } else if (this.addmodifyFlag === '2') {
+            reqData.version = this.rowData.version
+            updateRiverlake(this.rowData.water_id, reqData).then(res => {
+              console.log(res)
+              this.searchClick()
+              this.visible = false
+              // this.form2.resetFields()
+              this.$refs.form2.clearValidate()
+              this.$message.success('修改河湖库成功!')
+            })
+          }
         }
       })
     },
     // 取消按钮触发
     handleCancelAdd () {
       this.visible = false
+    },
+    // 河湖新增保存按钮
+    handleOkAdd () {
+      console.log(this.hehutypevalue)
+    },
+    // 修改按钮触发
+    handleEditOrNew (value) {
+      console.log(value)
     },
     // 查询按钮触发
     searchClick () {
@@ -1232,6 +1513,7 @@ export default {
       //   water_type: this.form.type
       // }
       this.queryParam.water_type = this.form.type === '' ? 0 : this.form.type
+      this.queryParam.name = this.form.namesearch
       console.log(this.queryParam)
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
@@ -1239,7 +1521,8 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
-
+      this.form.namesearch = ''
+      this.form.type = ''
     },
     // 河湖删除
     handleDel (value) {
@@ -1251,8 +1534,9 @@ export default {
     handleOk () {
       delRiverlake(this.rowData).then((res) => {
         console.log(res)
-        // this.$message.success('删除成功！')
-        // this.$refs.table.refresh(true)
+        this.$message.success('删除成功！')
+        this.$refs.table.refresh(true)
+        this.visibledel = false
       })
     },
     handleCancelDel () {
