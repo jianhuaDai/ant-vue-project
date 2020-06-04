@@ -39,7 +39,9 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="所属区域" prop="name6" ref="name">
-                <a-cascader :options="options" placeholder="" />
+                <!-- <a-cascader :options="options" placeholder="" /> -->
+                <a-tree-select :treeData="treeData">
+                </a-tree-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -147,6 +149,7 @@
 <script>
 import { outfallTypes } from '../data.js'
 import { addSection, editSection } from '@/api/section'
+import { treeData } from '@/config/areaTreeSelectData'
 import mapInput from '@/components/Hczy/mapInput.vue'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 export default {
@@ -159,6 +162,7 @@ export default {
   components: { mapInput, uploadSingleImg },
   data () {
     return {
+      treeData,
       outfallTypes,
       getWaterModule: 'getWaterModule',
       title: '新建',

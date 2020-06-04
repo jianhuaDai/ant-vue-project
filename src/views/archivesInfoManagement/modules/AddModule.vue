@@ -53,10 +53,6 @@ import { addArchivesInfo, getRiversAndLakes, updateArchivesInfo } from '@/api/in
 import { uploadSingle } from '@/api/upload'
 export default {
   props: {
-    orgData: {
-      type: Array,
-      default: () => []
-    },
     type: {
       type: Number,
       default: () => 1

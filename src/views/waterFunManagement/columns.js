@@ -1,32 +1,32 @@
 export const columns = [
   {
     title: '功能区名称',
-    dataIndex: 'name',
-    scopedSlots: { customRender: 'name' }
+    dataIndex: 'func_name',
+    scopedSlots: { customRender: 'func_name' }
   },
   {
     title: '级别',
-    dataIndex: 'site'
+    dataIndex: 'func_grade_name'
   },
   {
     title: '类型',
-    dataIndex: 'principal'
+    dataIndex: 'functional_type_name'
   },
   {
     title: '经纬度',
-    dataIndex: 'create_at'
+    dataIndex: 'lon_lat'
   },
   {
     title: '是否为考核水功能区',
-    dataIndex: 'a1'
+    dataIndex: 'is_examine'
   },
   {
     title: '水质目标',
-    dataIndex: 'a2'
+    dataIndex: 'water_target_name'
   },
   {
     title: '所属区域',
-    dataIndex: 'a3'
+    dataIndex: 'regionalism_name'
   },
   {
     title: '操作',
