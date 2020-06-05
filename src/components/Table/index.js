@@ -133,22 +133,21 @@ export default {
      * @param {Object} sorter 排序条件
      */
     loadData (pagination, filters, sorter) {
-      this.localLoading = false
-      // this.localLoading = true
+      this.localLoading = true
       const parameter = Object.assign({
-        page: (pagination && pagination.current) ||
-          this.showPagination && this.localPagination.current || this.pageNum,
-        page_size: (pagination && pagination.pageSize) ||
-          this.showPagination && this.localPagination.pageSize || this.pageSize
-      },
-      (sorter && sorter.field && {
-        sortField: sorter.field
-      }) || {},
-      (sorter && sorter.order && {
-        sortOrder: sorter.order
-      }) || {}, {
-        ...filters
-      }
+          page: (pagination && pagination.current) ||
+            this.showPagination && this.localPagination.current || this.pageNum,
+          page_size: (pagination && pagination.pageSize) ||
+            this.showPagination && this.localPagination.pageSize || this.pageSize
+        },
+        (sorter && sorter.field && {
+          sortField: sorter.field
+        }) || {},
+        (sorter && sorter.order && {
+          sortOrder: sorter.order
+        }) || {}, {
+          ...filters
+        }
       )
       console.log('parameter', parameter)
       const result = this.data(parameter)
@@ -163,6 +162,10 @@ export default {
             pageSize: (pagination && pagination.pageSize) ||
               this.localPagination.pageSize
           }) || false
+          // 处理后台List 为 null
+          if (!Array.isArray(r.list)) {
+            r.list = []
+          }
           // 为防止删除数据后导致页面当前页面数据长度为 0 ,自动翻页到上一页
           if (r.list.length === 0 && this.showPagination && this.localPagination.current > 1) {
             this.localPagination.current--
@@ -234,10 +237,10 @@ export default {
       if (this.selectedRowKeys.length <= 0) return null
       return (
         <a style="margin-left: 24px" onClick={() => {
-          callback()
-          this.clearSelected()
-        }}>清空</a>
-      )
+        callback()
+        this.clearSelected()
+      }}>清空</a>
+    )
     },
     renderAlert () {
       // 绘制统计列数据
@@ -257,13 +260,13 @@ export default {
       // 绘制 alert 组件
       return (
         <a-alert showIcon={true} style="margin-bottom: 16px">
-          <template slot="message">
-            <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
-            {needTotalItems}
-            {clearItem}
-          </template>
-        </a-alert>
-      )
+        <template slot="message">
+        <span style="margin-right: 12px">已选择: <a style="font-weight: 600">{this.selectedRows.length}</a></span>
+      {needTotalItems}
+      {clearItem}
+    </template>
+      </a-alert>
+    )
     }
   },
 
@@ -303,15 +306,15 @@ export default {
     })
     const table = (
       <a-table {...{ props, scopedSlots: { ...this.$scopedSlots } }} onChange={this.loadData} onExpand={ (expanded, record) => { this.$emit('expand', expanded, record) } }>
-        { Object.keys(this.$slots).map(name => (<template slot={name}>{this.$slots[name]}</template>)) }
+    { Object.keys(this.$slots).map(name => (<template slot={name}>{this.$slots[name]}</template>)) }
       </a-table>
     )
 
-    return (
-      <div class="table-wrapper">
-        { showAlert ? this.renderAlert() : null }
-        { table }
-      </div>
+      return (
+        <div class="table-wrapper">
+      { showAlert ? this.renderAlert() : null }
+      { table }
+    </div>
     )
+    }
   }
-}

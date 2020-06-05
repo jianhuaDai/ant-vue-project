@@ -16,7 +16,9 @@ export const DictionaryEnum = {
   GET_WATER_SCALE: 'get_water_scale', // 取水口规模
   GET_WATER_PURPOSE: 'get_water_purpose', // 取水用途
   FUNCTIONAL_LEVEL1: 'functional_level1', // 水功能保护区级别1
-  FUNCTIONAL_LEVEL2: 'functional_level2' // 功能区级别2
+  FUNCTIONAL_LEVEL2: 'functional_level2', // 功能区级别2
+  CHIEF_LEVEL: 'chief_level', // 河长级别
+  EMPLOYEE_TITLE: 'employee_title' // 职位
 }
 export function getDictionary (type, pid = 0) {
   return axios({
