@@ -46,7 +46,7 @@
             </a-col>
             <a-col :md="12" :sm="24">
               <a-form-model-item
-                label="上级"
+                label="上级河湖长"
                 prop="pid">
                 <a-tree-select
                   :treeDefaultExpandedKeys="expendBook"
