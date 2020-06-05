@@ -3,7 +3,8 @@ import { axios } from '@/utils/request'
 const api = {
   list: '/employees/page_query',
   chief: '/employees',
-  del: '/employees/delete/'
+  del: '/employees/delete',
+  riverData: '/water_infos/page_query'
 }
 
 export function getList (parameter) {
@@ -23,23 +24,25 @@ export function getChief (id) {
     params: {}
   })
 }
-export function updateChief (parameter) {
+export function saveChief (parameter) {
+  const method = parameter.employee_id ? 'put' : 'post'
+  const url = parameter.employee_id ? `${api.chief}/${parameter.employee_id}` : api.chief
   return axios({
-    url: `${api.chief}/${parameter.id}`,
-    method: 'put',
+    url: url,
+    method: method,
     data: parameter
   })
 }
-export function addChief (parameter) {
+export function delChief (id) {
   return axios({
-    url: api.chief,
+    url: `${api.del}/${id}`,
     method: 'post',
-    data: parameter
+    data: {}
   })
 }
-export function delChief (parameter) {
+export function getRiverData (parameter) {
   return axios({
-    url: api.del,
+    url: api.riverData,
     method: 'post',
     data: parameter
   })

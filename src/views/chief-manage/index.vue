@@ -1,12 +1,12 @@
 <template>
   <div style="height: 100%">
     <a-row :gutter="8" style="height: 100%">
-      <a-col :span="6" style="height: 100%">
+      <a-col :span="4" style="height: 100%">
         <a-card :bordered="false" title="区域" style="height: 100%">
           <area-tree/>
         </a-card>
       </a-col>
-      <a-col :span="18" style="height: 100%">
+      <a-col :span="20" style="height: 100%">
         <a-card :bordered="false">
           <div class="table-page-search-wrapper">
             <a-form layout="inline">
@@ -18,7 +18,7 @@
                 </a-col>
                 <a-col :md="9" :sm="24">
                   <a-form-item label="河长级别" style="margin-bottom: 0">
-                    <dictionary-select v-model="queryParam.chief_level" :insert-option-all="true" :select-first="true" :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"></dictionary-select>
+                    <dictionary-select v-model="queryParam.chief_level" :insert-option-all="true" :select-first="true" :dictionary-type="DictionaryEnum.CHIEF_LEVEL"></dictionary-select>
                   </a-form-item>
                 </a-col>
                 <a-col :md="6" :sm="24">
@@ -42,7 +42,7 @@
             showPagination="auto"
           >
             <span slot="serial" slot-scope="text, record, index">
-              {{ index + 1 }}
+              {{ index + 1 }}defaul
             </span>
             <span slot="status" slot-scope="text">
               <a-badge :status="text | statusBadge" :text="text | statusName" />
@@ -54,7 +54,7 @@
               </template>
             </span>
           </s-table>
-          <edit-module ref="taskModule"></edit-module>
+          <edit-module ref="editModule" @ok="()=>this.$refs.table.refresh(true)"></edit-module>
         </a-card>
       </a-col>
     </a-row>
@@ -62,30 +62,14 @@
 </template>
 
 <script>
-  import PageView from '../../layouts/PageView'
   import { STable, Ellipsis } from '@/components'
-  import { getList } from '@/api/chief'
+  import { getList, delChief } from '@/api/chief'
   import EditModule from './modules/EditModule'
   import AreaTree from '../../components/Hczy/AreaTree'
 
-  const statusMap = {
-    1: {
-      status: 'default',
-      text: '未制定方案'
-    },
-    2: {
-      status: 'processing',
-      text: '已制定方案'
-    },
-    3: {
-      status: 'success',
-      text: '已完成'
-    }
-  }
-
   export default {
-    name: 'Task',
-    components: { PageView, STable, Ellipsis, EditModule, AreaTree },
+    name: 'ChiefManage',
+    components: { STable, Ellipsis, EditModule, AreaTree },
     methods: {
       goTo (record) {
         this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
@@ -96,13 +80,17 @@
         this.$refs.table.refresh(true)
       },
       handleEditOrNew (record) {
-        this.$refs.taskModule.showModal(record)
+        this.$refs.editModule.showModal(record)
       },
       handleDel (record) {
+        const _this = this
         this.$confirm({
           title: '删除操作',
-          content: `确定要删除${record.name}吗`,
+          content: `确定要删除${record.employee_name}吗`,
           onOk () {
+            delChief(record.employee_id).then(res => {
+              _this.$message.success('删除成功')
+            })
           },
           onCancel () {
           }
@@ -120,13 +108,12 @@
         columns: [
           {
             title: '姓名',
-            dataIndex: 'employee_name',
-            width: '80px'
+            dataIndex: 'employee_name'
           },
           {
             title: '职位',
-            dataIndex: 'title',
-            width: '60px'
+            dataIndex: 'title'
+            // width: '60px'
           },
           {
             title: '所属单位',
@@ -134,13 +121,13 @@
           },
           {
             title: '级别',
-            dataIndex: 'chief_level_name',
-            width: '120px'
+            dataIndex: 'chief_level_name'
+            // width: '120px'
           },
           {
             title: '上级',
-            dataIndex: 'p_employee_name',
-            width: '80px'
+            dataIndex: 'p_employee_name'
+            // width: '80px'
           },
           {
             title: '联系电话',
@@ -171,14 +158,6 @@
 
       }
     }
-    // filters: {
-    //   statusFilter (type) {
-    //     return statusMap[type].text
-    //   },
-    //   statusTypeFilter (type) {
-    //     return statusMap[type].status
-    //   }
-    // }
   }
 </script>
 <style scoped>

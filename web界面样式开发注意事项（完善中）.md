@@ -5,7 +5,7 @@
 #####（1）一列布局：模态框宽度 60%
 
 #####（2）两列布局:
-			1. 模态框 width:70%
+			1. 模态框 width:60%
 			2. 两列栅格统一：
 					 <a-row :gutter="24"> 
 					 <a-col :md="12" :sm="24">
@@ -19,11 +19,11 @@
 <template>
 	<div style="height: 100%">
 		 <a-row :gutter="8" style="height: 100%">
-		     <a-col :span="6" style="height: 100%">
+		     <a-col :span="4" style="height: 100%">
         		<a-card :bordered="false" title="区域" style="height: 100%">
        		  </a-card>
        	 </a-col>
-       	 <a-col :span="18" style="height: 100%">
+       	 <a-col :span="20" style="height: 100%">
 						<a-card :bordered="false">
 						</a-card>
 						 <a-card :bordered="false" style="margin-top: 8px;height: calc(100% - 88px)" title="查询列表">
