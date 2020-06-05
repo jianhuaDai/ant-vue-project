@@ -2,7 +2,9 @@ import { axios } from '@/utils/request'
 
 const api = {
     getshuiyuandiList: '/water_sources/page_query',
-    delshuiyuandi: '/water_sources/delete'
+    addshuiyuandi: '/water_sources',
+    updateshuiyuandi: '/water_sources/',
+    delshuiyuandi: '/water_sources/delete/'
 }
 
 // 查询水源地列表接口
@@ -11,6 +13,22 @@ export function getShuiyuandiList (parameter) {
     url: api.getshuiyuandiList,
     method: 'post',
     data: parameter
+  })
+}
+// 新增水源地接口
+export function addShuiyuandi (parameter) {
+  return axios({
+    url: api.addshuiyuandi,
+    method: 'post',
+    data: parameter
+  })
+}
+// 更新水源地信息
+export function updateShuiyuandi (id, parameter) {
+  return axios({
+      url: api.updateshuiyuandi + id,
+      method: 'put',
+      data: parameter
   })
 }
 // 删除水源地信息
