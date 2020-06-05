@@ -371,7 +371,7 @@
                     <a-icon
                       @click="showMap1"
                       slot="addonAfter"
-                      type="search"
+                      type="environment"
                       :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
@@ -387,7 +387,7 @@
                     <a-icon
                       @click="showMap2"
                       slot="addonAfter"
-                      type="search"
+                      type="environment"
                       :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
@@ -470,7 +470,7 @@
                     <a-icon
                       @click="showMap3"
                       slot="addonAfter"
-                      type="search"
+                      type="environment"
                       :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
@@ -486,7 +486,7 @@
                     <a-icon
                       @click="showMap4"
                       slot="addonAfter"
-                      type="search"
+                      type="environment"
                       :style="{ color: '#0D7DD9' }" />
                   </a-input>
                 </a-form-item>
@@ -1077,7 +1077,8 @@ export default {
       queryParam: {
         regionalism_id: '',
         name: '',
-        water_type: 0
+        water_type: 0,
+        status: 1
       },
       // 加载表格数据
       loadData: parameter => {

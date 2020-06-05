@@ -13,8 +13,8 @@
             :wrapper-col="wrapperCol">
             <a-row>
               <a-col :span="6">
-                <a-form-model-item label="水源地名称:" prop="name">
-                  <a-input v-model="form.name"></a-input>
+                <a-form-model-item label="水源地名称:" prop="namesearch">
+                  <a-input v-model="form.namesearch"></a-input>
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
@@ -29,9 +29,9 @@
               </a-col>
               <a-col :span="6">
                 <a-form-model-item label="属性:" prop="type">
-                  <a-select v-model="form.type" placeholder="全部">
-                    <a-select-option value="0">市级</a-select-option>
-                    <a-select-option value="1">区级</a-select-option>
+                  <a-select v-model="form.type" placeholder="全部" allowClear>
+                    <a-select-option value="1">市级</a-select-option>
+                    <a-select-option value="2">区级</a-select-option>
                   </a-select>
                 </a-form-model-item>
               </a-col>
@@ -81,37 +81,24 @@
                 :rowKey="record => record.id"
                 :columns="columns"
                 :data="loadData"
-                showPagination="true">
-                <!-- <span
-                  slot="serial"
-                  slot-scope="text, record, index">
-                  {{ index + 1 }}
-                </span>
-                <span
-                  slot="status"
-                  slot-scope="text">
-                  <a-badge
-                    :status="text | statusTypeFilter"
-                    :text="text | statusFilter" />
-                </span>
-                <span
-                  slot="name"
+                :showPagination="true">
+                <template
+                  slot="source_type"
                   slot-scope="text, record">
-                  <a @click="goTo(record)">{{ text }}</a>
-                </span> -->
-
+                  <div v-if="record.status === 1">
+                    <span>河流</span>
+                  </div>
+                  <div v-if="record.status === 2">
+                    <span>湖泊</span>
+                  </div>
+                  <div v-if="record.status === 2">
+                    <span>水库</span>
+                  </div>
+                </template>
                 <span
                   slot="action"
                   slot-scope="text, record, index">
                   <template>
-                    <!-- <a
-                      @click="() => {}"
-                      v-show="record.publish !== '1'"
-                      v-html="'&emsp;发布'"></a>
-                    <span
-                      style="font-size: 14px"
-                      v-show="record.publish === '1'">已发布</span>
-                    <a-divider type="vertical" /> -->
                     <a @click="gcAddClick(record)">编辑</a>
                     <a
                       @click="handleDel(record)"
@@ -126,7 +113,7 @@
     </a-row>
     <!-- 新增水源地 -->
     <a-modal
-      title="新增水源地"
+      :title="title"
       width="60%"
       :visible="visible"
       @ok="handleOk"
@@ -196,7 +183,7 @@
                 label="所属区域"
                 prop="suoshuquyu"
                 ref="suoshuquyu">
-                <a-tree-select v-model="form2.area2" :treeData="options2"> </a-tree-select>
+                <a-tree-select v-model="form2.suoshuquyu" :treeData="options2"> </a-tree-select>
                 <!-- <a-select
                   placeholder="全部"
                   v-model="form2.suoshuquyu">
@@ -242,7 +229,7 @@
                 prop="jwd"
                 ref="jwd">
                 <a-input v-model="form2.jwd" disabled>
-                  <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                  <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                 </a-input>
                 <!-- <mapInput
                   v-model="form2.jwd"
@@ -385,7 +372,7 @@
 import { STable } from '@/components'
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { getShuiyuandiList, delShuiyuandi } from '@/api/shuiyuandi'
+import { getShuiyuandiList, addShuiyuandi, updateShuiyuandi, delShuiyuandi } from '@/api/shuiyuandi'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 import { treeData } from '@/config/areaTreeSelectData'
 import mapboxgl from 'mapbox-gl'
@@ -405,16 +392,29 @@ export default {
       wrapperCol: { span: 16 },
       confirmLoading: false,
       form: {
-        name: '',
+        namesearch: '',
         area: '',
-        type: ''
+        type: null
       },
       options: treeData,
       options2: treeData,
+      addmodifyflag: '1',
+      title: '新增水源地',
       form2: {
         name: '',
         code: '',
         pointname: '',
+        weizhi: '',
+        suoshushuiti: '',
+        suoshuquyu: '',
+        zxbz: '',
+        type2: '',
+        jwd: '',
+        jcpc: '',
+        dnkhmb: '',
+        sswkhmb: '',
+        czlx: '',
+        beizhu: '',
         image_url: ''
       },
       rules: {
@@ -537,17 +537,17 @@ export default {
         },
         {
           title: '属性',
-          dataIndex: 'create_at'
+          dataIndex: 'source_property_name'
           // sorter: true
         },
         {
           title: '所属水体',
-          dataIndex: 'create_at'
-          // sorter: true
+          dataIndex: 'source_type',
+          scopedSlots: { customRender: 'source_type' }
         },
         {
           title: '所属区域',
-          dataIndex: 'create_at'
+          dataIndex: 'regionalism_name'
           // sorter: true
         },
         {
@@ -560,23 +560,20 @@ export default {
        // 查询参数
       queryParam: {
         name: '',
-        area: '',
-        type: ''
+        regionalism_id: '',
+        source_property: null,
+        status: 1
       },
       loadData: parameter => {
         // alert('123')
         return getShuiyuandiList(Object.assign(parameter, this.queryParam)).then(res => {
           console.log(res)
           return res.data
-        })// return getTasks(Object.assign(parameter, this.queryParam))
-        //   .then(res => {
-        //     return res.data
-        //   })
+        })
       }
     }
   },
   created () {
-
   },
   methods: {
     // 水源地删除
@@ -585,6 +582,7 @@ export default {
       this.rowData = value.id
       this.visibledel = true
     },
+    // 删除按钮触发
     handleOk () {
       delShuiyuandi(this.rowData).then((res) => {
         console.log(res)
@@ -602,10 +600,18 @@ export default {
     },
     // 查询按钮触发
     searchClick () {
-      console.log(this.form)
-      getShuiyuandiList().then(res => {
-        console.log(res)
-      })
+      // console.log(this.form)
+      // getShuiyuandiList().then(res => {
+      //   console.log(res)
+      // })
+      console.log(this.form.type)
+      this.queryParam.name = this.form.namesearch
+      this.queryParam.regionalism_id = this.form.area === '' ? '' : this.form.area
+      this.queryParam.source_property = this.form.type === '' ? null : parseInt(this.form.type)
+
+      // console.log(this.queryParam)
+      // this.$refs[this.queryParam].$refs.table.refresh(true)
+      this.$refs.table.refresh(true)
     },
     // 重置按钮触发
     resertClick () {
@@ -680,24 +686,79 @@ export default {
     // 新增编辑按钮触发
     gcAddClick (data = {}) {
       this.visible = true
-      this.form = { ...{}, ...data }
-      console.log(this.form)
-      if (this.form.id) {
-        this.addmodifyFlag = '2'
+      this.form2 = { ...{}, ...data }
+      console.log(this.form2)
+      this.rowData = this.form2
+      if (this.form2.id) {
+        this.addmodifyflag = '2'
         this.title = '修改水源地信息'
-        this.setFormValue(this.form)
+        this.setFormValue(this.form2)
       } else {
-        this.addmodifyFlag = '1'
+        this.addmodifyflag = '1'
         this.title = '新增水源地信息'
       }
       setTimeout(() => {
         this.$refs.form2.clearValidate()
       }, 1)
     },
+    // 修改表单赋值
+    setFormValue (data) {
+      console.log(data)
+      this.form2.name = data.name
+      this.form2.code = data.source_id
+      this.form2.pointname = data.point
+      this.form2.weizhi = data.location
+      this.form2.suoshushuiti = data.source_type.toString()
+      this.form2.suoshuquyu = data.regionalism_id
+      this.form2.zxbz = data.standard
+      this.form2.type2 = data.source_property.toString()
+      this.form2.jwd = data.lon_lat
+      this.form2.jcpc = data.monitoring_frequency
+      this.form2.dnkhmb = data.current_target.toString()
+      this.form2.sswkhmb = data.target.toString()
+      this.form2.czlx = data.station_type.toString()
+      this.form2.beizhu = data.note
+      this.form2.image_url = data.image_url
+    },
     savePopup () {
-      this.$refs.form.validate(err => {
-        if (!err) {
-
+      this.$refs.form2.validate(err => {
+        if (err) {
+          var reqData = {
+            name: this.form2.name,
+            source_id: this.form2.code === undefined ? '' : this.form2.code,
+            point: this.form2.pointname,
+            location: this.form2.weizhi,
+            source_type: parseInt(this.form2.suoshushuiti),
+            regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
+            standard: this.form2.zxbz === undefined ? '' : this.form2.zxbz,
+            source_property: parseInt(this.form2.type2),
+            lon_lat: this.form2.jwd,
+            monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
+            current_target: this.form2.dnkhmb === undefined ? null : parseInt(this.form2.dnkhmb),
+            target: this.form2.sswkhmb === undefined ? null : parseInt(this.form2.sswkhmb),
+            station_type: this.form2.czlx === undefined ? null : parseInt(this.form2.czlx),
+            note: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
+            image_url: this.form2.image_url
+          }
+          console.log(reqData)
+          if (this.addmodifyflag === '1') {
+            addShuiyuandi(reqData).then(res => {
+              this.searchClick()
+              this.visible = false
+              this.$refs.form2.clearValidate()
+              this.$message.success('新增水源地成功!')
+            })
+          } else if (this.addmodifyflag === '2') {
+            reqData.id = this.rowData.source_id
+            reqData.version = this.rowData.version
+            console.log(reqData)
+            updateShuiyuandi(this.rowData.source_id, reqData).then(res => {
+              this.searchClick()
+              this.visible = false
+              this.$refs.form2.clearValidate()
+              this.$message.success('修改水源地成功!')
+            })
+          }
         }
       })
     },
