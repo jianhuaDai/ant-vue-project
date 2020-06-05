@@ -104,7 +104,7 @@ export function LayerBtns () {
       id: 31,
       name: '取水口',
       icon: '/icons/intake.svg',
-      detailModal: 'getWaterDialog',
+      detailModal: 'GetWaterDetail',
       detailTitle: '取水口详情'
     }, {
       id: 32,

@@ -3,38 +3,31 @@
     <a-modal
       v-model="visible"
       @ok="handleOk"
-      width="40%"
+      width="70%"
       :title="title"
       :confirmLoading="confirmLoading"
     >
       <a-spin :spinning="confirmLoading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-row :gutter="24">
-            <a-col :md="24" :sm="24">
+            <a-col :md="12" :sm="24">
               <a-form-model-item
                 :label-col="{span:4}"
                 :wrapper-col="{span:20}"
-                label="人员"
-                prop="name"
-                ref="name">
-                <a-tree-select
-                  v-model="form.name"
-                  tree-data-simple-mode
-                  style="width: 100%"
-                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                  :tree-data="treeData"
-                  placeholder="请选择人员"
-                  :load-data="onLoadData"/>
+                label="姓名"
+                prop="employee_name"
+                ref="employee_name">
+              <a-input v-model="form.employee_name"></a-input>
               </a-form-model-item>
             </a-col>
-            <a-col :md="24" :sm="24">
+            <a-col :md="12" :sm="24">
               <a-form-model-item
                 label="河湖"
                 :label-col="{span:4}"
                 :wrapper-col="{span:20}"
-                prop="river">
+                prop="water_ids">
                 <a-tree-select
-                  v-model="form.river"
+                  v-model="form.water_ids"
                   tree-data-simple-mode
                   style="width: 100%"
                   :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -45,23 +38,57 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :md="24" :sm="24">
+            <a-col :md="12" :sm="24">
               <a-form-model-item
+                label="职位"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}">
+                <dictionary-select :dictionary-type="DictionaryEnum.EMPLOYEE_TITLE"></dictionary-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="所属单位"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}">
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="上级"
+                prop="pid"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}">
+                <dictionary-select :dictionary-type="DictionaryEnum.PROJECT_LEVEL"></dictionary-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                label="联系电话"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}">
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                style="margin-bottom: 0"
+                label="区域"
+                :label-col="{span:4}"
+                :wrapper-col="{span:20}">
+                <dictionary-select :dictionary-type="DictionaryEnum.PROJECT_LEVEL"></dictionary-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :md="12" :sm="24">
+              <a-form-model-item
+                style="margin-bottom: 0"
                 label="河长级别"
                 :label-col="{span:4}"
-                :wrapper-col="{span:20}"
-                prop="level"
-                ref="level">
-                <a-select
-                  mode="multiple"
-                  v-model="form.level"
-                  style="width: 100%"
-                  placeholder="请选择河长级别"
-                >
-                  <a-select-option :key="item.id" v-for="item in levelData">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
+                :wrapper-col="{span:20}">
+                <dictionary-select :dictionary-type="DictionaryEnum.CHIEF_LEVEL"></dictionary-select>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -126,20 +153,23 @@
         status: true,
         confirmLoading: false,
         form: {
-          id: '',
-          name: '',
-          river: '',
-          level: ''
+          employee_id: '',
+          employee_name: '',
+          phone: '',
+          pid: '',
+          regionalism_id: '',
+          title_id: 0,
+          water_ids: []
         },
         rules: {
-          name: [
-            { required: true, message: '人员不能为空', trigger: 'change' }
+          employee_name: [
+            { required: true, message: '姓名不能为空', trigger: 'change' }
           ],
-          river: [
+          water_ids: [
             { required: true, message: '请选择河湖', trigger: 'change' }
           ],
-          level: [
-            { required: true, message: '请选择河长级别', trigger: 'blur' }
+          pid: [
+            { required: true, message: '请选择上级河湖长', trigger: 'blur' }
           ]
         },
         layout: 'horizontal',

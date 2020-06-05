@@ -13,12 +13,12 @@
               <a-row :gutter="24">
                 <a-col :md="9" :sm="24">
                   <a-form-item label="姓名" style="margin-bottom: 0">
-                    <a-input v-model="queryParam.name" placeholder=""/>
+                    <a-input v-model="queryParam.keyword" placeholder=""/>
                   </a-form-item>
                 </a-col>
                 <a-col :md="9" :sm="24">
-                  <a-form-item label="河湖长类型" style="margin-bottom: 0">
-                    <dictionary-select v-model="queryParam.status" :insert-option-all="true" :select-first="true" :dictionary-type="DictionaryEnum.WATER_TYPE"></dictionary-select>
+                  <a-form-item label="河长级别" style="margin-bottom: 0">
+                    <dictionary-select v-model="queryParam.chief_level" :insert-option-all="true" :select-first="true" :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"></dictionary-select>
                   </a-form-item>
                 </a-col>
                 <a-col :md="6" :sm="24">
@@ -36,7 +36,7 @@
           <s-table
             ref="table"
             size="default"
-            :rowKey="(record) => record.id"
+            :rowKey="(record) => record.employee_id"
             :columns="columns"
             :data="loadData"
             showPagination="auto"
@@ -45,7 +45,7 @@
               {{ index + 1 }}
             </span>
             <span slot="status" slot-scope="text">
-              <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+              <a-badge :status="text | statusBadge" :text="text | statusName" />
             </span>
             <span slot="action" slot-scope="text, record, index">
               <template>
@@ -64,7 +64,7 @@
 <script>
   import PageView from '../../layouts/PageView'
   import { STable, Ellipsis } from '@/components'
-  import { getTasks } from '@/api/task'
+  import { getList } from '@/api/chief'
   import EditModule from './modules/EditModule'
   import AreaTree from '../../components/Hczy/AreaTree'
 
@@ -91,7 +91,8 @@
         this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
       },
       resetQuery () {
-        this.queryParam.status = ''
+        this.queryParam.chief_level = null
+        this.queryParam.keyword = ''
         this.$refs.table.refresh(true)
       },
       handleEditOrNew (record) {
@@ -113,46 +114,54 @@
     data () {
       return {
         queryParam: {
-          name: '',
-          status: ''
+          keyword: '',
+          chief_level: null
         },
         columns: [
           {
             title: '姓名',
-            dataIndex: 'name'
+            dataIndex: 'employee_name',
+            width: '80px'
           },
           {
             title: '职位',
-            dataIndex: 'site'
+            dataIndex: 'title',
+            width: '60px'
           },
           {
             title: '所属单位',
-            dataIndex: 'principal'
+            dataIndex: 'depts[0].dept_name'
           },
           {
             title: '级别',
-            dataIndex: 'level',
-            scopedSlots: { customRender: 'status' }
+            dataIndex: 'chief_level_name',
+            width: '120px'
+          },
+          {
+            title: '上级',
+            dataIndex: 'p_employee_name',
+            width: '80px'
           },
           {
             title: '联系电话',
-            dataIndex: 'create_at',
-            sorter: true
+            dataIndex: 'phone',
+            width: '150px'
           },
           {
             title: '状态',
             dataIndex: 'status',
-            scopedSlots: { customRender: 'status' }
+            scopedSlots: { customRender: 'status' },
+            width: '80px'
           },
           {
             title: '操作',
             dataIndex: 'action',
-            width: '120px',
+            width: '100px',
             scopedSlots: { customRender: 'action' }
           }
         ],
         loadData: parameter => {
-          return getTasks(Object.assign(parameter, this.queryParam))
+          return getList(Object.assign(parameter, this.queryParam))
             .then(res => {
               return res.data
             })
@@ -161,15 +170,15 @@
         selectedRows: []
 
       }
-    },
-    filters: {
-      statusFilter (type) {
-        return statusMap[type].text
-      },
-      statusTypeFilter (type) {
-        return statusMap[type].status
-      }
     }
+    // filters: {
+    //   statusFilter (type) {
+    //     return statusMap[type].text
+    //   },
+    //   statusTypeFilter (type) {
+    //     return statusMap[type].status
+    //   }
+    // }
   }
 </script>
 <style scoped>
