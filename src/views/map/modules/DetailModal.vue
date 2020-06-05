@@ -6,6 +6,7 @@
       :destroyOnClose="true"
       :footer="null"
       width="800px"
+      :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
       <component :is="detailModal" :dataId="dataId"></component>
