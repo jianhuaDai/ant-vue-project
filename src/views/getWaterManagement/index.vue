@@ -6,12 +6,12 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="所属区域" style="margin-bottom: 0">
-                <a-input v-model="queryParam.name" placeholder="" />
+                <a-input v-model="queryParam.regionalism_id" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="取水口名称" style="margin-bottom: 0">
-                <a-input v-model="queryParam.status" placeholder="" />
+                <a-input v-model="queryParam.name" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -34,10 +34,9 @@
         :data="loadData"
         showPagination="auto"
       >
-        <span slot="name" slot-scope="text, record">
-          <a @click="goTo(record)">{{ text }}</a>
+        <span slot="is_transfer" slot-scope="text">
+          {{ text | isExamineName }}
         </span>
-
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEditOrNew(record)">编辑</a>
@@ -45,7 +44,7 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="getWaterModule" :formData="rowData"></add-module>
+      <add-module ref="getWaterModule" @refreshTable="$refs.table.refresh(true)"></add-module>
     </a-card>
   </div>
 </template>
@@ -53,7 +52,7 @@
 <script>
 import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
-import { getTasks } from '@/api/getWater'
+import { getWaterList, deleteWater } from '@/api/getWater'
 import AddModule from './modules/addModule'
 
 export default {
@@ -61,8 +60,8 @@ export default {
   data () {
     return {
       queryParam: {
-        name: '',
-        status: ''
+        regionalism_id: null,
+        name: ''
       },
       columns: [
         {
@@ -72,89 +71,64 @@ export default {
         },
         {
           title: '取水流量',
-          dataIndex: 'site'
+          dataIndex: 'ammount'
         },
         {
           title: '所属水源地',
-          dataIndex: 'principal'
+          dataIndex: 'source_name'
         },
         {
           title: '经纬度',
-          dataIndex: 'create_at'
+          dataIndex: 'lon_lat'
         },
         {
           title: '是否为引调水工程取水口',
-          dataIndex: 'is1'
+          dataIndex: 'is_transfer',
+          scopedSlots: { customRender: 'is_transfer' }
         },
         {
           title: '取水方式',
-          dataIndex: 'is2'
+          dataIndex: 'get_water_type_name'
         },
         {
           title: '所属区域',
-          dataIndex: 'is3'
+          dataIndex: 'regionalism_name'
         },
         {
           title: '操作',
           dataIndex: 'action',
-          width: '160px',
+          width: '100px',
           scopedSlots: { customRender: 'action' }
         }
       ],
       loadData: parameter => {
-        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
-          res.data.list = res.data.list.map((item, index) => {
-            return {
-              ...item,
-              id: index + 1
-            }
-          })
+        return getWaterList(Object.assign(parameter, this.queryParam)).then(res => {
           return res.data
         })
-      },
-      selectedRowKeys: [],
-      selectedRows: [],
-      rowData: {
-        id: '',
-        name: '',
-        site: '',
-        principal: '',
-        participant: '',
-        progress: '',
-        imageUrl: '',
-        location: '1, 1'
       }
     }
   },
   components: { PageView, STable, Ellipsis, AddModule },
   methods: {
-    goTo (record) {
-      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
-    },
     resetQuery () {
-      this.queryParam.status = ''
+      this.queryParam.name = ''
+      this.queryParam.regionalism_id = null
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
-      record
-        ? (this.rowData = record)
-        : (this.rowData = {
-            id: '',
-            name: '',
-            site: '',
-            principal: '',
-            participant: '',
-            progress: '',
-            imageUrl: '',
-            location: '1, 1'
-          })
       this.$refs.getWaterModule.showModal(record)
     },
     handleDel (record) {
+      const _this = this
       this.$confirm({
         title: '删除操作',
         content: `确定要删除${record.name}吗`,
-        onOk () {},
+        onOk () {
+          deleteWater(record.get_water_id).then(() => {
+            _this.$message.success('删除成功！')
+            _this.$refs.table.refresh(true)
+          })
+        },
         onCancel () {}
       })
     }

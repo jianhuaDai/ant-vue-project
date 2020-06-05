@@ -235,16 +235,21 @@ export default {
           const params = Object.assign({}, _this.form, {
             has_video: _this.form.has_video ? 1 : -1,
             frequency: _this.form.frequency * 1,
-            in_river_plan: _this.form.in_river_plan * 1
+            in_river_plan: _this.form.in_river_plan * 1,
+            diameter: _this.form.diameter * 1
           })
           if (!_this.form.sewage_id) {
             // 新增
             addOutfall(params).then(() => {
+              _this.$message.success('新增成功！')
+              _this.$emit('refreshTable')
               _this.visible = false
             })
           } else {
             // 编辑
             editOutfall(_this.form.sewage_id, params).then(() => {
+              _this.$message.success('编辑成功！')
+              _this.$emit('refreshTable')
               _this.visible = false
             })
           }

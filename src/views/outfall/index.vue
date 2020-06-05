@@ -51,7 +51,7 @@
           </template>
         </span>
       </s-table>
-      <add-module ref="taskModule" :formData="rowData"></add-module>
+      <add-module ref="taskModule" @refreshTable="$refs.table.refresh(true)"></add-module>
     </a-card>
   </div>
 </template>
@@ -59,7 +59,7 @@
 <script>
 import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
-import { getOutfallList } from '@/api/outfall'
+import { getOutfallList, deleteOutfall } from '@/api/outfall'
 import AddModule from './modules/addModule'
 
 export default {
@@ -73,32 +73,32 @@ export default {
       columns: [
         {
           title: '排污口名称',
-          dataIndex: 'name',
-          scopedSlots: { customRender: 'name' }
-        },
-        {
-          title: '位置',
-          dataIndex: 'site'
-        },
-        {
-          title: '排污来源',
-          dataIndex: 'principal'
+          dataIndex: 'sewage_name',
+          scopedSlots: { customRender: 'sewage_name' }
         },
         // {
-        //   title: '经纬度',
-        //   dataIndex: 'create_at'
+        //   title: '位置',
+        //   dataIndex: 'location'
         // },
         {
+          title: '排污来源',
+          dataIndex: 'come_from'
+        },
+        {
+          title: '经纬度',
+          dataIndex: 'lon_lat'
+        },
+        {
           title: '排水去向',
-          dataIndex: 'is1'
+          dataIndex: 'in_river_way_name'
         },
         {
           title: '排口类型',
-          dataIndex: 'is2'
+          dataIndex: 'sewage_type_name'
         },
         {
           title: '所属区域',
-          dataIndex: 'is3'
+          dataIndex: 'regionalism_name'
         },
         {
           title: '操作',
@@ -117,18 +117,6 @@ export default {
           })
           return res.data
         })
-      },
-      selectedRowKeys: [],
-      selectedRows: [],
-      rowData: {
-        id: '',
-        name: '',
-        site: '',
-        principal: '',
-        participant: '',
-        progress: '',
-        imageUrl: '',
-        location: '1, 1'
       }
     }
   },
@@ -138,29 +126,24 @@ export default {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
     resetQuery () {
-      this.queryParam.status = ''
+      this.queryParam.sewage_type = 0
+      this.queryParam.name = ''
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
-      record
-        ? (this.rowData = record)
-        : (this.rowData = {
-            id: '',
-            name: '',
-            site: '',
-            principal: '',
-            participant: '',
-            progress: '',
-            imageUrl: '',
-            location: '1, 1'
-          })
       this.$refs.taskModule.showModal(record)
     },
     handleDel (record) {
+      const _this = this
       this.$confirm({
         title: '删除操作',
-        content: `确定要删除${record.name}吗`,
-        onOk () {},
+        content: `确定要删除${record.sewage_name}吗`,
+        onOk () {
+          deleteOutfall(record.sewage_id).then(() => {
+            _this.$message.success('删除成功！')
+            _this.$refs.table.refresh(true)
+          })
+        },
         onCancel () {}
       })
     }
