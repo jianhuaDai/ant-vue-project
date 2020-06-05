@@ -220,6 +220,7 @@ export default {
   created () {},
   methods: {
     showModal (data = {}) {
+      console.log(data, 'kkkkkk')
       if (JSON.stringify(data) !== '{}') {
         data.state = data.state === 1
       }

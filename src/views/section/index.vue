@@ -49,7 +49,7 @@
 <script>
 import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
-import { getSectionList, deleteSections } from '@/api/section'
+import { getSectionList, deleteSection } from '@/api/section'
 import AddModule from './modules/addModule'
 
 export default {
@@ -76,7 +76,7 @@ export default {
         },
         {
           title: '所属区域',
-          dataIndex: 'is1'
+          dataIndex: 'regionalism_name'
         },
         {
           title: '经纬度',
@@ -121,7 +121,7 @@ export default {
         title: '删除操作',
         content: `确定要删除${record.fracture_name}吗`,
         onOk () {
-          deleteSections(record.fracture_id).then(() => {
+          deleteSection(record.fracture_id).then(() => {
             _this.$message.success('删除成功!')
             _this.$refs.table.refresh(true)
           })

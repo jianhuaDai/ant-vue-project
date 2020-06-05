@@ -7,7 +7,7 @@
       :show-upload-list="false"
       accept=".png,.jpg,.bmp"
     >
-      <img width="100" height="100" v-if="showImage" :src="image_url" alt="avatar" />
+      <img width="100" height="100" v-if="showImage" :src="image_url[0]" alt="avatar" />
       <div v-else style="width: 100px;height: 100px;border: 1px solid #ddd;">
         <a-icon style="fontSize: 20px;transform: translate(37px, 37px);" type="plus" />
       </div>
@@ -18,15 +18,27 @@
 <script>
 import { uploadSingle } from '@/api/upload'
 export default {
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    }
+  },
   model: {
     prop: 'value',
     event: 'change'
   },
   data () {
     return {
-      image_url: '',
+      image_url: [],
       fileList: [],
       showImage: false
+    }
+  },
+  created () {
+    this.image_url = this.value
+    if (this.image_url.length > 0) {
+      this.showImage = true
     }
   },
   methods: {
@@ -35,7 +47,7 @@ export default {
       formData.append('file', data.file)
       uploadSingle(formData)
         .then(res => {
-          this.image_url = res.data
+          this.image_url = [res.data]
           this.showImage = res.data
           this.$emit('change', this.image_url)
         })

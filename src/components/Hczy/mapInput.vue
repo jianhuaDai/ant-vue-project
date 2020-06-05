@@ -21,6 +21,12 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from 'mapbox-gl'
 export default {
   name: 'MapInput',
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    }
+  },
   model: {
     prop: 'value',
     event: 'change'
@@ -34,7 +40,8 @@ export default {
     }
   },
   created () {
-    this.location = ''
+    console.log(this, 'dsddss')
+    this.location = this.value[0]
   },
   methods: {
     initMap () {
@@ -65,7 +72,7 @@ export default {
     },
     AddDraw () {
       this.location = this.lng + ', ' + this.lat
-      this.$emit('change', this.location)
+      this.$emit('change', [this.location])
       this.showMapDom = false
     },
     cancelAddDraw () {
