@@ -166,7 +166,9 @@ export default {
         sewage_name: [{ required: true, message: '排污口名称不能为空', trigger: ['blur', 'change'] }],
         sewage_type: [{ required: true, message: '排口类型不能为空', trigger: ['blur', 'change'] }],
         lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
-        regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }]
+        regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }],
+        frequency: [{ pattern: /^[0-9]+$/, message: '请输入整数', trigger: ['blur', 'change'] }],
+        in_river_plan: [{ pattern: /^[0-9]+$/, message: '请输入整数', trigger: ['blur', 'change'] }]
       },
       visible: false,
       options: [

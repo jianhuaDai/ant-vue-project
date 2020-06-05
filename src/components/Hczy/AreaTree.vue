@@ -1,10 +1,9 @@
 <template>
   <div class="tree">
-    <a-tree-select
+    <a-tree
       :tree-data="treeData"
       :replaceFields="replaceFields"
       @select="onSelect"
-      :props="replaceFields"
       :defaultExpandedKeys="['32']"
     />
   </div>
@@ -17,8 +16,7 @@ export default {
     return {
       replaceFields: {
         key: 'id',
-        title: 'name',
-        value: 'id'
+        title: 'name'
       },
       treeData
     }

@@ -118,8 +118,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="状态" prop="state" ref="state">
-                <a-switch v-model="form.state" checked-children="启用" un-checked-children="停用" default-checked />
+              <a-form-model-item label="状态" prop="fracture_state" ref="fracture_state">
+                <a-switch v-model="form.fracture_state" checked-children="启用" un-checked-children="停用" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -228,7 +228,7 @@ export default {
     showModal (data = {}) {
       console.log(data, 'kkkkkk')
       if (JSON.stringify(data) !== '{}') {
-        data.state = data.state === 1
+        data.fracture_state = data.fracture_state === 1
       }
       this.visible = true
       this.form = { ...{}, ...data }
@@ -247,7 +247,7 @@ export default {
         if (valid) {
           const params = Object.assign({}, _this.form, {
             monitoring_frequency: _this.form.monitoring_frequency * 1,
-            state: _this.form.state ? 1 : -1
+            fracture_state: _this.form.fracture_state ? 1 : -1
           })
           if (_this.isAdd) {
             // 新增

@@ -186,7 +186,11 @@ export default {
         source_id: [{ required: true, message: '所属水源地不能为空', trigger: ['blur', 'change'] }],
         lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
         get_water_type: [{ required: true, message: '取水方式不能为空', trigger: ['blur', 'change'] }],
-        ammount: [{ required: true, message: '取水流量不能为空', trigger: ['blur', 'change'] }] },
+        ammount: [
+          { required: true, message: '取水流量不能为空', trigger: ['blur', 'change'] },
+          { pattern: /^[0-9]+$/, message: '请输入整数', trigger: ['blur', 'change'] }
+          ]
+      },
       visible: false
     }
   },
