@@ -6,16 +6,18 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="排口类型" style="margin-bottom: 0">
-                <a-select v-model="queryParam.name" placeholder="">
-                  <a-select-option value="1">工业废水</a-select-option>
-                  <a-select-option value="2">生活污水</a-select-option>
-                  <a-select-option value="3">混合废污水</a-select-option>
-                </a-select>
+                <dictionary-select
+                  v-model="queryParam.sewage_type"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_SEWAGE_TYPE"
+                >
+                </dictionary-select>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="排污口名称" style="margin-bottom: 0">
-                <a-input v-model="queryParam.status" placeholder="" />
+                <a-input v-model="queryParam.sewage_name" placeholder="" />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -57,7 +59,7 @@
 <script>
 import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
-import { getTasks } from '@/api/getWater'
+import { getOutfallList } from '@/api/outfall'
 import AddModule from './modules/addModule'
 
 export default {
@@ -65,8 +67,8 @@ export default {
   data () {
     return {
       queryParam: {
-        name: '',
-        status: ''
+        sewage_type: 0,
+        sewage_name: ''
       },
       columns: [
         {
@@ -106,7 +108,7 @@ export default {
         }
       ],
       loadData: parameter => {
-        return getTasks(Object.assign(parameter, this.queryParam)).then(res => {
+        return getOutfallList(Object.assign(parameter, this.queryParam)).then(res => {
           res.data.list = res.data.list.map((item, index) => {
             return {
               ...item,

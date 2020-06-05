@@ -12,7 +12,7 @@
       >
         <template slot="attachment_url" slot-scope="text">
           <div v-for="(item, index) in text" :key="index">
-            {{ item.name }}
+            <a :href="item.url" target="_blank">{{ item.name }}</a>
           </div>
         </template>
         <span slot="status" slot-scope="text, record">

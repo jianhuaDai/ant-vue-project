@@ -17,44 +17,42 @@
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
         >
-          <a-row :gutter="24">
+          <a-row :gutter="24" v-if="visible">
             <a-col :span="12">
-              <a-form-model-item label="排污口名称" prop="name" ref="name">
-                <a-input v-model="form.name" />
-              </a-form-model-item>
-            </a-col>
-            <!-- <a-col :span="12">
-              <a-form-model-item label="位置" prop="name2" ref="name">
-                <a-cascader :options="options" placeholder="" />
-              </a-form-model-item>
-            </a-col> -->
-            <a-col :span="12">
-              <a-form-model-item label="排口来源" prop="name3" ref="name">
-                <a-input v-model="form.name3" />
+              <a-form-model-item label="排污口名称" prop="sewage_name" ref="sewage_name">
+                <a-input v-model="form.sewage_name" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="排口类型" prop="name4" ref="name">
-                <a-select v-model="form.name4" placeholder="">
-                  <a-select-option v-for="itemType in outfallTypes" :key="itemType.key">
-                    {{ itemType.name }}
-                  </a-select-option>
-                </a-select>
+              <a-form-model-item label="排口来源" prop="come_from" ref="come_from">
+                <a-input v-model="form.come_from"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name5" ref="name5">
-                <mapInput v-model="form.location" v-if="visible"></mapInput>
+              <a-form-model-item label="排口类型" prop="sewage_type" ref="sewage_type">
+                <dictionary-select
+                  v-model="form.sewage_type"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_SEWAGE_TYPE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name6" ref="name">
-                <a-cascader :options="options" placeholder="" />
+              <a-form-model-item label="经纬度" prop="lon_lat" ref="lon_lat">
+                <mapInput v-model="form.lon_lat" v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="监测频次" prop="name7" ref="name">
-                <a-input v-model="form.name5">
+              <a-form-model-item label="所属区域" prop="regionalism_id" ref="regionalism_id">
+                <a-tree-select v-model="form.regionalism_id" :treeData="treeData">
+                </a-tree-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="监测频次" prop="frequency" ref="frequency">
+                <a-input v-model="form.frequency">
                   <template slot="addonAfter">
                     次/月
                   </template>
@@ -62,41 +60,49 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="管径" prop="name9" ref="name">
-                <a-input v-model="form.name9" />
+              <a-form-model-item label="管径" prop="diameter" ref="diameter">
+                <a-input v-model="form.diameter" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="排水去向" prop="name10" ref="name">
-                <a-select v-model="form.name10">
-                  <a-select-option v-for="item in drainageDirection" :key="item.key" :value="item.key">
+              <a-form-model-item label="排水去向" prop="in_river_way" ref="in_river_way">
+                <dictionary-select
+                  v-model="form.in_river_way"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_SEWAGE_IN_WAY"
+                >
+                </dictionary-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="所属水体" prop="water_id" ref="water_id">
+                <a-select show-search placeholder="" option-filter-prop="children" v-model="form.water_id">
+                  <a-select-option v-for="item in riversAndLakes" :value="item.water_id" :key="item.water_id">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属水体" prop="name11" ref="name">
-                <a-input v-model="form.name11" />
+              <a-form-model-item label="关注级别" prop="attention_level" ref="attention_level">
+                <dictionary-select
+                  v-model="form.attention_level"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="关注级别" prop="name12" ref="name">
-                <a-select v-model="form.name12">
-                  <a-select-option value="1">省级</a-select-option>
-                  <a-select-option value="2">市级</a-select-option>
-                  <a-select-option value="3">区县级</a-select-option>
-                </a-select>
+            <!-- <a-col :span="12">
+              <a-form-model-item label="所属河长" prop="river_chief_id" ref="river_chief_id">
+                <a-input v-model="form.river_chief_id" />
               </a-form-model-item>
-            </a-col>
+            </a-col> -->
             <a-col :span="12">
-              <a-form-model-item label="所属河长" prop="name13" ref="name">
-                <a-input v-model="form.name13" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="设计入河量" prop="name14" ref="name">
-                <a-input v-model="form.name14">
+              <a-form-model-item label="设计入河量" prop="in_river_plan" ref="in_river_plan">
+                <a-input v-model="form.in_river_plan">
                   <template slot="addonAfter">
                     t/a
                   </template>
@@ -104,17 +110,19 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="是否有视频" prop="name15" ref="name">
-                <a-switch checked-children="开" un-checked-children="关" default-checked />
+              <a-form-model-item label="是否有视频" prop="has_video" ref="has_video">
+                <a-switch v-model="form.has_video" checked-children="开" un-checked-children="关" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="排放方式" prop="name17" ref="name">
-                <a-select v-model="form.name17" placeholder="">
-                  <a-select-option value="1">连续</a-select-option>
-                  <a-select-option value="2">间接</a-select-option>
-                  <a-select-option value="3">季节</a-select-option>
-                </a-select>
+              <a-form-model-item label="排放方式" prop="sewage_way" ref="sewage_way">
+                <dictionary-select
+                  v-model="form.sewage_way"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_SEWAGE_WAY"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -137,55 +145,30 @@
 </template>
 
 <script>
-// import { saveEmploy } from '../../../../api/manage'
-import { outfallTypes, drainageDirection } from '../data.js'
-import { uploadSingle } from '@/api/upload'
+import { treeData } from '@/config/areaTreeSelectData'
+import { addOutfall, editOutfall } from '@/api/outfall'
+import { getRiversAndLakes } from '@/api/infomanage'
 import mapInput from '@/components/Hczy/mapInput.vue'
 export default {
-  props: {
-    orgData: {
-      type: Array,
-      default: () => []
-    },
-    formData: {
-      type: Object,
-      default: function () {
-        return {
-          id: '',
-          name: '',
-          site: '',
-          principal: '',
-          participant: '',
-          progress: '',
-          imageUrl: '',
-          location: '1, 1'
-        }
-      }
-    }
-  },
+  props: {},
   components: { mapInput },
   data () {
     return {
-      outfallTypes,
-      drainageDirection,
+      riversAndLakes: [],
+      treeData,
       getWaterModule: 'getWaterModule',
-      fileList: [],
       title: '新建',
       labelCol: { span: 8 },
       wrapperCol: { span: 15, offset: 1 },
-      status: true,
       confirmLoading: false,
       form: {},
       rules: {
-        name: [{ required: true, message: '取水口名称不能为空', trigger: 'blur' }],
-        site: [{ required: true, message: '地点不能为空', trigger: 'blur' }],
-        principal: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
-        participant: [{ required: true, message: '参与人不能为空', trigger: 'blur' }]
+        sewage_name: [{ required: true, message: '排污口名称不能为空', trigger: ['blur', 'change'] }],
+        sewage_type: [{ required: true, message: '排口类型不能为空', trigger: ['blur', 'change'] }],
+        lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
+        regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }]
       },
-      layout: 'horizontal',
       visible: false,
-      showMapDom: false,
-      showImage: false,
       options: [
         {
           value: 'zhejiang',
@@ -222,36 +205,21 @@ export default {
       ]
     }
   },
-  watch: {
-    orgData (value) {
-      this.treeData = this.buildTreeData(value, [])
-    },
-    form: {
-      handler (value) {
-        this.showImage = value.imageUrl
-      },
-      deep: true
-    }
-  },
+  watch: {},
   mounted () {},
   created () {
-    this.form = this.formData
+    getRiversAndLakes({ page: 1, page_size: 0 }).then(res => {
+      this.riversAndLakes = res.data.list
+    })
   },
   methods: {
-    customRequest (data) {
-      const formData = new FormData()
-      formData.append('file', data.file)
-      uploadSingle(formData)
-        .then(res => {
-          this.$set(this.form, 'imageUrl', res.data)
-        })
-        .catch(() => {})
-      this.fileList = [data.file]
-    },
     showModal (data = {}) {
       this.visible = true
+      if (JSON.stringify(data) !== '{}') {
+        data.has_video = data.has_video === 1
+      }
       this.form = { ...{}, ...data }
-      if (this.form.id) {
+      if (this.form.sewage_id) {
         this.title = '编辑排污口'
       } else {
         this.title = '新增排污口'
@@ -264,20 +232,22 @@ export default {
       const _this = this
       this.$refs.form.validate(valid => {
         if (valid) {
-          _this.confirmLoading = true
-          if (!_this.form.employee_id) {
+          const params = Object.assign({}, _this.form, {
+            has_video: _this.form.has_video ? 1 : -1,
+            frequency: _this.form.frequency * 1,
+            in_river_plan: _this.form.in_river_plan * 1
+          })
+          if (!_this.form.sewage_id) {
+            // 新增
+            addOutfall(params).then(() => {
+              _this.visible = false
+            })
+          } else {
+            // 编辑
+            editOutfall(_this.form.sewage_id, params).then(() => {
+              _this.visible = false
+            })
           }
-          _this.visible = false
-          // saveEmploy(params, isEdit).then((res) => {
-          //   _this.$message.success('保存成功')
-          //   _this.visible = false
-          //   _this.$refs.userForm.resetFields()
-          //   _this.$emit('ok')
-          // }).catch((err) => {
-          //   _this.$message.error(err.msg || '保存失败')
-          // }).finally(() => {
-          //   _this.confirmLoading = false
-          // })
         }
       })
     }
