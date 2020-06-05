@@ -24,37 +24,43 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="name2" ref="name">
-                <a-cascader :options="options" placeholder="" />
+              <a-form-model-item label="所属区域" prop="regionalism_id" ref="regionalism_id">
+                <a-tree-select v-model="form.regionalism_id" :treeData="treeData"> </a-tree-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="具体地址" prop="name3" ref="name">
-                <a-input v-model="form.name3" />
+              <a-form-model-item label="具体地址" prop="location" ref="location">
+                <a-input v-model="form.location" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属水源地" prop="name4" ref="name">
-                <a-cascader :options="options" placeholder="" />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="经纬度" prop="name5" ref="name">
-                <mapInput v-model="form.location" v-if="visible"></mapInput>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="取水方式" prop="name6" ref="name">
-                <a-select v-model="form.name4">
-                  <a-select-option v-for="item in getWaterMethods" :key="item.key" :value="item.key">
+              <a-form-model-item label="所属水源地" prop="source_id" ref="source_id">
+                <a-select v-model="form.source_id">
+                  <a-select-option v-for="item in waterSourceList" :value="item.id" :key="item.id">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水流量" prop="name7" ref="name">
-                <a-input v-model="form.name5">
+              <a-form-model-item label="经纬度" prop="lon_lat" ref="lon_lat">
+                <mapInput v-model="form.lon_lat" v-if="visible"></mapInput>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="取水方式" prop="get_water_type" ref="get_water_type">
+                <dictionary-select
+                  v-model="form.get_water_type"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.GET_WATER_TYPE"
+                >
+                </dictionary-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="取水流量" prop="ammount" ref="ammount">
+                <a-input v-model="form.ammount">
                   <template slot="addonAfter">
                     m³/s
                   </template>
@@ -64,77 +70,69 @@
             <a-col :span="12">
               <a-form-model-item
                 label="是否为引调水工程取水口"
-                prop="name8"
-                ref="name"
+                prop="is_transfer"
+                ref="is_transfer"
                 :labelCol="{ span: 12 }"
-                :wrapperCol="{ span: 10, offset: 1 }"
+                :wrapperCol="{ span: 10}"
               >
-                <a-switch checked-children="开" un-checked-children="关" default-checked />
+                <a-switch v-model="form.is_transfer" checked-children="是" un-checked-children="否" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="引调水工程名称" prop="name9" ref="name">
-                <a-input v-model="form.name9" />
+              <a-form-model-item label="引调水工程名称" prop="transfer_project_name" ref="transfer_project_name">
+                <a-input v-model="form.transfer_project_name" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="规模类型" prop="name10" ref="name">
-                <a-select v-model="form.name10">
-                  <a-select-option v-for="item in scaleTypes" :key="item.key" :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
+              <a-form-model-item label="规模类型" prop="get_water_scale" ref="get_water_scale">
+                <dictionary-select
+                  v-model="form.get_water_scale"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.GET_WATER_SCALE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水口工程名称" prop="name11" ref="name">
-                <a-input v-model="form.name11" />
+              <a-form-model-item label="取水口工程名称" prop="get_water_project_name" ref="get_water_project_name">
+                <a-input v-model="form.get_water_project_name" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="主要取水用途" prop="name12" ref="name">
-                <a-select v-model="form.name12">
-                  <a-select-option v-for="item in purposes" :key="item.key" :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
+              <a-form-model-item label="主要取水用途" prop="get_water_purpose" ref="get_water_purpose">
+                <dictionary-select
+                  v-model="form.get_water_purpose"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.GET_WATER_PURPOSE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="取水许可证编号" prop="name13" ref="name">
-                <a-input v-model="form.name13" />
+              <a-form-model-item label="取水许可证编号" prop="license" ref="license">
+                <a-input v-model="form.license" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="供水范围" prop="name14" ref="name">
-                <a-input v-model="form.name14" />
+              <a-form-model-item label="供水范围" prop="range" ref="range">
+                <a-input v-model="form.range" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="开始取水时间" prop="name15" ref="name">
-                <a-date-picker v-model="form.date1" show-time type="date" placeholder="" style="width: 100%;" />
+              <a-form-model-item label="开始取水时间" prop="use_time" ref="use_time">
+                <a-date-picker v-model="form.use_time" show-time type="date" placeholder="" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="备注" prop="note" ref="note">
+                <a-input type="textarea" v-model="form.note" />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="图片" prop="name16" ref="name16">
-                <a-upload
-                  :customRequest="customRequest"
-                  :fileList="fileList"
-                  class="avatar-uploader"
-                  :show-upload-list="false"
-                  accept=".png,.jpg,.bmp"
-                  :headers="{ 'Content-Type': 'multipart/form-data' }"
-                >
-                  <img width="100" height="100" v-if="showImage" :src="form.imageUrl" alt="avatar" />
-                  <div v-else>
-                    <a-button> <a-icon type="upload" /> </a-button>
-                  </div>
-                </a-upload>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item label="备注" prop="name17" ref="name">
-                <a-input v-model="form.name17" />
+                <uploadSingleImg v-model="form.image_url"></uploadSingleImg>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -158,37 +156,22 @@
 
 <script>
 // import { saveEmploy } from '../../../../api/manage'
+import { treeData } from '@/config/areaTreeSelectData'
 import { getWaterMethods, scaleTypes, purposes } from '../data.js'
-import { uploadSingle } from '@/api/upload'
+import { addWater, editWater } from '@/api/getWater'
+import { getShuiyuandiList } from '@/api/shuiyuandi'
+import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 import mapInput from '@/components/Hczy/mapInput.vue'
 export default {
-  props: {
-    orgData: {
-      type: Array,
-      default: () => []
-    },
-    formData: {
-      type: Object,
-      default: function () {
-        return {
-          id: '',
-          name: '',
-          site: '',
-          principal: '',
-          participant: '',
-          progress: '',
-          imageUrl: '',
-          location: '1, 1'
-        }
-      }
-    }
-  },
-  components: { mapInput },
+  props: {},
+  components: { mapInput, uploadSingleImg },
   data () {
     return {
       getWaterMethods: getWaterMethods,
       scaleTypes: scaleTypes,
       purposes: purposes,
+      treeData,
+      waterSourceList: [],
       getWaterModule: 'getWaterModule',
       fileList: [],
       title: '新建',
@@ -198,81 +181,30 @@ export default {
       confirmLoading: false,
       form: {},
       rules: {
-        name: [{ required: true, message: '取水口名称不能为空', trigger: 'blur' }],
-        site: [{ required: true, message: '地点不能为空', trigger: 'blur' }],
-        principal: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
-        participant: [{ required: true, message: '参与人不能为空', trigger: 'blur' }]
-      },
-      layout: 'horizontal',
-      visible: false,
-      showMapDom: false,
-      showImage: false,
-      options: [
-        {
-          value: 'zhejiang',
-          label: 'Zhejiang',
-          children: [
-            {
-              value: 'hangzhou',
-              label: 'Hangzhou',
-              children: [
-                {
-                  value: 'xihu',
-                  label: 'West Lake'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          value: 'jiangsu',
-          label: 'Jiangsu',
-          children: [
-            {
-              value: 'nanjing',
-              label: 'Nanjing',
-              children: [
-                {
-                  value: 'zhonghuamen',
-                  label: 'Zhong Hua Men'
-                }
-              ]
-            }
-          ]
-        }
-      ]
+        name: [{ required: true, message: '取水口名称不能为空', trigger: ['blur', 'change'] }],
+        regionalism_id: [{ required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }],
+        source_id: [{ required: true, message: '所属水源地不能为空', trigger: ['blur', 'change'] }],
+        lon_lat: [{ required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }],
+        get_water_type: [{ required: true, message: '取水方式不能为空', trigger: ['blur', 'change'] }],
+        ammount: [{ required: true, message: '取水流量不能为空', trigger: ['blur', 'change'] }] },
+      visible: false
     }
   },
-  watch: {
-    orgData (value) {
-      this.treeData = this.buildTreeData(value, [])
-    },
-    form: {
-      handler (value) {
-        this.showImage = value.imageUrl
-      },
-      deep: true
-    }
-  },
+  watch: {},
   mounted () {},
   created () {
-    this.form = this.formData
+    getShuiyuandiList({ page: 1, page_size: 0 }).then(res => {
+      this.waterSourceList = res.data.list
+    })
   },
   methods: {
-    customRequest (data) {
-      const formData = new FormData()
-      formData.append('file', data.file)
-      uploadSingle(formData)
-        .then(res => {
-          this.$set(this.form, 'imageUrl', res.data)
-        })
-        .catch(() => {})
-      this.fileList = [data.file]
-    },
     showModal (data = {}) {
       this.visible = true
+      if (JSON.stringify(data) !== '{}') {
+        data.is_transfer = data.is_transfer === 1
+      }
       this.form = { ...{}, ...data }
-      if (this.form.id) {
+      if (this.form.get_water_id) {
         this.title = '编辑取水口'
       } else {
         this.title = '新增取水口'
@@ -285,20 +217,25 @@ export default {
       const _this = this
       this.$refs.form.validate(valid => {
         if (valid) {
-          _this.confirmLoading = true
-          if (!_this.form.employee_id) {
+          const params = Object.assign({}, _this.form, {
+            ammount: _this.form.ammount * 1,
+            is_transfer: _this.form.is_transfer ? 1 : -1
+          })
+          if (!_this.form.get_water_id) {
+            // 新增
+            addWater(params).then(() => {
+              _this.$message.success('新增成功！')
+              _this.$emit('refreshTable')
+              _this.visible = false
+            })
+          } else {
+            // 编辑
+            editWater(params.get_water_id, params).then(() => {
+              _this.$message.success('编辑成功！')
+              _this.$emit('refreshTable')
+              _this.visible = false
+            })
           }
-          _this.visible = false
-          // saveEmploy(params, isEdit).then((res) => {
-          //   _this.$message.success('保存成功')
-          //   _this.visible = false
-          //   _this.$refs.userForm.resetFields()
-          //   _this.$emit('ok')
-          // }).catch((err) => {
-          //   _this.$message.error(err.msg || '保存失败')
-          // }).finally(() => {
-          //   _this.confirmLoading = false
-          // })
         }
       })
     }
