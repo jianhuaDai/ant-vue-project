@@ -104,7 +104,8 @@ export default {
   components: { PageView, STable, Ellipsis, AddModule },
   methods: {
     resetQuery () {
-      this.queryParam.status = ''
+      this.queryParam.fracture_name = ''
+      this.queryParam.fracture_id = ''
       this.$refs.table.refresh(true)
     },
     handleEditOrNew (record) {
