@@ -30,9 +30,9 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="所属水体" prop="water_id" ref="water_id">
-                <a-select v-model="form.water_id" placeholder="">
-                  <a-select-option v-for="itemType in outfallTypes" :key="itemType.key">
-                    {{ itemType.name }}
+                <a-select show-search placeholder="" option-filter-prop="children" v-model="form.water_id">
+                  <a-select-option v-for="item in riversAndLakes" :value="item.water_id" :key="item.water_id">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -118,8 +118,8 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="状态" prop="state" ref="state">
-                <a-switch v-model="form.state" checked-children="启用" un-checked-children="停用" default-checked />
+              <a-form-model-item label="状态" prop="fracture_state" ref="fracture_state">
+                <a-switch v-model="form.fracture_state" checked-children="启用" un-checked-children="停用" default-checked />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -149,6 +149,7 @@
 <script>
 import { outfallTypes } from '../data.js'
 import { addSection, editSection } from '@/api/section'
+import { getRiversAndLakes } from '@/api/infomanage'
 import { treeData } from '@/config/areaTreeSelectData'
 import mapInput from '@/components/Hczy/mapInput.vue'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
@@ -164,6 +165,7 @@ export default {
     return {
       treeData,
       outfallTypes,
+      riversAndLakes: [],
       getWaterModule: 'getWaterModule',
       title: '新建',
       labelCol: { span: 8 },
@@ -217,12 +219,16 @@ export default {
   },
   watch: {},
   mounted () {},
-  created () {},
+  created () {
+    getRiversAndLakes({ page: 1, page_size: 0 }).then(res => {
+      this.riversAndLakes = res.data.list
+    })
+  },
   methods: {
     showModal (data = {}) {
       console.log(data, 'kkkkkk')
       if (JSON.stringify(data) !== '{}') {
-        data.state = data.state === 1
+        data.fracture_state = data.fracture_state === 1
       }
       this.visible = true
       this.form = { ...{}, ...data }
@@ -241,7 +247,7 @@ export default {
         if (valid) {
           const params = Object.assign({}, _this.form, {
             monitoring_frequency: _this.form.monitoring_frequency * 1,
-            state: _this.form.state ? 1 : 0
+            fracture_state: _this.form.fracture_state ? 1 : -1
           })
           if (_this.isAdd) {
             // 新增

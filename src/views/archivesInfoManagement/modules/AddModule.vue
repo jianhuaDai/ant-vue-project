@@ -4,7 +4,7 @@
       <a-spin :spinning="confirmLoading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
           <a-form-model-item label="河湖名称" prop="water_id" ref="water_id">
-            <a-select show-search placeholder="Select a person" option-filter-prop="children" v-model="form.water_id">
+            <a-select show-search placeholder="" option-filter-prop="children" v-model="form.water_id">
               <a-select-option v-for="item in riversAndLakes" :value="item.water_id" :key="item.water_id">
                 {{ item.name }}
               </a-select-option>
@@ -90,7 +90,6 @@ export default {
   },
   created () {
     getRiversAndLakes({ page: 1, page_size: 0 }).then(res => {
-      console.log(res.data, 'oooooo')
       this.riversAndLakes = res.data.list
     })
     this.setData()

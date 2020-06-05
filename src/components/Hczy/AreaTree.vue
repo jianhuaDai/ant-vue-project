@@ -2,7 +2,7 @@
   <div class="tree">
     <a-tree
       :tree-data="treeData"
-      :replace-fields="replaceFields"
+      :replaceFields="replaceFields"
       @select="onSelect"
       :defaultExpandedKeys="['32']"
     />
