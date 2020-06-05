@@ -648,18 +648,30 @@ export default {
       }, 1)
     },
     setFormValue (data) {
-      this.form2.name = data.pollution_name
-      this.form2.code = data.pollution_id
-      this.form2.suoshuhedao = data.water_id
-      this.form2.suoshuquyu = data.regionalism_id
-      this.form2.address = data.location
-      this.form2.wuranyuantype = data.pollution_type.toString()
-      this.form2.jwd = data.lon_lat
-      this.form2.guanzhujibie = data.attention_level.toString()
+      this.$set(this.form2, 'name', data.pollution_name)
+      this.$set(this.form2, 'code', data.pollution_id)
+      this.$set(this.form2, 'suoshuhedao', data.water_id)
+      this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
+      this.$set(this.form2, 'address', data.location)
+      this.$set(this.form2, 'wuranyuantype', data.pollution_type.toString())
+      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'guanzhujibie', data.attention_level.toString())
+      this.$set(this.form2, 'yxfanwei', data.range)
+      this.$set(this.form2, 'zhiliqk', data.control)
+      this.$set(this.form2, 'image_url', data.image_url)
+
+      // this.form2.name = data.pollution_name
+      // this.form2.code = data.pollution_id
+      // this.form2.suoshuhedao = data.water_id
+      // this.form2.suoshuquyu = data.regionalism_id
+      // this.form2.address = data.location
+      // this.form2.wuranyuantype = data.pollution_type.toString()
+      // this.form2.jwd = data.lon_lat
+      // this.form2.guanzhujibie = data.attention_level.toString()
       // this.form2.time = new Date(data.discover_time)
-      this.form2.yxfanwei = data.range
-      this.form2.zhiliqk = data.control
-      this.form2.image_url = data.image_url
+      // this.form2.yxfanwei = data.range
+      // this.form2.zhiliqk = data.control
+      // this.form2.image_url = data.image_url
     },
     savePopup () {
       console.log(this.form2.time)

@@ -13,25 +13,29 @@
             :wrapper-col="wrapperCol">
             <a-row>
               <a-col :span="6">
-                <a-form-model-item label="水源地名称:" prop="namesearch">
-                  <a-input v-model="form.namesearch"></a-input>
+                <a-form-model-item label="所属区域:" prop="suoshuquyu" ref="suoshuquyu">
+                  <!-- <a-input v-model="form.namesearch"></a-input> -->
+                  <a-tree-select v-model="form2.suoshuquyu" :treeData="options"> </a-tree-select>
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
-                <a-form-model-item label="所属区域:" prop="area">
-                  <!-- <a-select v-model="form.wrytype" placeholder="全部">
-                    <a-select-option value="0">工业污染源</a-select-option>
-                    <a-select-option value="1">农业污染源</a-select-option>
-                    <a-select-option value="2">城镇污染源</a-select-option>
-                  </a-select> -->
-                  <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select>
+                <a-form-model-item label="所属水体:" prop="suoshushuiti" ref="suoshushuiti">
+                  <a-select v-model="form.suoshushuiti" placeholder="全部">
+                    <a-select-option value="1">河流</a-select-option>
+                    <a-select-option value="2">湖泊</a-select-option>
+                    <a-select-option value="3">水库</a-select-option>
+                  </a-select>
+                  <!-- <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select> -->
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
-                <a-form-model-item label="属性:" prop="type">
-                  <a-select v-model="form.type" placeholder="全部" allowClear>
-                    <a-select-option value="1">市级</a-select-option>
-                    <a-select-option value="2">区级</a-select-option>
+                <a-form-model-item label="测站类别:" prop="czlb" ref="czlb">
+                  <a-select v-model="form.czlb" placeholder="全部" allowClear>
+                    <a-select-option value="1">水情测站</a-select-option>
+                    <a-select-option value="2">雨情测站</a-select-option>
+                    <a-select-option value="3">水质测站</a-select-option>
+                    <a-select-option value="4">河湖生态测站</a-select-option>
+                    <a-select-option value="5">视频站</a-select-option>
                   </a-select>
                 </a-form-model-item>
               </a-col>
@@ -83,26 +87,34 @@
                 :data="loadData"
                 :showPagination="true">
                 <template
-                  slot="source_type"
+                  slot="station_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
-                    <span>河流</span>
+                    <span>水情测站</span>
                   </div>
                   <div v-if="record.status === 2">
-                    <span>湖泊</span>
+                    <span>雨情测站</span>
                   </div>
-                  <div v-if="record.status === 2">
-                    <span>水库</span>
+                  <div v-if="record.status === 3">
+                    <span>水质测站</span>
+                  </div>
+                  <div v-if="record.status === 4">
+                    <span>河湖生态测站</span>
+                  </div>
+                  <div v-if="record.status === 5">
+                    <span>视频站</span>
                   </div>
                 </template>
                 <span
                   slot="action"
                   slot-scope="text, record, index">
                   <template>
+                    <!-- <a @click="gcDetailClick(record)">详情</a> -->
                     <a @click="gcAddClick(record)">编辑</a>
                     <a
                       @click="handleDel(record)"
                       style="margin-left: 10px;color: red">删除</a>
+                    <!-- <a @click="gcCollectClick(record)" style="margin-left: 10px;">关联监测项</a> -->
                   </template>
                 </span>
               </s-table>
@@ -111,7 +123,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <!-- 新增水源地 -->
+    <!-- 新增雨情 -->
     <a-modal
       :title="title"
       width="60%"
@@ -128,7 +140,7 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-model-item
-                label="水源地名称"
+                label="测站名称"
                 prop="name"
                 ref="name">
                 <a-input v-model="form2.name"></a-input>
@@ -136,26 +148,10 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item
-                label="水源地编码"
+                label="测站编码"
                 prop="code"
                 ref="code">
                 <a-input v-model="form2.code"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="点位名称"
-                prop="pointname"
-                ref="pointname">
-                <a-input v-model="form2.pointname"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="位置"
-                prop="weizhi"
-                ref="weizhi">
-                <a-input v-model="form2.weizhi"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -169,58 +165,15 @@
                   <a-select-option value="1">河流</a-select-option>
                   <a-select-option value="2">湖泊</a-select-option>
                   <a-select-option value="3">水库</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in suoshuhedaovalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
                 </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item
-                label="所属区域"
-                prop="suoshuquyu"
-                ref="suoshuquyu">
-                <a-tree-select v-model="form2.suoshuquyu" :treeData="options2"> </a-tree-select>
-                <!-- <a-select
-                  placeholder="全部"
-                  v-model="form2.suoshuquyu">
-                  <a-select-option
-                    v-for="item in suoshuquyuvalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select> -->
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="执行标准"
-                prop="zxbz"
-                ref="zxbz">
-                <a-input v-model="form2.zxbz"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="属性"
-                prop="type2"
-                ref="type2">
-                <a-select
-                  placeholder="全部"
-                  v-model="form2.type2">
-                  <a-select-option value="1">市级</a-select-option>
-                  <a-select-option value="2">区级</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in wuranyuantypevalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                label="测站地址"
+                prop="address"
+                ref="address">
+                <a-input v-model="form2.address"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -229,11 +182,44 @@
                 prop="jwd"
                 ref="jwd">
                 <a-input v-model="form2.jwd" disabled>
-                  <a-icon @click="showMap" slot="addonAfter" type="search" :style="{ color: '#0D7DD9' }" />
+                  <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                 </a-input>
                 <!-- <mapInput
                   v-model="form2.jwd"
                   v-if="visible"></mapInput> -->
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item
+                label="所属区域"
+                prop="suoshuquyu2"
+                ref="suoshuquyu2">
+                <a-tree-select v-model="form2.suoshuquyu2" :treeData="options2"> </a-tree-select>
+              </a-form-model-item>
+            </a-col>
+            <!-- <a-col :span="12">
+              <a-form-model-item
+                label="测站类别"
+                prop="czlb"
+                ref="czlb">
+                <a-input v-model="form2.czlb"></a-input>
+              </a-form-model-item>
+            </a-col> -->
+            <a-col :span="12">
+              <a-form-model-item
+                label="监测方式"
+                prop="jcfs"
+                ref="jcfs">
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.jcfs">
+                  <a-select-option value="1">人为监测</a-select-option>
+                  <a-select-option value="2">设备监测</a-select-option>
+                </a-select>
+                <!-- <dictionary-select
+                  v-model="form2.jcfs"
+                  :dictionary-type="DictionaryEnum.DIC_MONITORING_TYPE">
+                </dictionary-select> -->
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -249,58 +235,32 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item
-                label="当年考核目标"
-                prop="dnkhmb"
-                ref="dnkhmb">
-                <a-select
-                  placeholder="全部"
-                  v-model="form2.dnkhmb">
-                  <a-select-option value="1">I类</a-select-option>
-                  <a-select-option value="2">II类</a-select-option>
-                  <a-select-option value="3">III类</a-select-option>
-                  <a-select-option value="4">IV类</a-select-option>
-                  <a-select-option value="5">V类</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in guanzhujibievalue"
+              <a-form-item
+                label="所属部门:"
+                prop="deptname"
+                ref="deptname">
+                <!-- <a-input v-model.number="form2.gldwname"></a-input> -->
+                <a-select v-model="form2.deptname">
+                  <a-select-option
+                    v-for="item in deptnamevalue"
                     :key="item.key"
                     :value="item.key">
                     {{ item.name }}
-                  </a-select-option> -->
+                  </a-select-option>
                 </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item
+                label="基面名称"
+                prop="jmmc"
+                ref="jmmc">
+                <a-input v-model="form2.jmmc"></a-input>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
               <a-form-model-item
-                label="十三五考核目标"
-                prop="sswkhmb"
-                ref="sswkhmb">
-                <a-select
-                  v-model="form2.sswkhmb">
-                  <a-select-option value="1">I类</a-select-option>
-                  <a-select-option value="2">II类</a-select-option>
-                  <a-select-option value="3">III类</a-select-option>
-                  <a-select-option value="4">IV类</a-select-option>
-                  <a-select-option value="5">V类</a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="测站类型"
-                prop="czlx"
-                ref="czlx">
-                <a-select
-                  v-model="form2.czlx">
-                  <a-select-option value="1">泵站</a-select-option>
-                  <a-select-option value="2">闸站</a-select-option>
-                  <a-select-option value="3">阀站</a-select-option>
-                </a-select>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="备注"
+                label="简介"
                 prop="beizhu"
                 ref="beizhu">
                 <a-input v-model="form2.beizhu"></a-input>
@@ -326,13 +286,21 @@
           @click="savePopup">保存</a-button>
       </template>
     </a-modal>
-    <!-- 水源地信息删除 -->
+    <!-- 雨情信息删除 -->
     <a-modal
-      title="水源地信息删除"
+      title="雨情信息删除"
       :visible="visibledel"
       @ok="handleOk"
       @cancel="handleCancelDel">
       <p>确定删除该条记录?</p>
+    </a-modal>
+    <!-- 关联监测项 -->
+    <a-modal
+      title="关联监测项"
+      :visible="visibleguanlian"
+      @ok="handleOkGL"
+      @cancel="handleCancelGL">
+
     </a-modal>
     <div
       id="distance"
@@ -372,7 +340,7 @@
 import { STable } from '@/components'
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { getShuiyuandiList, addShuiyuandi, updateShuiyuandi, delShuiyuandi } from '@/api/shuiyuandi'
+import { getShuiqingcezhanList, addShuiqincezhan, updateShuiqincezhan, delShuiqincezhan, getGldwdata } from '@/api/shuiqingcezhan'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 import { treeData } from '@/config/areaTreeSelectData'
 import mapboxgl from 'mapbox-gl'
@@ -392,37 +360,47 @@ export default {
       wrapperCol: { span: 16 },
       confirmLoading: false,
       form: {
-        namesearch: '',
-        area: '',
-        type: null
+        suoshuquyu: '',
+        suoshushuiti: '',
+        czlb: ''
       },
       options: treeData,
       options2: treeData,
       addmodifyflag: '1',
-      title: '新增水源地',
+      title: '新增雨情测站',
+      deptnamevalue: [],
       form2: {
         name: '',
         code: '',
-        pointname: '',
-        weizhi: '',
+        address: '',
         suoshushuiti: '',
-        suoshuquyu: '',
-        zxbz: '',
-        type2: '',
+        suoshuquyu2: '',
+        deptname: '',
         jwd: '',
+        jcfs: '',
         jcpc: '',
-        dnkhmb: '',
-        sswkhmb: '',
-        czlx: '',
+        jmmc: '',
         beizhu: '',
         image_url: ''
       },
       rules: {
         name: [
-          { required: true, message: '水源地名称不能为空', trigger: 'blur' }
+          { required: true, message: '雨情名称不能为空', trigger: 'blur' }
         ],
         pointname: [
           { required: true, message: '点位名称不能为空', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '测站编码不能为空', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '地址不能为空', trigger: 'blur' }
+        ],
+        suoshuquyu2: [
+          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+        ],
+        jcfs: [
+          { required: true, message: '监测方式不能为空', trigger: 'blur' }
         ],
         weizhi: [
           { required: true, message: '位置不能为空', trigger: 'blur' }
@@ -466,9 +444,7 @@ export default {
         }
       ],
       // 所属区域
-      suoshuquyuvalue: [
-
-      ],
+      suoshuquyuvalue: [],
       // 污染源类型
       wuranyuantypevalue: [
         {
@@ -507,6 +483,7 @@ export default {
       // form2: this.$form.createForm(this),
       visible: false,
       visibledel: false,
+      visibleguanlian: false,
       handleCancelMap: false,
       sureBtnShow: true,
       rowData: {},
@@ -519,54 +496,54 @@ export default {
         //   scopedSlots: { customRender: 'serial' }
         // },
         {
-          title: '水源地名称',
-          dataIndex: 'name',
-          scopedSlots: { customRender: 'name' }
+          title: '测站名称',
+          dataIndex: 'station_name'
         },
         {
-          title: '水源地编码',
-          dataIndex: 'source_id'
-        },
-        {
-          title: '点位名称',
-          dataIndex: 'point'
-        },
-        {
-          title: '经纬度',
-          dataIndex: 'lon_lat'
-        },
-        {
-          title: '属性',
-          dataIndex: 'source_property_name'
-          // sorter: true
+          title: '测站编码',
+          dataIndex: 'monitoring_id'
         },
         {
           title: '所属水体',
-          dataIndex: 'source_type',
-          scopedSlots: { customRender: 'source_type' }
+          dataIndex: 'water_name'
         },
         {
           title: '所属区域',
           dataIndex: 'regionalism_name'
-          // sorter: true
+        },
+        {
+          title: '测站类别',
+          dataIndex: 'station_type',
+          scopedSlots: { customRender: 'station_type' }
+        },
+        {
+          title: '监测方式',
+          dataIndex: 'monitoring_type_name'
+        },
+        {
+          title: '监测频次',
+          dataIndex: 'monitoring_frequency'
+        },
+        {
+          title: '所属部门',
+          dataIndex: 'dept_name'
         },
         {
           title: '操作',
           dataIndex: 'action',
-          width: '160px',
+          width: '150px',
           scopedSlots: { customRender: 'action' }
         }
       ],
        // 查询参数
       queryParam: {
-        name: '',
         regionalism_id: '',
-        source_property: null,
-        status: 1
+        water_type: null,
+        station_type: null
+        // status: 1
       },
       loadData: parameter => {
-        // alert('123')
-        return getShuiyuandiList(Object.assign(parameter, this.queryParam)).then(res => {
+        return getShuiqingcezhanList(Object.assign(parameter, this.queryParam)).then(res => {
           console.log(res)
           return res.data
         })
@@ -574,17 +551,35 @@ export default {
     }
   },
   created () {
+    // 获取河湖长和管理单位下拉数据
+    getGldwdata('136485248216072193').then(res => {
+      console.log(res)
+      for (var i = 0; i < res.data.depts.length; i++) {
+        this.deptnamevalue.push(
+            {
+              key: res.data.depts[i].dept_id,
+              name: res.data.depts[i].dept_name
+            }
+          )
+      }
+    })
   },
   methods: {
-    // 水源地删除
+    handleOkGL () {
+      this.visibleguanlian = true
+    },
+    handleCancelGL () {
+      this.visibleguanlian = false
+    },
+    // 水情测站删除
     handleDel (value) {
       console.log(value)
-      this.rowData = value.id
+      this.rowData = value.monitoring_id
       this.visibledel = true
     },
     // 删除按钮触发
     handleOk () {
-      delShuiyuandi(this.rowData).then((res) => {
+      delShuiqincezhan(this.rowData).then((res) => {
         console.log(res)
         this.$message.success('删除成功！')
         this.$refs.table.refresh(true)
@@ -600,15 +595,11 @@ export default {
     },
     // 查询按钮触发
     searchClick () {
-      // console.log(this.form)
-      // getShuiyuandiList().then(res => {
-      //   console.log(res)
-      // })
       console.log(this.form.type)
-      this.queryParam.name = this.form.namesearch
+      // this.queryParam.regionalism_id = this.form.suoshuquyu
       this.queryParam.regionalism_id = this.form.area === '' ? '' : this.form.area
-      this.queryParam.source_property = this.form.type === '' ? null : parseInt(this.form.type)
-
+      this.queryParam.water_type = this.suoshushuiti === '' ? null : this.suoshushuiti
+      this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
@@ -666,15 +657,11 @@ export default {
         // alert(e.lngLat.lng, e.lngLat.lat);
         _this.closeMap(e)
         marker.setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map)
-        // document.getElementById('info').innerHTML =
-        //   JSON.stringify(e.point) + '<br />' + JSON.stringify(e.lngLat)
-        // marker.setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map)
       })
     },
     closeMap (e) {
       this.jindu = e.lngLat.lng.toFixed(6)
       this.weidu = e.lngLat.lat.toFixed(6)
-
       this.sureBtnShow = false
     },
     selectChangehedao () {
@@ -689,13 +676,13 @@ export default {
       this.form2 = { ...{}, ...data }
       console.log(this.form2)
       this.rowData = this.form2
-      if (this.form2.id) {
+      if (this.form2.monitoring_id) {
         this.addmodifyflag = '2'
-        this.title = '修改水源地信息'
+        this.title = '修改雨情信息'
         this.setFormValue(this.form2)
       } else {
         this.addmodifyflag = '1'
-        this.title = '新增水源地信息'
+        this.title = '新增雨情信息'
       }
       setTimeout(() => {
         this.$refs.form2.clearValidate()
@@ -704,59 +691,67 @@ export default {
     // 修改表单赋值
     setFormValue (data) {
       console.log(data)
-      this.form2.name = data.name
-      this.form2.code = data.source_id
-      this.form2.pointname = data.point
-      this.form2.weizhi = data.location
-      this.form2.suoshushuiti = data.source_type.toString()
-      this.form2.suoshuquyu = data.regionalism_id
-      this.form2.zxbz = data.standard
-      this.form2.type2 = data.source_property.toString()
-      this.form2.jwd = data.lon_lat
-      this.form2.jcpc = data.monitoring_frequency
-      this.form2.dnkhmb = data.current_target.toString()
-      this.form2.sswkhmb = data.target.toString()
-      this.form2.czlx = data.station_type.toString()
-      this.form2.beizhu = data.note
-      this.form2.image_url = data.image_url
+      // this.form2.name = data.station_name
+      this.$set(this.form2, 'name', data.station_name)
+      this.$set(this.form2, 'code', data.monitoring_num)
+      this.$set(this.form2, 'suoshushuiti', data.water_id.toString())
+      this.$set(this.form2, 'address', data.location)
+      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
+      this.$set(this.form2, 'deptname', data.dept_id)
+      this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
+      this.$set(this.form2, 'jcpc', data.monitoring_frequency)
+      this.$set(this.form2, 'jmmc', data.base_name)
+      this.$set(this.form2, 'beizhu', data.explain)
+      this.$set(this.form2, 'image_url', data.image_url)
+      // this.form2.code = data.monitoring_num
+      // this.form2.suoshushuiti = data.water_id.toString()
+      // this.form2.address = data.location
+      // this.form2.jwd = data.lon_lat
+      // this.form2.suoshuquyu2 = data.regionalism_id
+      // this.form2.deptname = data.dept_id
+      // this.form2.czlb = data.standard
+      // this.form2.jcfs = data.monitoring_type
+      // this.form2.jcpc = data.monitoring_frequency
+      // this.form2.jmmc = data.base_name
+      // this.form2.beizhu = data.explain
+      // this.form2.image_url = data.image_url
     },
     savePopup () {
       this.$refs.form2.validate(err => {
         if (err) {
           var reqData = {
-            name: this.form2.name,
-            source_id: this.form2.code === undefined ? '' : this.form2.code,
-            point: this.form2.pointname,
-            location: this.form2.weizhi,
-            source_type: parseInt(this.form2.suoshushuiti),
-            regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
-            standard: this.form2.zxbz === undefined ? '' : this.form2.zxbz,
-            source_property: parseInt(this.form2.type2),
+            station_name: this.form2.name,
+            monitoring_num: this.form2.code === undefined ? '' : this.form2.code,
+            water_id: this.form2.suoshushuiti,
+            location: this.form2.address,
             lon_lat: this.form2.jwd,
+            dept_id: this.form2.deptname,
+            regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
+            station_type: 2,
+            monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
-            current_target: this.form2.dnkhmb === undefined ? null : parseInt(this.form2.dnkhmb),
-            target: this.form2.sswkhmb === undefined ? null : parseInt(this.form2.sswkhmb),
-            station_type: this.form2.czlx === undefined ? null : parseInt(this.form2.czlx),
-            note: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
-            image_url: this.form2.image_url
+            base_name: this.form2.jmmc,
+            explain: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
+            image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
           if (this.addmodifyflag === '1') {
-            addShuiyuandi(reqData).then(res => {
+            addShuiqincezhan(reqData).then(res => {
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()
-              this.$message.success('新增水源地成功!')
+              this.$message.success('新增雨情测站成功!')
             })
           } else if (this.addmodifyflag === '2') {
-            reqData.id = this.rowData.source_id
+            reqData.id = this.rowData.monitoring_id
             reqData.version = this.rowData.version
             console.log(reqData)
-            updateShuiyuandi(this.rowData.source_id, reqData).then(res => {
+            updateShuiqincezhan(this.rowData.monitoring_id, reqData).then(res => {
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()
-              this.$message.success('修改水源地成功!')
+              this.$message.success('修改雨情测站成功!')
             })
           }
         }

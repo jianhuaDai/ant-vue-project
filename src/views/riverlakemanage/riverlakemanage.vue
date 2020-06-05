@@ -114,7 +114,10 @@
                       <span>水库片</span>
                     </div>
                   </template>
-                  <template
+                  <span slot="status" slot-scope="text, record">
+                    <a-badge :status="text | statusBadge" :text="text | statusName" />
+                  </span>
+                  <!-- <template
                     slot="status"
                     slot-scope="text, record">
                     <div v-if="record.status === 1">
@@ -123,7 +126,7 @@
                     <div v-if="record.status === -1">
                       <span>禁用</span>
                     </div>
-                  </template>
+                  </template> -->
                   <!-- <span
                     slot="serial"
                     slot-scope="text, record, index">

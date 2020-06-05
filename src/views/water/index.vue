@@ -192,9 +192,9 @@
             <a-col :span="12">
               <a-form-model-item
                 label="所属区域"
-                prop="suoshuquyu"
-                ref="suoshuquyu">
-                <a-tree-select v-model="form2.suoshuquyu" :treeData="options2"> </a-tree-select>
+                prop="suoshuquyu2"
+                ref="suoshuquyu2">
+                <a-tree-select v-model="form2.suoshuquyu2" :treeData="options2"> </a-tree-select>
               </a-form-model-item>
             </a-col>
             <!-- <a-col :span="12">
@@ -212,9 +212,9 @@
                 ref="jcfs">
                 <a-select
                   placeholder="全部"
-                  v-model="form2.type2">
-                  <a-select-option value="2">设备监测</a-select-option>
+                  v-model="form2.jcfs">
                   <a-select-option value="1">人为监测</a-select-option>
+                  <a-select-option value="2">设备监测</a-select-option>
                 </a-select>
                 <!-- <dictionary-select
                   v-model="form2.jcfs"
@@ -374,7 +374,7 @@ export default {
         code: '',
         address: '',
         suoshushuiti: '',
-        suoshuquyu: '',
+        suoshuquyu2: '',
         deptname: '',
         jwd: '',
         jcfs: '',
@@ -389,6 +389,18 @@ export default {
         ],
         pointname: [
           { required: true, message: '点位名称不能为空', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '测站编码不能为空', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '地址不能为空', trigger: 'blur' }
+        ],
+        suoshuquyu2: [
+          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+        ],
+        jcfs: [
+          { required: true, message: '监测方式不能为空', trigger: 'blur' }
         ],
         weizhi: [
           { required: true, message: '位置不能为空', trigger: 'blur' }
@@ -583,15 +595,11 @@ export default {
     },
     // 查询按钮触发
     searchClick () {
-      // console.log(this.form)
-      // getShuiyuandiList().then(res => {
-      //   console.log(res)
-      // })
       console.log(this.form.type)
-      this.queryParam.name = this.form.namesearch
+      // this.queryParam.regionalism_id = this.form.suoshuquyu
       this.queryParam.regionalism_id = this.form.area === '' ? '' : this.form.area
-      this.queryParam.source_property = this.form.type === '' ? null : parseInt(this.form.type)
-
+      this.queryParam.water_type = this.suoshushuiti === '' ? null : this.suoshushuiti
+      this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
@@ -683,26 +691,38 @@ export default {
     // 修改表单赋值
     setFormValue (data) {
       console.log(data)
-      this.form2.name = data.station_name
-      this.form2.code = data.source_id
-      this.form2.suoshushuiti = data.water_id.toString()
-      this.form2.address = data.location
-      this.form2.jwd = data.lon_lat
-      this.form2.suoshuquyu = data.regionalism_id
-      // this.form2.deptname = ''
+      // this.form2.name = data.station_name
+      this.$set(this.form2, 'name', data.station_name)
+      this.$set(this.form2, 'code', data.monitoring_num)
+      this.$set(this.form2, 'suoshushuiti', data.water_id.toString())
+      this.$set(this.form2, 'address', data.location)
+      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
+      this.$set(this.form2, 'deptname', data.dept_id)
+      this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
+      this.$set(this.form2, 'jcpc', data.monitoring_frequency)
+      this.$set(this.form2, 'jmmc', data.base_name)
+      this.$set(this.form2, 'beizhu', data.explain)
+      this.$set(this.form2, 'image_url', data.image_url)
+      // this.form2.code = data.monitoring_num
+      // this.form2.suoshushuiti = data.water_id.toString()
+      // this.form2.address = data.location
+      // this.form2.jwd = data.lon_lat
+      // this.form2.suoshuquyu2 = data.regionalism_id
+      // this.form2.deptname = data.dept_id
       // this.form2.czlb = data.standard
-      this.form2.jcfs = data.monitoring_type
-      this.form2.jcpc = data.monitoring_frequency
-      this.form2.jmmc = data.base_name
-      this.form2.beizhu = data.explain
-      this.form2.image_url = data.image_url
+      // this.form2.jcfs = data.monitoring_type
+      // this.form2.jcpc = data.monitoring_frequency
+      // this.form2.jmmc = data.base_name
+      // this.form2.beizhu = data.explain
+      // this.form2.image_url = data.image_url
     },
     savePopup () {
       this.$refs.form2.validate(err => {
         if (err) {
           var reqData = {
             station_name: this.form2.name,
-            source_id: this.form2.code === undefined ? '' : this.form2.code,
+            monitoring_num: this.form2.code === undefined ? '' : this.form2.code,
             water_id: this.form2.suoshushuiti,
             location: this.form2.address,
             lon_lat: this.form2.jwd,
@@ -724,10 +744,10 @@ export default {
               this.$message.success('新增水情测站成功!')
             })
           } else if (this.addmodifyflag === '2') {
-            reqData.id = this.rowData.source_id
+            reqData.id = this.rowData.monitoring_id
             reqData.version = this.rowData.version
             console.log(reqData)
-            updateShuiqincezhan(this.rowData.source_id, reqData).then(res => {
+            updateShuiqincezhan(this.rowData.monitoring_id, reqData).then(res => {
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()

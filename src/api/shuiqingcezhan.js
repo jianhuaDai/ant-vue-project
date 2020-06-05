@@ -3,7 +3,7 @@ import { axios } from '@/utils/request'
 const api = {
     getshuiqingcezhanList: '/monitoring_station/page_query',
     addshuiqincezhan: '/monitoring_station',
-    updateshuiqincezhan: '/monitoring_station',
+    updateshuiqincezhan: '/monitoring_station/',
     delshuiqincezhan: '/monitoring_station/delete/',
     getgldwdata: '/enterprise_book/'
 }
@@ -25,10 +25,10 @@ export function addShuiqincezhan (parameter) {
     })
   }
   // 更新水情测站
-export function updateShuiqincezhan (parameter) {
+export function updateShuiqincezhan (id, parameter) {
     return axios({
-      url: api.updateshuiqincezhan,
-      method: 'post',
+      url: api.updateshuiqincezhan + id,
+      method: 'put',
       data: parameter
     })
   }

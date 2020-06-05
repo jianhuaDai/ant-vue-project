@@ -704,21 +704,36 @@ export default {
     // 修改表单赋值
     setFormValue (data) {
       console.log(data)
-      this.form2.name = data.name
-      this.form2.code = data.source_id
-      this.form2.pointname = data.point
-      this.form2.weizhi = data.location
-      this.form2.suoshushuiti = data.source_type.toString()
-      this.form2.suoshuquyu = data.regionalism_id
-      this.form2.zxbz = data.standard
-      this.form2.type2 = data.source_property.toString()
-      this.form2.jwd = data.lon_lat
-      this.form2.jcpc = data.monitoring_frequency
-      this.form2.dnkhmb = data.current_target.toString()
-      this.form2.sswkhmb = data.target.toString()
-      this.form2.czlx = data.station_type.toString()
-      this.form2.beizhu = data.note
-      this.form2.image_url = data.image_url
+      this.$set(this.form2, 'name', data.name)
+      this.$set(this.form2, 'code', data.source_id)
+      this.$set(this.form2, 'pointname', data.point)
+      this.$set(this.form2, 'weizhi', data.location)
+      this.$set(this.form2, 'suoshushuiti', data.source_type.toString())
+      this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
+      this.$set(this.form2, 'zxbz', data.standard)
+      this.$set(this.form2, 'type2', data.source_property.toString())
+      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'jcpc', data.monitoring_frequency)
+      this.$set(this.form2, 'dnkhmb', data.current_target.toString())
+      this.$set(this.form2, 'sswkhmb', data.target.toString())
+      this.$set(this.form2, 'czlx', data.station_type.toString())
+      this.$set(this.form2, 'beizhu', data.note)
+      this.$set(this.form2, 'image_url', data.image_url)
+      // this.form2.name = data.name
+      // this.form2.code = data.source_id
+      // this.form2.pointname = data.point
+      // this.form2.weizhi = data.location
+      // this.form2.suoshushuiti = data.source_type.toString()
+      // this.form2.suoshuquyu = data.regionalism_id
+      // this.form2.zxbz = data.standard
+      // this.form2.type2 = data.source_property.toString()
+      // this.form2.jwd = data.lon_lat
+      // this.form2.jcpc = data.monitoring_frequency
+      // this.form2.dnkhmb = data.current_target.toString()
+      // this.form2.sswkhmb = data.target.toString()
+      // this.form2.czlx = data.station_type.toString()
+      // this.form2.beizhu = data.note
+      // this.form2.image_url = data.image_url
     },
     savePopup () {
       this.$refs.form2.validate(err => {
@@ -738,7 +753,7 @@ export default {
             target: this.form2.sswkhmb === undefined ? null : parseInt(this.form2.sswkhmb),
             station_type: this.form2.czlx === undefined ? null : parseInt(this.form2.czlx),
             note: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
-            image_url: this.form2.image_url
+            image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
           if (this.addmodifyflag === '1') {
@@ -749,10 +764,10 @@ export default {
               this.$message.success('新增水源地成功!')
             })
           } else if (this.addmodifyflag === '2') {
-            reqData.id = this.rowData.source_id
+            reqData.id = this.rowData.id
             reqData.version = this.rowData.version
             console.log(reqData)
-            updateShuiyuandi(this.rowData.source_id, reqData).then(res => {
+            updateShuiyuandi(this.rowData.id, reqData).then(res => {
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()
