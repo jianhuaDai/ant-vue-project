@@ -31,7 +31,6 @@
                 <a-tree-select
                   showSearch
                   allowClear
-                  multiple
                   :dropdownStyle="{ maxHeight: '600px', overflow: 'auto' }"
                   :treeData="deptData"
                   treeNodeFilterProp="title"
@@ -57,7 +56,7 @@
                   v-model="form.pid">
                   <a-icon slot="suffixIcon" type="user"/>
                   <template slot-scope="text" slot="title">
-                    <a-icon type="team"/>
+                    <a-icon type="user"/>
                     {{ text.value }}
                   </template>
                 </a-tree-select>
@@ -182,6 +181,7 @@
     methods: {
       initRiverData () {
         getRiverData({ page_size: 0 }).then(res => {
+          this.riverData = res.data.ist
           this.riverData = res.data.list.map((v) => {
             return { id: v.water_id, pId: v.pid, value: v.water_id, title: v.name }
           })
@@ -240,9 +240,6 @@
 
         const tree = {}
         for (const item of list) {
-          item.key = item.dept_id
-          item.title = item.dept_name
-          item.value = item.dept_id
           let ptr = list.find(parent => findFun(parent, item))
           if (ptr === undefined) ptr = tree
           if (!ptr.children) {

@@ -3,7 +3,7 @@
     <a-row :gutter="8" style="height: 100%">
       <a-col :span="4" style="height: 100%">
         <a-card :bordered="false" title="区域" style="height: 100%">
-          <area-tree/>
+          <area-tree @sendSelectNode="areaChange" />
         </a-card>
       </a-col>
       <a-col :span="20" style="height: 100%">
@@ -71,8 +71,9 @@
     name: 'ChiefManage',
     components: { STable, Ellipsis, EditModule, AreaTree },
     methods: {
-      goTo (record) {
-        this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+      areaChange (areas) {
+        this.queryParam.regionalism_id = areas[0]
+        this.$refs.table.refresh(true)
       },
       resetQuery () {
         this.queryParam.chief_level = null
@@ -103,7 +104,9 @@
       return {
         queryParam: {
           keyword: '',
-          chief_level: null
+          chief_level: null,
+          status: 1,
+          regionalism_id: ''
         },
         columns: [
           {
