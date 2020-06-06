@@ -19,6 +19,7 @@
   import getWaterDialog from '../components/getWaterDialog.vue'
   import getWaterFun from '../components/getWaterFun.vue'
   import GetWaterDetail from '../components/GetWaterDetail'
+  import PollutionDetail from '../components/PollutionDetail'
 
   export default {
     props: {
@@ -27,14 +28,13 @@
       anxianDetail,
       getWaterDialog,
       getWaterFun,
-      GetWaterDetail
+      GetWaterDetail,
+      PollutionDetail
     },
     data () {
       return {
-        treeData: [],
         title: '详情',
         visible: false,
-        confirmLoading: false,
         dataId: '',
         detailModal: ''
       }
@@ -50,7 +50,6 @@
         this.visible = true
       },
       cancel () {
-        // this.$emit('setDetailModule', false)
         this.visible = false
       }
     },

@@ -2,94 +2,94 @@
   <div>
     <a-spin :spinning="confirmLoading">
       <div class="detail-info">
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水口编号：</div>
-              <div class="value">NJ000001</div>
+              <div class="value">{{ form.get_water_id }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水口名称：</div>
-              <div class="value">南京夹江取水口</div>
+              <div class="value">{{ form.name }}</div>
             </div>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">位置：</div>
-              <div class="value">南京秦淮区秦淮河</div>
+              <div class="value">{{ form.location }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">所属区域：</div>
-              <div class="value">南京市-建邺区</div>
+              <div class="value">{{ form.regionalism_name }}</div>
             </div>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">经纬度：</div>
-              <div class="value">118.32，31.79</div>
+              <div class="value">{{Array.isArray(form.lon_lat)?form.lon_lat[0]:form.lon_lat}}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水量：</div>
-              <div class="value">3.65m<sup>3</sup>/s</div>
+              <div class="value">{{ form.ammount }}m<sup>3</sup>/s</div>
             </div>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水方式：</div>
-              <div class="value">抽取</div>
+              <div class="value">{{ form.get_water_type }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水水源类型：</div>
-              <div class="value">河流</div>
+              <div class="value">{{ form.source_name }}</div>
             </div>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">取水用途：</div>
-              <div class="value">城乡用水</div>
+              <div class="value">{{ form.get_water_purpose_name }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">规模类型：</div>
-              <div class="value">规模以上</div>
+              <div class="value">{{ form.get_water_scale_name }}</div>
             </div>
           </a-col>
         </a-row>
-        <a-row :gutter="48">
+        <a-row :gutter="100">
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">供水范围：</div>
-              <div class="value">以雨花台区、秦淮区、建邺区为主，近期已覆盖弹尽粮绝多了几分代理费领导了放大了就代理费简单卤鸡</div>
+              <div class="value">{{ form.range }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">开始取水日期：</div>
-              <div class="value">2020-09-20</div>
+              <div class="value">{{ form.use_time }}</div>
             </div>
           </a-col>
         </a-row>
 
       </div>
       <div class="chart-container">
-        <div class="title">南京夹江取水口取水量同比</div>
+        <div class="title">{{ form.name }}取水量同比</div>
         <div class="chart">
           <ve-histogram :data="chartData" :extend="extend" :colors="colors" height="300px"></ve-histogram>
         </div>
@@ -99,10 +99,17 @@
 </template>
 
 <script>
+  import { getWaterDetail } from '@/api/mapServer'
+
   export default {
     name: 'GetWaterDetail',
     created () {
-      console.log(this.dataId)
+        console.log(this.dataId)
+        this.confirmLoading = true
+        getWaterDetail(this.dataId).then(res => {
+          this.form = res.data
+          this.confirmLoading = false
+      })
     },
     props: {
       dataId: {
@@ -112,6 +119,7 @@
     },
     data: function () {
       return {
+        form: {},
         confirmLoading: false,
         colors: ['#3FD4A2', '#6885B8', '#FF6010'],
         chartSettings: {
@@ -154,10 +162,11 @@
     width: 100%;
     min-height: 40px;
     font-size: 14px;
-    color: #333333;
+    color: rgba(0,0,0,0.7);
     align-items: baseline;
     .title {
       width: 40%;
+      font-weight: bolder;
     }
     .value {
       width: 60%;

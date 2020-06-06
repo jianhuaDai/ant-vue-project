@@ -1,7 +1,11 @@
 <template>
   <mask-page-view>
     <div class="map">
-      <mapbox-view ref="map" :options="mapOptions" @mapLoaded="mapLoaded" :background-color="'rgba(207, 229, 246, 1)'"></mapbox-view>
+      <mapbox-view
+        ref="map"
+        :options="mapOptions"
+        @mapLoaded="mapLoaded"
+        :background-color="'rgba(207, 229, 246, 1)'"></mapbox-view>
       <div class="nav-map" v-show="ready">
         <div
           @click="nav(item.id)"
@@ -36,13 +40,24 @@
             <a-table
               v-show="tableList.columns.length>0"
               :rowKey="tableList.rowKey"
+              :bordered="false"
               :columns="tableList.columns"
               :dataSource="tableList.data"
-              :pagination="false"
+              :pagination="{hideOnSinglePage: true, size: 'small'}"
               :customRow="customRow"
               :rowSelection="tableList.options.rowSelection"
               :scroll="{ y: 500 }"
-            />
+            >
+              <span slot="m3s" slot-scope="text, record, index">
+                {{text}}m<sup>3</sup>/s
+              </span>
+              <span slot="t/a" slot-scope="text, record, index">
+                {{text}}t/a
+              </span>
+              <span slot="hasOrNo" slot-scope="text, record, index">
+                {{text === 1 ? '有': '无'}}
+              </span>
+            </a-table>
           </div>
         </div>
       </div>
@@ -54,208 +69,251 @@
 <script>
   import Vue from 'vue'
   import MapboxView from '../../components/Hczy/Map/MapboxView'
-    import mapboxgl from 'mapbox-gl'
-    import HcMarker from './components/HcMarker'
-    import { MaskPageView } from '@/layouts'
-    import {
-      Navs,
-      LayerBtns,
-      GetDataByLayer,
-      GetTableRowKey
-    } from './config/base'
+  import mapboxgl from 'mapbox-gl'
+  import HcMarker from './components/HcMarker'
+  import { MaskPageView } from '@/layouts'
+  import {
+    Navs,
+    LayerBtns,
+    GetDataByLayer,
+    GetTableRowKey, TableColumnsByLayer, GetLayerItem
+  } from './config/base'
   import DetailModal from './modules/DetailModal'
-    let Map = null
-    export default {
-        name: 'OneMap',
-        data () {
-          return {
-            mapOptions: {
-              pitch: 30,
-              zoom: 7,
-              style: '/bright2'
-            },
-            ready: false,
-            baseData: {
-              navs: Navs(),
-              layerItems: LayerBtns()
-            },
-            showInfoPanel: false,
-            layerManager: {
-              currentNav: 0,
-              activeLayerItem: {},
-              visibleLayerIds: [],
-              existLayerGroup: {} // 已存在的对应图层相关group
-            },
-            tableList: {
-              options: {
-                rowSelection: {
-                  type: 'radio',
-                  columnWidth: 0,
-                  selectedRowKeys: []
-                }
-              },
-              columns: [],
-              data: [],
-              rowKey: 'id'
-            }
-          }
+
+  let Map = null
+  export default {
+    name: 'OneMap',
+    data () {
+      return {
+        mapOptions: {
+          pitch: 30,
+          zoom: 7,
+          style: '/bright2'
         },
-        components: { DetailModal, MapboxView, MaskPageView },
-        methods: {
-          initMap () {
-            this.nav(1)
-            fetch('/data/js.geojson').then(res => res.json()).then(data => {
-              Map.addSource('320000', {
-                'type': 'geojson',
-                'data': data
-              })
-              Map.addLayer({
-                'id': 'area',
-                'type': 'fill',
-                'source': '320000',
-                'layout': {},
-                'paint': {
-                  'fill-color': '#fff',
-                  'fill-outline-color': '#ccc'
-                }
-              }, 'landuse-residential')
+        ready: false,
+        baseData: {
+          navs: Navs(),
+          layerItems: LayerBtns()
+        },
+        showInfoPanel: false,
+        layerManager: {
+          currentNav: 0,
+          activeLayerItem: {},
+          visibleLayerIds: [],
+          existLayerGroup: {} // 已存在的对应图层相关group
+        },
+        tableList: {
+          options: {
+            rowSelection: {
+              type: 'radio',
+              columnWidth: 0,
+              selectedRowKeys: []
+            }
+          },
+          columns: [],
+          data: [],
+          rowKey: 'id'
+        }
+      }
+    },
+    components: { DetailModal, MapboxView, MaskPageView },
+    methods: {
+      initMap () {
+        this.nav(1)
+        fetch('/data/js.geojson').then(res => res.json()).then(data => {
+          Map.addSource('320000', {
+            'type': 'geojson',
+            'data': data
+          })
+          Map.addLayer({
+            'id': 'area',
+            'type': 'fill',
+            'source': '320000',
+            'layout': {},
+            'paint': {
+              'fill-color': '#fff',
+              'fill-outline-color': '#ccc'
+            }
+          }, 'landuse-residential')
+        })
+        // this.renderMarker()
+      },
+      mapLoaded (map) {
+        Map = map
+        this.ready = true
+        this.initMap()
+      },
+      nav (navId) {
+        if (this.layerManager.currentNav === navId) {
+          this.showInfoPanel = !this.showInfoPanel
+          return
+        }
+        this.layerManager.currentNav = navId
+        this.showInfoPanel = true
+        this.layerRadioHandle(this.baseData.layerItems[navId][0])
+      },
+      layerManagerHandle (layerItem) {
+        this.clearSelect()
+        if (!this.layerManager.existLayerGroup[layerItem.id]) {
+          this.layerManager.existLayerGroup[layerItem.id] = {
+            layerItem: layerItem
+          }
+        }
+        for (const key in this.layerManager.existLayerGroup) {
+          const intLayerId = parseInt(key)
+          this.toggleLayer(this.layerManager.existLayerGroup[key].layerItem, this.layerManager.visibleLayerIds.includes(intLayerId), layerItem.extraLayer)
+        }
+      },
+      toggleLayer (layerItem, isShow = true, extraLayer = false) {
+        const layerGroup = this.layerManager.existLayerGroup[layerItem.id]
+        if (isShow) {
+          this.loadLayer(layerItem)
+        } else {
+          console.log('hide===', layerGroup)
+          if (layerGroup.markerGroup) {
+            layerGroup.markerGroup.forEach((marker) => {
+              marker.remove()
             })
-            // this.renderMarker()
-          },
-          mapLoaded (map) {
-            Map = map
-            this.ready = true
-            this.initMap()
-          },
-          nav (navId) {
-            if (this.layerManager.currentNav === navId) {
-              this.showInfoPanel = !this.showInfoPanel
-              return
-            }
-            this.layerManager.currentNav = navId
-            this.showInfoPanel = true
-            this.layerRadioHandle(this.baseData.layerItems[navId][0])
-          },
-          layerManagerHandle (layerItem) {
-            this.clearSelect()
-            if (!this.layerManager.existLayerGroup[layerItem.id]) {
-              this.layerManager.existLayerGroup[layerItem.id] = {}
-            }
-            for (const key in this.layerManager.existLayerGroup) {
-              const intLayerId = parseInt(key)
-              this.toggleLayer(layerItem, this.layerManager.visibleLayerIds.includes(intLayerId), layerItem.extraLayer)
-            }
-          },
-          toggleLayer (layerItem, isShow = true, extraLayer = false) {
-            const layerGroup = this.layerManager.existLayerGroup[layerItem.id]
-            if (isShow) {
-              this.loadLayer(layerItem)
-            } else {
-              if (layerGroup.markerGroup) {
-               layerGroup.markerGroup.forEach((marker) => {
-                  marker.remove()
-                })
-                layerGroup.markerGroup.clear()
-              }
-            }
-          },
-          loadLayer (layerItem) {
-            GetDataByLayer(layerItem.id).then(res => {
-              if (res) {
-                setTimeout(() => {
-                  this.renderLayer(layerItem, res)
-                }, 200)
-              }
+            layerGroup.markerGroup.clear()
+          }
+        }
+      },
+      loadLayer (layerItem) {
+        GetDataByLayer(layerItem.id).then(res => {
+          if (res) {
+            setTimeout(() => {
+              this.renderLayer(layerItem, res)
+            }, 100)
+          }
+        })
+      },
+      clearSelect () {
+      },
+      layerRadioHandle (layerItem) {
+        if (this.layerManager.activeLayerItem.id === layerItem.id) {
+          return
+        }
+        this.layerManager.activeLayerItem = layerItem
+        this.layerManager.visibleLayerIds = [layerItem.id]
+        this.layerManagerHandle(layerItem)
+        this.renderTableList()
+      },
+      layerCheckboxHandle (e, layerItem) {
+        e.stopPropagation()
+        if (this.layerManager.activeLayerItem.id === layerItem.id) {
+          return
+        }
+        const index = this.layerManager.visibleLayerIds.indexOf(layerItem.id)
+        if (index < 0) {
+          this.layerManager.visibleLayerIds.push(layerItem.id)
+        } else {
+          this.layerManager.visibleLayerIds.splice(index, 1)
+        }
+        this.layerManagerHandle(layerItem)
+      },
+      // 渲染Layer
+      renderLayer (layerItem, res) {
+        switch (layerItem.id) {
+          case 11: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(v.lon_lat.split(','),
+                layerItem, v.id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
             })
-          },
-          clearSelect () {
-          },
-          layerRadioHandle (layerItem) {
-            if (this.layerManager.activeLayerItem.id === layerItem.id) {
-              return
-            }
-            this.layerManager.activeLayerItem = layerItem
-            this.layerManager.visibleLayerIds = [layerItem.id]
-            this.layerManagerHandle(layerItem)
-          },
-          layerCheckboxHandle (e, layerItem) {
-            e.stopPropagation()
-            if (this.layerManager.activeLayerItem.id === layerItem.id) {
-              return
-            }
-            const index = this.layerManager.visibleLayerIds.indexOf(layerItem.id)
-            if (index < 0) {
-              this.layerManager.visibleLayerIds.push(layerItem.id)
-            } else {
-              this.layerManager.visibleLayerIds.splice(index, 1)
-            }
-            this.layerManagerHandle(layerItem)
-          },
-          // 渲染Layer
-          renderLayer (layerItem, res) {
-            const geoData = res.data.geo_info
-            switch (layerItem.id) {
-              case 31: {
-                geoData.features.forEach((v) => {
-                  this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/intake.svg', '#3677fe', v.properties.name, v.properties.info)
-                })
-                break
-              }
-              default: {
-                geoData.features.forEach((v) => {
-                  this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
-                })
-              }
-            }
-          },
-          markerClick (dataId, layerItem) {
-            console.log(dataId, layerItem)
-            if (layerItem.detailModal) {
-              this.$refs.detailModal.showModal(dataId, layerItem.detailModal, layerItem.detailTitle)
-            }
-          },
-          // 渲染marker
-          renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
-            if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
-              this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
-            }
-            const el = document.createElement('div')
-            el.className = 'hc-marker-container'
-            const child = document.createElement('div')
-            el.appendChild(child)
-            const MarkerInstance = Vue.extend(HcMarker)
-            new MarkerInstance({
-              propsData: {
-                dataId: dataId,
-                icon: icon,
-                bgColor: bgColor,
-                name: name,
-                info: info
-              }
-            }).$mount(child)
-            const marker = new mapboxgl.Marker({
-              element: el
+            break
+          }
+          case 31: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(v.lon_lat[0].split(','),
+                layerItem, v.get_water_id, layerItem.icon, layerItem.bgColor, v.name, `取水留量：${v.ammount}m<sup>3</sup>/s`)
             })
-              .setLngLat(coordinates)
-              .addTo(Map)
-            this.layerManager.existLayerGroup[layerItem.id].markerGroup.add(marker)
-            el.addEventListener('click', (e) => {
-              e.stopPropagation()
-              this.markerClick(dataId, layerItem)
+            break
+          }
+          case 32: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(v.lon_lat[0].split(','),
+                layerItem, v.func_id, layerItem.icon, layerItem.bgColor, v.func_name, `水质目标：${v.water_target_name}`)
             })
-          },
-          customRow (record, index) {
-            return {
-              on: {
-                click: () => {
-                  this.rowSelect(record)
-                  this.$set(this.tableOption.rowSelection.selectedRowKeys, 0, record[this.rowKey])
-                }
-              }
+            break
+          }
+          case 51: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(v.lon_lat[0].split(','),
+                layerItem, v.sewage_id, layerItem.icon, layerItem.bgColor, v.sewage_name, `${v.sewage_type_name}`)
+            })
+            break
+          }
+          default: {
+            // geoData.features.forEach((v) => {
+            //   this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
+            // })
+          }
+        }
+      },
+      markerClick (dataId, layerItem) {
+        if (layerItem.detailModal) {
+          this.$refs.detailModal.showModal(dataId, layerItem.detailModal, layerItem.detailTitle)
+        }
+      },
+      // 渲染marker
+      renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
+        if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
+        }
+        const el = document.createElement('div')
+        el.className = 'hc-marker-container'
+        const child = document.createElement('div')
+        el.appendChild(child)
+        const MarkerInstance = Vue.extend(HcMarker)
+        new MarkerInstance({
+          propsData: {
+            dataId: dataId,
+            icon: icon,
+            bgColor: bgColor,
+            name: name,
+            info: info
+          }
+        }).$mount(child)
+        const marker = new mapboxgl.Marker({
+          element: el
+        })
+          .setLngLat(coordinates)
+          .addTo(Map)
+        this.layerManager.existLayerGroup[layerItem.id].markerGroup.add(marker)
+        el.addEventListener('click', (e) => {
+          e.stopPropagation()
+          this.markerClick(dataId, layerItem)
+        })
+      },
+      renderTableList () {
+        this.tableList.data = []
+        this.tableList.rowKey = GetTableRowKey(this.layerManager.activeLayerItem.id)
+        this.tableList.columns = TableColumnsByLayer(this.layerManager.activeLayerItem.id)
+        GetDataByLayer(this.layerManager.activeLayerItem.id).then(res => {
+          this.tableList.data = res.data.list
+        })
+      },
+      rowSelect (record) {
+        console.log(record)
+        if (record.lon_lat) {
+          const coordinate = Array.isArray(record.lon_lat) ? record.lon_lat[0].split(',') : record.lon_lat.split(',')
+          Map.flyTo({
+            center: coordinate,
+            zoom: 11
+          })
+        }
+      },
+      customRow (record, index) {
+        return {
+          on: {
+            click: () => {
+              this.rowSelect(record)
+              this.$set(this.tableList.options.rowSelection.selectedRowKeys, 0, record[this.rowKey])
             }
           }
         }
+      }
     }
+  }
 </script>
 
 <style lang="less" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div id="MapView" class="map-view" :style="{backgroundColor:backgroundColor}">
+  <div :id="id" class="map-view" :style="{backgroundColor:backgroundColor}">
   </div>
 </template>
 
@@ -12,7 +12,8 @@
     name: 'MapboxView',
     data () {
       return {
-        map: null
+        map: null,
+        id: 'mapView'
       }
     },
     props: {
@@ -25,6 +26,9 @@
         type: String,
         default: '#FFFFFF'
       }
+    },
+    created () {
+      this.id = `${Math.random() * 1000}`
     },
     mounted () {
       this.initMap()
@@ -47,7 +51,7 @@
           },
           ...this.options
         }
-        const map = new mapboxgl.Map({ ...options, ...{ container: 'MapView', token: MAPBOX_TOKEN } })
+        const map = new mapboxgl.Map({ ...options, ...{ container: this.id, token: MAPBOX_TOKEN } })
         // 地图加载、场景加载事件
         map.on('load', () => {
           this.$emit('mapLoaded', map)

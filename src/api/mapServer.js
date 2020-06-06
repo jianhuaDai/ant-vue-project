@@ -4,13 +4,15 @@ import { axios } from '@/utils/request'
 const api = {
   SERVER_MAP: 'http://test.susinnovation.com:8080/geoserver/china2019/ows',
   waterInfo: '/monitor/water_rain',
-  pollution: '/water_pollution/emphasis_pollutions',
+  pollution: '/pollutions/page_query',
+  pollutionDetail: '/pollutions',
   NJ_SERVER: 'http://test.susinnovation.com:8080/geoserver/njdemo/ows',
   riverAndLake: '/water_info/get_water_infos',
-  getWater: '/monitor/get_water',
+  getWater: '/get_waters/page_query',
+  getWaterDetail: '/get_waters',
   waterEmphasiss: '/info_serve/get_water_emphasiss',
-  waterFunction: '/water_resource/water_functionals',
-  sewage: '/monitor/sewage',
+  waterFunction: '/water_functionals/page_query',
+  sewage: '/sewage/page_query',
   riverLine: '/river_protect/rivers_lines',
   blackWater: '/info_serve/get_water_monitors',
   videoMonitor: '/monitor/video_monitor'
@@ -35,8 +37,15 @@ export function loadNJWFS (parameter) {
 export function loadPollution (parameter) {
   return axios({
     url: api.pollution,
+    method: 'post',
+    data: parameter
+  })
+}
+export function getPollutionDetail (id) {
+  return axios({
+    url: `${api.pollutionDetail}/${id}`,
     method: 'get',
-    params: parameter
+    params: {}
   })
 }
 
@@ -59,8 +68,16 @@ export function loadRiverAndLake (parameter) {
 export function loadGetWater (parameter) {
   return axios({
     url: api.getWater,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function getWaterDetail (id) {
+  return axios({
+    url: `${api.getWaterDetail}/${id}`,
     method: 'get',
-    params: parameter
+    params: {}
   })
 }
 
@@ -75,15 +92,15 @@ export function loadWaterEmphasiss (parameter) {
 export function loadWaterFunction (parameter) {
   return axios({
     url: api.waterFunction,
-    method: 'get',
-    params: parameter
+    method: 'post',
+    data: parameter
   })
 }
 
 export function loadSewage (parameter) {
   return axios({
     url: api.sewage,
-    method: 'get',
+    method: 'post',
     params: parameter
   })
 }

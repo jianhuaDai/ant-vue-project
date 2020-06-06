@@ -70,12 +70,19 @@ export function Navs () {
   }]
 }
 
+export function GetLayerItem (id, layerItems) {
+  return layerItems.find(v => v.id === id)
+}
+
 export function LayerBtns () {
   return {
     1: [{
       id: 11,
       name: '污染源',
-      icon: '/icons/pollution.svg'
+      icon: '/icons/pollution.svg',
+      bgColor: '#516c85',
+      detailModal: 'PollutionDetail',
+      detailTitle: '污染源详情'
     }, {
       id: 12,
       name: '水情',
@@ -104,12 +111,16 @@ export function LayerBtns () {
       id: 31,
       name: '取水口',
       icon: '/icons/intake.svg',
+      bgColor: '#3677fe',
       detailModal: 'GetWaterDetail',
       detailTitle: '取水口详情'
     }, {
       id: 32,
       name: '水功能区',
-      icon: '/icons/water-function.svg'
+      icon: '/icons/water-function.svg',
+      bgColor: '#1391d9',
+      detailModal: 'getWaterFun',
+      detailTitle: '水功能区详情'
     }, {
       id: 33,
       name: '水环境功能区',
@@ -122,7 +133,10 @@ export function LayerBtns () {
     5: [{
       id: 51,
       name: '排污口',
-      icon: '/icons/outfall.svg'
+      icon: '/icons/outfall.svg',
+      detailModal: 'GetWaterDetail',
+      bgColor: '#516c85',
+      detailTitle: '排污口详情'
     }],
     6: [{
       id: 61,
@@ -152,13 +166,13 @@ export function LayerBtns () {
 
 const TableColumns = {
   11: {
-    rowKey: 'pollution_id',
+    rowKey: 'id',
     columns: [{
-      title: '污染源名称',
+      title: '污染源',
       dataIndex: 'pollution_name',
       width: '50%'
     }, {
-      title: '位置',
+      title: '地址',
       dataIndex: 'location',
       width: '50%'
     }]
@@ -243,24 +257,29 @@ const TableColumns = {
     rowKey: 'get_water_id',
     columns: [{
       title: '名称',
-      dataIndex: 'get_water_name',
-      width: '50%'
+      dataIndex: 'name',
+      width: '70%'
     }, {
-      title: '流量',
+      title: '取水量',
       dataIndex: 'ammount',
-      width: '50%'
+      width: '30%',
+      scopedSlots: { customRender: 'm3s' }
     }]
   },
   32: {
-    rowKey: 'id',
+    rowKey: 'func_id',
     columns: [{
-      title: '功能',
-      dataIndex: 'func_type',
-      width: '50%'
+      title: '级别',
+      dataIndex: 'func_grade',
+      width: '60px'
     }, {
-      title: '位置',
+      title: '功能分类',
+      dataIndex: 'functional_type_name',
+      width: '120px'
+    }, {
+      title: '名称',
       dataIndex: 'func_name',
-      width: '50%'
+      width: '120px'
     }]
   },
   33: {
@@ -290,13 +309,17 @@ const TableColumns = {
   51: {
     rowKey: 'sewage_id',
     columns: [{
-      title: '名称',
-      dataIndex: 'sewage_name',
-      width: '70%'
+      title: '排污口',
+      dataIndex: 'sewage_name'
     }, {
-      title: '类型',
+      title: '监控视频',
+      dataIndex: 'has_video',
+      width: '100px',
+      scopedSlots: { customRender: 'hasOrNo' }
+    }, {
+      title: '排污量',
       dataIndex: 'come_from',
-      width: '30%'
+      scopedSlots: { customRender: 't/a' }
     }]
   },
   61: {
@@ -362,7 +385,8 @@ export function GetDataByLayer (layerId) {
     case 11: {
       return loadPollution({
         page_size: 0,
-        province_id: 32
+        province_id: 32,
+        status: 1
       })
     }
     case 12: {
@@ -407,21 +431,14 @@ export function GetDataByLayer (layerId) {
       })
     }
     case 31: {
-      return loadProject({
-        page_size: 0,
-        province_id: 32
-      }).then(res => {
-        return Promise.resolve(res.data)
+      return loadGetWater({
+        page: 1,
+        page_size: 0
       })
-      // return loadGetWater({
-      //   page_size: 0,
-      //   province_id: 32
-      // })
     }
     case 32: {
       return loadWaterFunction({
-        page_size: 0,
-        province_id: 32
+        page_size: 0
       })
     }
     case 33: {
@@ -439,7 +456,8 @@ export function GetDataByLayer (layerId) {
     case 51: {
       return loadSewage({
         page_size: 0,
-        province_id: 32
+        province_id: 32,
+        status: 1
       })
     }
     case 61: {
