@@ -18,6 +18,9 @@
           <div class="line"></div>
         </div>
       </div>
+      <div class="water-icons">
+        <!-- 水情图例区域 -->
+      </div>
       <div :class="['panel-info',showInfoPanel?'panel-show':'']">
         <div class="panel-content">
           <!--          <div v-show="currentNav===1">-->
@@ -85,6 +88,7 @@
     name: 'OneMap',
     data () {
       return {
+        showWaterIcons: false,
         mapOptions: {
           pitch: 30,
           zoom: 7,
@@ -214,6 +218,7 @@
       },
       // 渲染Layer
       renderLayer (layerItem, res) {
+        this.showWaterIcons = layerItem.id === 12
         switch (layerItem.id) {
           case 11: {
             res.data.list.forEach((v) => {
@@ -333,16 +338,29 @@
     height: 100vh;
   }
 
-  .map .nav-map {
-    position: absolute;
-    right: 50%;
-    bottom: 5%;
-    transform: translateX(50%);
-    z-index: 999;
-    display: flex;
-    justify-content: flex-start;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.4);
-    border-radius: 2px;
+  .map {
+    .nav-map {
+      position: absolute;
+      right: 55%;
+      bottom: 5%;
+      transform: translateX(50%);
+      z-index: 999;
+      display: flex;
+      justify-content: flex-start;
+      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.4);
+      border-radius: 2px;
+    }
+    .water-icons {
+      position: absolute;
+      right: 320px;
+      bottom: 5%;
+      // transform: translateX(50%);
+      z-index: 999;
+      display: flex;
+      justify-content: flex-start;
+      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.4);
+      border-radius: 2px;
+    }
   }
 
   .nav-map-item {
