@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-input v-model="location" disabled>
+    <a-input v-model="location">
       <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
     </a-input>
     <div id="distance" class="distance-container" v-show="showMapDom"></div>
@@ -42,6 +42,13 @@ export default {
   created () {
     console.log(this, 'dsddss')
     this.location = this.value[0]
+  },
+  watch: {
+    location: {
+      handler (val) {
+        this.$emit('change', [this.location])
+      }
+    }
   },
   methods: {
     initMap () {
