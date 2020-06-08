@@ -3,7 +3,7 @@ import { axios } from '@/utils/request'
 
 const api = {
   SERVER_MAP: 'http://test.susinnovation.com:8080/geoserver/china2019/ows',
-  waterInfo: '/monitor/water_rain',
+  waterInfo: '/monitoring_station/page_query', // 测站列表 station_type: 1水情测站2雨情测站3水质测站4河湖生态测站5视频站
   pollution: '/pollutions/page_query',
   pollutionDetail: '/pollutions',
   NJ_SERVER: 'http://test.susinnovation.com:8080/geoserver/njdemo/ows',
@@ -52,8 +52,8 @@ export function getPollutionDetail (id) {
 export function loadWaterOrRain (parameter) {
   return axios({
     url: api.waterInfo,
-    method: 'get',
-    params: parameter
+    method: 'post',
+    data: parameter
   })
 }
 
