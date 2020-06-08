@@ -5,7 +5,7 @@
       :title="title"
       :destroyOnClose="true"
       :footer="null"
-      width="800px"
+      width="70%"
       :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
@@ -20,7 +20,7 @@
   import getWaterFun from '../components/getWaterFun.vue'
   import GetWaterDetail from '../components/GetWaterDetail'
   import PollutionDetail from '../components/PollutionDetail'
-
+  import waterDetail from '../components/waterDetail'
   export default {
     props: {
     },
@@ -29,7 +29,8 @@
       getWaterDialog,
       getWaterFun,
       GetWaterDetail,
-      PollutionDetail
+      PollutionDetail,
+      waterDetail
     },
     data () {
       return {

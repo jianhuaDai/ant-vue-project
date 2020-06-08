@@ -49,13 +49,13 @@
               :scroll="{ y: 500 }"
             >
               <span slot="m3s" slot-scope="text, record, index">
-                {{text}}m<sup>3</sup>/s
+                {{ text }}m<sup>3</sup>/s
               </span>
               <span slot="t/a" slot-scope="text, record, index">
-                {{text}}t/a
+                {{ text }}t/a
               </span>
               <span slot="hasOrNo" slot-scope="text, record, index">
-                {{text === 1 ? '有': '无'}}
+                {{ text === 1 ? '有': '无' }}
               </span>
             </a-table>
           </div>
@@ -153,6 +153,7 @@
         this.layerRadioHandle(this.baseData.layerItems[navId][0])
       },
       layerManagerHandle (layerItem) {
+        console.log(layerItem, 'kkkkk')
         this.clearSelect()
         if (!this.layerManager.existLayerGroup[layerItem.id]) {
           this.layerManager.existLayerGroup[layerItem.id] = {
@@ -218,6 +219,13 @@
             res.data.list.forEach((v) => {
               this.renderMarker(v.lon_lat.split(','),
                 layerItem, v.id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
+            })
+            break
+          }
+          case 12: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
+                layerItem, v.id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
             })
             break
           }
@@ -293,7 +301,7 @@
         })
       },
       rowSelect (record) {
-        console.log(record)
+        console.log(record, 'dddddd')
         if (record.lon_lat) {
           const coordinate = Array.isArray(record.lon_lat) ? record.lon_lat[0].split(',') : record.lon_lat.split(',')
           Map.flyTo({
