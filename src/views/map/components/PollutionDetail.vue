@@ -6,13 +6,13 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">污染源编号：</div>
-              <div class="value">{{form.id}}</div>
+              <div class="value">{{ form.id }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">污染源名称：</div>
-              <div class="value">{{form.pollution_name}}</div>
+              <div class="value">{{ form.pollution_name }}</div>
             </div>
           </a-col>
         </a-row>
@@ -20,13 +20,13 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">污染源类型：</div>
-              <div class="value">{{form.pollution_type_name}}</div>
+              <div class="value">{{ form.pollution_type_name }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">发现时间：</div>
-              <div class="value">{{form.discover_time}}</div>
+              <div class="value">{{ form.discover_time }}</div>
             </div>
           </a-col>
         </a-row>
@@ -34,13 +34,13 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">所属河道：</div>
-              <div class="value">{{form.water_name}}</div>
+              <div class="value">{{ form.water_name }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">所属区域：</div>
-              <div class="value">{{form.regionalism_name}}</div>
+              <div class="value">{{ form.regionalism_name }}</div>
             </div>
           </a-col>
         </a-row>
@@ -48,13 +48,13 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">关注级别：</div>
-              <div class="value">{{form.attention_level_name}}</div>
+              <div class="value">{{ form.attention_level_name }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">所属河长：</div>
-              <div class="value">{{form.chief_name}}</div>
+              <div class="value">{{ form.chief_name }}</div>
             </div>
           </a-col>
         </a-row>
@@ -62,13 +62,13 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">详细地址：</div>
-              <div class="value">{{form.location}}</div>
+              <div class="value">{{ form.location }}</div>
             </div>
           </a-col>
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">经纬度：</div>
-              <div class="value">{{form.lon_lat}}</div>
+              <div class="value">{{ form.lon_lat }}</div>
             </div>
           </a-col>
         </a-row>
@@ -76,7 +76,7 @@
           <a-col :md="24">
             <div class="detail-item">
               <div class="title">影响范围：</div>
-              <div class="value">{{form.range}}</div>
+              <div class="value">{{ form.range }}</div>
             </div>
           </a-col>
         </a-row>
@@ -148,11 +148,11 @@
     color: rgba(0,0,0,0.7);
     align-items: baseline;
     .title {
-      width: 40%;
+      flex: 0 0 100px;
       font-weight: bolder;
     }
     .value {
-      width: 60%;
+      flex: 1 0;
     }
     sup {
       font-size: 12px;
