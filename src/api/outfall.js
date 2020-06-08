@@ -22,7 +22,7 @@ export function addOutfall (params) {
 export function editOutfall (id, params) {
   return axios({
     url: `/sewage/${id}`,
-    method: 'post',
+    method: 'put',
     data: params
   })
 }
