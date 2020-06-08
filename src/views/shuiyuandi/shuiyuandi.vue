@@ -228,7 +228,7 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd" disabled>
+                <a-input v-model="form2.jwd" placeholder="数据格式：xxx.xxxx,xx.xxxx">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                 </a-input>
                 <!-- <mapInput
@@ -687,7 +687,8 @@ export default {
     gcAddClick (data = {}) {
       this.visible = true
       this.form2 = { ...{}, ...data }
-      console.log(this.form2)
+      // console.log(this.form2)
+      // console.log(this.form2.image_url)
       this.rowData = this.form2
       if (this.form2.id) {
         this.addmodifyflag = '2'
@@ -704,6 +705,7 @@ export default {
     // 修改表单赋值
     setFormValue (data) {
       console.log(data)
+      console.log(data.image_url)
       this.$set(this.form2, 'name', data.name)
       this.$set(this.form2, 'code', data.source_id)
       this.$set(this.form2, 'pointname', data.point)
@@ -718,6 +720,7 @@ export default {
       this.$set(this.form2, 'sswkhmb', data.target.toString())
       this.$set(this.form2, 'czlx', data.station_type.toString())
       this.$set(this.form2, 'beizhu', data.note)
+      // this.$set(this.form2, 'image_url', [])
       this.$set(this.form2, 'image_url', data.image_url)
       // this.form2.name = data.name
       // this.form2.code = data.source_id
@@ -756,6 +759,7 @@ export default {
             image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
+          console.log(this.form2)
           if (this.addmodifyflag === '1') {
             addShuiyuandi(reqData).then(res => {
               this.searchClick()

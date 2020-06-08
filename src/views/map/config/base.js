@@ -390,17 +390,17 @@ export function GetDataByLayer (layerId) {
       })
     }
     case 12: {
+      // 水情列表
       return loadWaterOrRain({
         page_size: 0,
-        province_id: 32,
-        type: 1
+        station_type: 1
       })
     }
     case 13: {
+      // 雨情列表
       return loadWaterOrRain({
         page_size: 0,
-        province_id: 32,
-        type: 2
+        station_type: 2
       })
     }
     case 14: {
