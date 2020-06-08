@@ -91,6 +91,7 @@
           onOk () {
             delChief(record.employee_id).then(res => {
               _this.$message.success('删除成功')
+              _this.$refs.table.refresh(true)
             })
           },
           onCancel () {
