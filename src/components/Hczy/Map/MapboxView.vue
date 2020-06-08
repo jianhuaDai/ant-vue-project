@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" class="map-view" :style="{backgroundColor:backgroundColor}" v-html="el">
+  <div :id="id" class="map-view" :style="{backgroundColor:backgroundColor}">
   </div>
 </template>
 
@@ -30,9 +30,9 @@
     },
     created () {
       this.id = `${Math.random() * 1000}`
-      this.el = document.createElement('div')
-      this.el.className = 'map-view'
-      console.log('el:', this.el)
+      // this.el = document.createElement('div')
+      // this.el.className = 'map-view'
+      // console.log('el:', this.el)
     },
     mounted () {
       this.initMap()
