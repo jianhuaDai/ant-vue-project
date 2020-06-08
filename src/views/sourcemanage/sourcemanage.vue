@@ -176,7 +176,7 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd" disabled>
+                <a-input v-model="form2.jwd" placeholder="数据格式：xxx.xxxx,xx.xxxx">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                   <!-- <a-icon type="environment" /> -->
                 </a-input>

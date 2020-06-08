@@ -272,6 +272,8 @@
           }).finally(() => {
             this.confirmLoading = false
           })
+        } else {
+          this.form = { ...{}, data }
         }
         setTimeout(() => {
           this.$refs.form.clearValidate()

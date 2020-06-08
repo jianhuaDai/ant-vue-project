@@ -165,11 +165,11 @@
     color: rgba(0,0,0,0.7);
     align-items: baseline;
     .title {
-      width: 40%;
+      flex: 0 0 100px;
       font-weight: bolder;
     }
     .value {
-      width: 60%;
+      flex: 1 0;
     }
     sup {
       font-size: 12px;
