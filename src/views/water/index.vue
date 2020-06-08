@@ -28,7 +28,7 @@
                   <!-- <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select> -->
                 </a-form-model-item>
               </a-col>
-              <a-col :span="6">
+              <!-- <a-col :span="6">
                 <a-form-model-item label="测站类别:" prop="czlb" ref="czlb">
                   <a-select v-model="form.czlb" placeholder="全部" allowClear>
                     <a-select-option value="1">水情测站</a-select-option>
@@ -38,7 +38,7 @@
                     <a-select-option value="5">视频站</a-select-option>
                   </a-select>
                 </a-form-model-item>
-              </a-col>
+              </a-col> -->
               <a-col
                 :span="5"
                 :offset="1"
@@ -539,7 +539,7 @@ export default {
       queryParam: {
         regionalism_id: '',
         water_type: null,
-        station_type: null
+        station_type: 1
         // status: 1
       },
       loadData: parameter => {
@@ -599,8 +599,9 @@ export default {
       // this.queryParam.regionalism_id = this.form.suoshuquyu
       this.queryParam.regionalism_id = this.form.area === '' ? '' : this.form.area
       this.queryParam.water_type = this.suoshushuiti === '' ? null : this.suoshushuiti
-      this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
+      // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
+      this.queryParam.station_type = 1
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
     },
@@ -696,7 +697,7 @@ export default {
       this.$set(this.form2, 'code', data.monitoring_num)
       this.$set(this.form2, 'suoshushuiti', data.water_id.toString())
       this.$set(this.form2, 'address', data.location)
-      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'jwd', data.lon_lat[0])
       this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
       this.$set(this.form2, 'deptname', data.dept_id)
       this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
@@ -725,9 +726,9 @@ export default {
             monitoring_num: this.form2.code === undefined ? '' : this.form2.code,
             water_id: this.form2.suoshushuiti,
             location: this.form2.address,
-            lon_lat: this.form2.jwd,
+            lon_lat: [this.form2.jwd],
             dept_id: this.form2.deptname,
-            regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
+            regionalism_id: this.form2.suoshuquyu2 === undefined ? '' : this.form2.suoshuquyu2,
             station_type: 1,
             monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),

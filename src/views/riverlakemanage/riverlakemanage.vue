@@ -370,7 +370,7 @@
                   ref="startjwd">
                   <a-input
                     v-model="form2.startjwd"
-                    disabled>
+                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
                     <a-icon
                       @click="showMap1"
                       slot="addonAfter"
@@ -386,7 +386,7 @@
                   ref="endjwd">
                   <a-input
                     v-model="form2.endjwd"
-                    disabled>
+                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
                     <a-icon
                       @click="showMap2"
                       slot="addonAfter"
@@ -469,7 +469,7 @@
                   ref="">
                   <a-input
                     v-model="form2.startjwd2"
-                    disabled>
+                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
                     <a-icon
                       @click="showMap3"
                       slot="addonAfter"
@@ -485,7 +485,7 @@
                   ref="endjwd2">
                   <a-input
                     v-model="form2.endjwd2"
-                    disabled>
+                    placeholder="xxx.xxxx,xx.xxxx">
                     <a-icon
                       @click="showMap4"
                       slot="addonAfter"
