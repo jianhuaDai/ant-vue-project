@@ -694,24 +694,24 @@ export default {
             image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
-          if (this.addmodifyflag === '1') {
-            addSource(reqData).then(res => {
-              this.searchClick()
-              this.visible = false
-              this.$refs.form2.clearValidate()
-              this.$message.success('新增污染源成功!')
-            })
-          } else if (this.addmodifyflag === '2') {
-            reqData.pollution_id = this.rowData.pollution_id
-            reqData.version = this.rowData.version
-            console.log(reqData)
-            updateSource(this.rowData.pollution_id, reqData).then(res => {
-              this.searchClick()
-              this.visible = false
-              this.$refs.form2.clearValidate()
-              this.$message.success('修改污染源成功!')
-            })
-          }
+          // if (this.addmodifyflag === '1') {
+          //   addSource(reqData).then(res => {
+          //     this.searchClick()
+          //     this.visible = false
+          //     this.$refs.form2.clearValidate()
+          //     this.$message.success('新增污染源成功!')
+          //   })
+          // } else if (this.addmodifyflag === '2') {
+          //   reqData.pollution_id = this.rowData.pollution_id
+          //   reqData.version = this.rowData.version
+          //   console.log(reqData)
+          //   updateSource(this.rowData.pollution_id, reqData).then(res => {
+          //     this.searchClick()
+          //     this.visible = false
+          //     this.$refs.form2.clearValidate()
+          //     this.$message.success('修改污染源成功!')
+          //   })
+          // }
         }
       })
     },
@@ -753,3 +753,4 @@ export default {
   margin-left: 20px;
 }
 </style>
+

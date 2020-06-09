@@ -150,6 +150,40 @@ export const asyncRouterMap = [
                 meta: { title: '视频站', keepAlive: true, permission: ['dashboard'] }
               }
             ]
+          },
+          {
+            path: '/info-manage/shoreline-info',
+            component: PageView,
+            meta: {
+              title: '水域岸线利用',
+              permission: ['dashboard']
+            },
+            children: [
+              {
+                path: '/info-manage/monitor-info/shorelinemanage',
+                name: 'ShorelineManage',
+                component: () => import('@/views/watershorelines/shorelineinfomanage/shorelineinfomanage'),
+                meta: { title: '岸线信息管理', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/monitor-info/shorelineprojmanage',
+                name: 'ShorelineProjManage',
+                component: () => import('@/views/watershorelines/shorelineprojinfomanage/shorelineprojinfomanage'),
+                meta: { title: '岸线工程信息管理', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/monitor-info/shorelineland',
+                name: 'ShorelineLand',
+                component: () => import('@/views/watershorelines/shorelinelandconde/shorelinelandconde'),
+                meta: { title: '岸线用地状况', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/monitor-info/shorelineplan',
+                name: 'ShorelinePlan',
+                component: () => import('@/views/watershorelines/shorelineplan/shorelineplan'),
+                meta: { title: '岸线规划信息', keepAlive: true, permission: ['dashboard'] }
+              }
+            ]
           }
         ]
       },
