@@ -207,12 +207,12 @@ const TableColumns = {
   14: {
     rowKey: 'video_monitor_id',
     columns: [{
-      title: '名称',
-      dataIndex: 'video_monitor_name',
+      title: '站点名称',
+      dataIndex: 'station_name',
       width: '50%'
     }, {
       title: '地址',
-      dataIndex: 'address',
+      dataIndex: 'location',
       width: '50%'
     }]
   },
@@ -408,8 +408,11 @@ export function GetDataByLayer (layerId) {
     }
     case 14: {
       return loadVideoMonitor({
+        page: 1,
         page_size: 0,
-        province_id: 32
+        station_type: 5,
+        regionalism_id: '',
+        water_type: null
       })
     }
     case 21: {

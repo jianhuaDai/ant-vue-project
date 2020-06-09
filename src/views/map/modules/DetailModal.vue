@@ -9,7 +9,7 @@
       :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
-      <component :is="detailModal" :dataId="dataId"></component>
+      <component :is="detailModal" :id="dataId"></component>
     </a-modal>
   </div>
 </template>

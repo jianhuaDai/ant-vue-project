@@ -15,7 +15,7 @@ const api = {
   sewage: '/sewage/page_query',
   riverLine: '/river_protect/rivers_lines',
   blackWater: '/info_serve/get_water_monitors',
-  videoMonitor: '/monitor/video_monitor'
+  videoMonitor: '/monitoring_station/page_query'
 }
 
 export function loadWFS (parameter) {
@@ -152,7 +152,7 @@ export function loadComplaint (parameter) {
 export function loadVideoMonitor (parameter) {
   return axios({
     url: api.videoMonitor,
-    method: 'get',
+    method: 'post',
     params: parameter
   })
 }
