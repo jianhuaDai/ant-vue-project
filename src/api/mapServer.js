@@ -153,6 +153,6 @@ export function loadVideoMonitor (parameter) {
   return axios({
     url: api.videoMonitor,
     method: 'post',
-    params: parameter
+    data: parameter
   })
 }

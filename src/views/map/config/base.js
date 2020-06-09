@@ -408,7 +408,6 @@ export function GetDataByLayer (layerId) {
     }
     case 14: {
       return loadVideoMonitor({
-        page: 1,
         page_size: 0,
         station_type: 5,
         regionalism_id: '',
