@@ -209,31 +209,10 @@
                 label="河湖类型"
                 prop="hehutypevalue"
                 ref="hehutypevalue">
-                <!-- <a-select
-                  placeholder="全部"
+                <dictionary-select
                   v-model="form2.hehutypevalue"
-                  @change="selectChangeadd">
-                  <a-select-option
-                    v-for="item in typevalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select> -->
-                <a-select
-                  placeholder="全部"
-                  v-model="hehutypevalue">
-                  <a-select-option value="1">河流</a-select-option>
-                  <a-select-option value="2">河段</a-select-option>
-                  <a-select-option value="3">湖泊</a-select-option>
-                  <a-select-option value="4">湖泊片</a-select-option>
-                  <a-select-option value="5">水库</a-select-option>
-                  <a-select-option value="6">水库片</a-select-option>
-                </a-select>
-                <!-- <dictionary-select
-                  v-model="hehutype"
                   :dictionary-type="DictionaryEnum.WATER_TYPE">
-                </dictionary-select> -->
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -249,25 +228,10 @@
                 label="河湖库层级"
                 prop="hehucengji"
                 ref="hehucengji">
-                <!-- <a-select
-                  placeholder="全部"
-                  v-model="form2.hehucengji">
-                  <a-select-option
-                    v-for="item in cengjivalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select> -->
-                <!-- <dictionary-select
+                <dictionary-select
                   v-model="form2.hehucengji"
                   :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
-                </dictionary-select> -->
-                <a-select v-model="form2.hehucengji">
-                  <a-select-option value="0">省级</a-select-option>
-                  <a-select-option value="1">市级</a-select-option>
-                  <a-select-option value="2">区县级</a-select-option>
-                </a-select>
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -275,16 +239,6 @@
                 label="河湖长"
                 prop="hehuzhang"
                 ref="hehuzhang">
-                <!-- <a-select
-                  placeholder="全部"
-                  v-model="form2.hehuzhang">
-                  <a-select-option
-                    v-for="item in hehuzhangvalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select> -->
                 <!-- <dictionary-select
                   v-model="form2.hehuzhang"
                   :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
@@ -328,49 +282,30 @@
                   <a-select
                     placeholder="全部"
                     v-model="form2.heliujibie">
-                    <!-- <a-select-option
-                      v-for="item in heliujibievalue"
-                      :key="item.key"
-                      :value="item.key">
-                      {{ item.name }}
-                    </a-select-option> -->
-                    <a-select-option value="0">干河流</a-select-option>
-                    <a-select-option value="1">一级</a-select-option>
-                    <a-select-option value="2">二级</a-select-option>
-                    <a-select-option value="3">三级</a-select-option>
-                    <a-select-option value="4">四级</a-select-option>
-                    <a-select-option value="5">五级</a-select-option>
-                    <a-select-option value="6">六级</a-select-option>
-                    <a-select-option value="7">七级</a-select-option>
-                    <a-select-option value="8">八级</a-select-option>
-                    <a-select-option value="9">未定级别</a-select-option>
+                    <a-select-option value="1">干河流</a-select-option>
+                    <a-select-option value="2">一级</a-select-option>
+                    <a-select-option value="3">二级</a-select-option>
+                    <a-select-option value="4">三级</a-select-option>
+                    <a-select-option value="5">四级</a-select-option>
+                    <a-select-option value="6">五级</a-select-option>
+                    <a-select-option value="7">六级</a-select-option>
+                    <a-select-option value="8">七级</a-select-option>
+                    <a-select-option value="9">八级</a-select-option>
+                    <a-select-option value="10">未定级别</a-select-option>
                   </a-select>
+                  <!-- <dictionary-select
+                    v-model="form2.heliujibie"
+                    :dictionary-type="DictionaryEnum.DIC_WATER_LEVEL">
+                  </dictionary-select> -->
                 </a-form-item>
               </a-col>
-              <!-- <a-col :span="12">
-                <a-form-item
-                  label="起点:"
-                  prop="start"
-                  ref="start">
-                  <a-input v-model="form2.start"></a-input>
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
-                <a-form-item
-                  label="终点:"
-                  prop="end"
-                  ref="end">
-                  <a-input v-model="form2.end"></a-input>
-                </a-form-item>
-              </a-col> -->
               <a-col :span="12">
                 <a-form-item
                   label="起点经纬度:"
                   prop="startjwd"
                   ref="startjwd">
                   <a-input
-                    v-model="form2.startjwd"
-                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
+                    v-model="form2.startjwd">
                     <a-icon
                       @click="showMap1"
                       slot="addonAfter"
@@ -385,8 +320,7 @@
                   prop="endjwd"
                   ref="endjwd">
                   <a-input
-                    v-model="form2.endjwd"
-                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
+                    v-model="form2.endjwd">
                     <a-icon
                       @click="showMap2"
                       slot="addonAfter"
@@ -415,12 +349,6 @@
                   <a-select
                     placeholder="全部"
                     v-model="form2.heduanjibie">
-                    <!-- <a-select-option
-                      v-for="item in heduanjibievalue"
-                      :key="item.key"
-                      :value="item.key">
-                      {{ item.name }}
-                    </a-select-option> -->
                     <a-select-option value="11">国家级</a-select-option>
                     <a-select-option value="12">自治区级</a-select-option>
                     <a-select-option value="13">市级</a-select-option>
@@ -446,30 +374,13 @@
                   <a-input v-model="form2.weizhi"></a-input>
                 </a-form-item>
               </a-col>
-              <!-- <a-col :span="12">
-                <a-form-item
-                  label="起点:"
-                  prop="start2"
-                  ref="start2">
-                  <a-input v-model="form2.start2"></a-input>
-                </a-form-item>
-              </a-col>
-              <a-col :span="12">
-                <a-form-item
-                  label="终点:"
-                  prop="end2"
-                  ref="end2">
-                  <a-input v-model="form2.end2"></a-input>
-                </a-form-item>
-              </a-col> -->
               <a-col :span="12">
                 <a-form-item
                   label="起点经纬度:"
                   prop=""
                   ref="">
                   <a-input
-                    v-model="form2.startjwd2"
-                    placeholder="数据格式：xxx.xxxx,xx.xxxx">
+                    v-model="form2.startjwd2">
                     <a-icon
                       @click="showMap3"
                       slot="addonAfter"
@@ -484,8 +395,7 @@
                   prop="endjwd2"
                   ref="endjwd2">
                   <a-input
-                    v-model="form2.endjwd2"
-                    placeholder="xxx.xxxx,xx.xxxx">
+                    v-model="form2.endjwd2">
                     <a-icon
                       @click="showMap4"
                       slot="addonAfter"
@@ -519,18 +429,16 @@
                   label="咸淡水属性:"
                   prop="xdsshuxing"
                   ref="xdsshuxing">
-                  <a-select
+                  <dictionary-select
+                    v-model="form2.xdsshuxing"
+                    :dictionary-type="DictionaryEnum.DIC_IS_SALT">
+                  </dictionary-select>
+                  <!-- <a-select
                     placeholder="全部"
                     v-model="form2.xdsshuxing">
                     <a-select-option value="-1">咸水</a-select-option>
                     <a-select-option value="1">淡水</a-select-option>
-                    <!-- <a-select-option
-                      v-for="item in xdsshuxingvalue"
-                      :key="item.key"
-                      :value="item.key">
-                      {{ item.name }}
-                    </a-select-option> -->
-                  </a-select>
+                  </a-select> -->
                 </a-form-item>
               </a-col>
             </div>
@@ -570,7 +478,6 @@
                   label="管理单位名称:"
                   prop="gldwname"
                   ref="gldwname">
-                  <!-- <a-input v-model.number="form2.gldwname"></a-input> -->
                   <a-select v-model="form2.gldwname">
                     <a-select-option
                       v-for="item in gldwnamevalue"
@@ -598,13 +505,13 @@
                   label="工程等级:"
                   prop="gcdj"
                   ref="gcdj">
-                  <a-select v-model="form2.gcdj">
-                    <a-select-option value="1">I类</a-select-option>
-                    <a-select-option value="2">II类</a-select-option>
-                    <a-select-option value="3">III类</a-select-option>
-                    <a-select-option value="4">IV类</a-select-option>
-                    <a-select-option value="5">V类</a-select-option>
-                  </a-select>
+                  <dictionary-select
+                    v-model="form2.gcdj"
+                    :insert-option-all="false"
+                    :select-first="false"
+                    :dictionary-type="DictionaryEnum.PROJECT_LEVEL"
+                  >
+                  </dictionary-select>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
@@ -621,21 +528,6 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <!-- <a-col :span="12">
-                <a-form-item
-                  label=""
-                  prop="sklx2"
-                  ref="sklx2">
-                  <a-select>
-                    <a-select-option
-                      v-for="item in sklxvalue2"
-                      :key="item.key"
-                      :value="item.key">
-                      {{ item.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col> -->
             </div>
             <!-- 水库信息-----结束 -->
             <!-- 水库片信息---开始 -->
@@ -716,9 +608,6 @@ import mapboxgl from 'mapbox-gl'
 import { treeData } from './data.js'
 import AreaTree from '@com/Hczy/AreaTree.vue'
 import { getRiverlakeList, delRiverlake, addRiverlake, updateRiverlake, getGldwdata } from '@/api/riverlakemanage'
-// import { Scene, Zoom, Scale, PointLayer, PolygonLayer } from '@antv/l7'
-// import { Scene, Scale, PointLayer, LineLayer, PolygonLayer, MarkerLayer, Marker } from '@antv/l7'
-// import { Mapbox } from '@antv/l7-maps'
 export default {
   components: {
     STable,
@@ -726,43 +615,51 @@ export default {
   },
   watch: {
     // 3--河流  4--河段  5--湖泊  6-- 湖泊片  7--水库  8--水库片
-    hehutypevalue (value2, oldval) {
-      if (value2 === '1') {
+    'form2.hehutypevalue' (value2, oldval) {
+      console.log(value2)
+      console.log(this.form2.heliujibie)
+      if (value2 === 1) {
+        this.hehutypevalue = '1'
         this.heliuShow = true
         this.heduanShow = false
         this.hupoShow = false
         this.hupopianShow = false
         this.shuikuShow = false
         this.shuikupianShow = false
-      } else if (value2 === '2') {
+      } else if (value2 === 2) {
+        this.hehutypevalue = '2'
         this.heliuShow = false
         this.heduanShow = true
         this.hupoShow = false
         this.hupopianShow = false
         this.shuikuShow = false
         this.shuikupianShow = false
-      } else if (value2 === '3') {
+      } else if (value2 === 3) {
+        this.hehutypevalue = '3'
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = true
         this.hupopianShow = false
         this.shuikuShow = false
         this.shuikupianShow = false
-      } else if (value2 === '4') {
+      } else if (value2 === 4) {
+        this.hehutypevalue = '4'
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
         this.hupopianShow = true
         this.shuikuShow = false
         this.shuikupianShow = false
-      } else if (value2 === '5') {
+      } else if (value2 === 5) {
+        this.hehutypevalue = '5'
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
         this.hupopianShow = false
         this.shuikuShow = true
         this.shuikupianShow = false
-      } else if (value2 === '6') {
+      } else if (value2 === 6) {
+        this.hehutypevalue = '6'
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
@@ -834,7 +731,6 @@ export default {
       center: [118.806266, 32.059868],
       zoom: 12,
       pitch: 0,
-      hehutypevalue: '1',
       zkr: '',
       gcdj: '',
       sklx: '',
@@ -842,6 +738,7 @@ export default {
       bearing: 0,
       container: 'add-map',
       antialias: true,
+      hehutypevalue: '1',
       attributionControl: false, // 隐藏地图所属信息
       doubleClickZoom: false,
       // form: this.$form.createForm(this),
@@ -853,7 +750,7 @@ export default {
       },
       form2: {
         name: '',
-        hehutypevalue: '1',
+        hehutypevalue: 1,
         code: '',
         hehucengji: '',
         hehuzhang: '',
@@ -861,6 +758,7 @@ export default {
         length: '',
         startjwd: '',
         endjwd: '',
+        heliujibie: '',
         weizhishuikupian: '',
         weizhishuiku: '',
         gldwname: '',
@@ -903,7 +801,7 @@ export default {
         },
         {
           title: '河湖编号',
-          dataIndex: 'chief_id'
+          dataIndex: 'water_num'
         },
         {
           title: '河长名称',
@@ -966,106 +864,6 @@ export default {
       hehuzhangvalue: [],
       sklxvalue: [],
       sklxvalue2: [],
-      cengjivalue: [
-        {
-          value: '0',
-          name: '省级'
-        },
-        {
-          value: '1',
-          name: '市级'
-        },
-        {
-          value: '2',
-          name: '县级'
-        },
-        {
-          value: '3',
-          name: '乡级'
-        },
-        {
-          value: '4',
-          name: '村级'
-        }
-      ],
-      heliujibievalue: [
-        {
-          value: '0',
-          name: '干河流'
-        },
-        {
-          value: '1',
-          name: '一级'
-        },
-        {
-          value: '2',
-          name: '二级'
-        },
-        {
-          value: '3',
-          name: '三级'
-        },
-        {
-          value: '4',
-          name: '三级'
-        },
-        {
-          value: '5',
-          name: '五级'
-        },
-        {
-          value: '6',
-          name: '六级'
-        },
-        {
-          value: '7',
-          name: '七级'
-        },
-        {
-          value: '8',
-          name: '八级'
-        },
-        {
-          value: '9',
-          name: '未定级别'
-        }
-      ],
-      heduanjibievalue: [
-        {
-          value: '0',
-          name: '国家级'
-        },
-        {
-          value: '1',
-          name: '自治区级'
-        },
-        {
-          value: '2',
-          name: '市级'
-        },
-        {
-          value: '3',
-          name: '县级'
-        },
-        {
-          value: '4',
-          name: '乡镇级'
-        },
-        {
-          value: '5',
-          name: '村级'
-        }
-      ],
-      xdsshuxingvalue: [
-        {
-          value: '1',
-          name: '咸水'
-        },
-        {
-          value: '2',
-          name: '淡水'
-        }
-      ],
       jinweiduFlag: '1',
       jinweiduFlag2: '1',
       heliujindu1: '',
@@ -1130,15 +928,12 @@ export default {
     },
     // 左侧树形触发
     onSelecttree () {
-
     },
     // 河湖类型--查询
     hehutypeSelectClick (value) {
       console.log(value)
     },
-
     heliuSelect () {
-
     },
     // 新增编辑按钮触发
     gcAddClick (data = {}) {
@@ -1164,6 +959,23 @@ export default {
         this.form2.heliujibie = ''
         this.form2.startjwd = ''
         this.form2.endjwd = ''
+        this.form2.length2 = ''
+        this.form2.heduanjibie = ''
+        this.form2.xzqh = ''
+        this.form2.weizhi = ''
+        this.form2.startjwd2 = ''
+        this.form2.endjwd2 = ''
+        this.form2.weizhihupo = ''
+        this.form2.mianjihupo = ''
+        this.form2.xdsshuxing = ''
+        this.form2.weizhihupopian = ''
+        this.form2.mianjihupopian = ''
+        this.form2.weizhishuiku = ''
+        this.form2.gldwname = ''
+        this.form2.zkr = ''
+        this.form2.gcdj = ''
+        this.form2.sklx = ''
+        this.form2.weizhishuikupian = ''
       }
       setTimeout(() => {
         this.$refs.form2.clearValidate()
@@ -1228,11 +1040,11 @@ export default {
     setheliu (data) {
       this.form2.name = data.name
       // this.form2.hehutypevalue = data.water_type
-      this.hehutypevalue = '1'
-      this.form2.code = data.water_id
+      this.hehutypevalue = 1
+      this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade.toString()
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.length = data.length
       this.form2.heliujibie = data.water_level.toString()
       this.form2.startjwd = data.origin[0]
@@ -1244,13 +1056,13 @@ export default {
     setheduan (data) {
       this.form2.name = data.name
       // this.form2.hehutypevalue = '2'
-      this.hehutypevalue = '2'
-      this.form2.code = data.water_id
-      this.form2.hehucengji = data.water_grade.toString()
+      this.hehutypevalue = 2
+      this.form2.code = data.water_num
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.length2 = data.length
-      this.form2.heduanjibie = data.water_level.toString()
+      this.form2.heduanjibie = data.water_level
       this.form2.xzqh = data.regionalism_id
       this.form2.weizhi = data.location
       this.form2.startjwd2 = data.origin[0]
@@ -1264,37 +1076,37 @@ export default {
     // 设置湖泊表单值
     sethupo (data) {
       this.form2.name = data.name
-      this.hehutypevalue = '3'
-      this.form2.code = data.water_id
-      this.form2.hehucengji = data.water_grade.toString()
+      this.hehutypevalue = 3
+      this.form2.code = data.water_num
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.weizhihupo = data.location
       this.form2.mianjihupo = data.area
-      this.form2.xdsshuxing = data.is_salt.toString()
+      this.form2.xdsshuxing = data.is_salt
       // reqData.location = this.form2.weizhihupo
-      //       reqData.area = parseInt(this.form2.mianjihupo)
-      //       reqData.is_salt = parseInt(this.form2.xdsshuxing)
+      // reqData.area = parseInt(this.form2.mianjihupo)
+      // reqData.is_salt = parseInt(this.form2.xdsshuxing)
     },
     // 设置湖泊片表单值
     sethupopian (data) {
       this.form2.name = data.name
-      this.hehutypevalue = '4'
-      this.form2.code = data.water_id
-      this.form2.hehucengji = data.water_grade.toString()
+      this.hehutypevalue = 4
+      this.form2.code = data.water_num
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.weizhihupopian = data.location
       this.form2.mianjihupopian = data.area
     },
     // 设置水库表单值
     setshuiku (data) {
       this.form2.name = data.name
-      this.hehutypevalue = '5'
-      this.form2.code = data.water_id
-      this.form2.hehucengji = data.water_grade.toString()
+      this.hehutypevalue = 5
+      this.form2.code = data.water_num
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.weizhishuiku = data.location
       this.form2.gldwname = data.dept_id
       this.form2.zkr = data.capacity
@@ -1307,63 +1119,16 @@ export default {
     // 设置水库片表单值
     setshuikupian (data) {
       this.form2.name = data.name
-      this.hehutypevalue = '6'
-      this.form2.code = data.water_id
-      this.form2.hehucengji = data.water_grade.toString()
+      this.hehutypevalue = 6
+      this.form2.code = data.water_num
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
-      this.form2.sjhehuku = data.pid
+      this.form2.sjhehuku = data.p_name
       this.form2.weizhishuikupian = data.location
     },
     // 河湖类型选择触发
     selectChangeadd () { },
     // 河流起点经纬度获取
-    getMapPoint1 () {
-      this.jinweiduFlag = '1'
-      this.handleCancelMap = true
-      this.sureBtnShow = true
-      this.heliujindu1 = ''
-      this.heliuweidu1 = ''
-      setTimeout(() => {
-        this.initMap()
-        // this.initLanguage()
-      }, 500)
-    },
-    // 河流终点经纬度获取
-    getMapPoint2 () {
-      this.jinweiduFlag = '2'
-      this.handleCancelMap = true
-      this.sureBtnShow = true
-      this.heliujindu2 = ''
-      this.heliuweidu2 = ''
-      setTimeout(() => {
-        this.initMap()
-        // this.initLanguage()
-      }, 500)
-    },
-    // 河段起点经纬度获取
-    getMapPoint3 () {
-      this.jinweiduFlag2 = '1'
-      this.handleCancelMap = true
-      this.sureBtnShow = true
-      this.heduanjindu1 = ''
-      this.heduanweidu1 = ''
-      setTimeout(() => {
-        this.initMap()
-        // this.initLanguage()
-      }, 500)
-    },
-    // 河段终点经纬度获取
-    getMapPoint4 () {
-      this.jinweiduFlag2 = '2'
-      this.handleCancelMap = true
-      this.sureBtnShow = true
-      this.heduanjindu2 = ''
-      this.heduanweidu2 = ''
-      setTimeout(() => {
-        this.initMap()
-        // this.initLanguage()
-      }, 500)
-    },
     showMap1 () {
       this.jinweiduFlag = '1'
       this.handleCancelMap = true
@@ -1372,9 +1137,9 @@ export default {
       this.heliuweidu1 = ''
       setTimeout(() => {
         this.initMap()
-        // this.initLanguage()
       }, 500)
     },
+    // 河流终点经纬度获取
     showMap2 () {
       this.jinweiduFlag = '2'
       this.handleCancelMap = true
@@ -1383,9 +1148,9 @@ export default {
       this.heliuweidu2 = ''
       setTimeout(() => {
         this.initMap()
-        // this.initLanguage()
       }, 500)
     },
+    // 河段起点经纬度获取
     showMap3 () {
       this.jinweiduFlag2 = '1'
       this.handleCancelMap = true
@@ -1394,9 +1159,9 @@ export default {
       this.heduanweidu1 = ''
       setTimeout(() => {
         this.initMap()
-        // this.initLanguage()
       }, 500)
     },
+    // 河段终点经纬度获取
     showMap4 () {
       this.jinweiduFlag2 = '2'
       this.handleCancelMap = true
@@ -1410,6 +1175,8 @@ export default {
     },
     AddDraw () {
       console.log(this.hehutypevalue)
+      console.log(typeof (this.hehutypevalue))
+      // console.log(this.jinweiduFlag)
       this.disabled = false
       if (this.hehutypevalue === '1' && this.jinweiduFlag === '1') {
         if (this.heliujindu1 === '' || this.heliuweidu1 === '') {
@@ -1417,7 +1184,6 @@ export default {
         } else {
           var a1 = this.heliujindu1
           var b1 = this.heliuweidu1
-          // this.form2.setFieldsValue({ startjwd: a1 + ',' + b1 })
           this.form2.startjwd = a1 + ',' + b1
           this.handleCancelMap = false
         }
@@ -1427,7 +1193,6 @@ export default {
         } else {
           var a2 = this.heliujindu2
           var b2 = this.heliuweidu2
-          // this.form2.setFieldsValue({ endjwd: a2 + ',' + b2 })
           this.form2.endjwd = a2 + ',' + b2
           this.handleCancelMap = false
         }
@@ -1437,7 +1202,6 @@ export default {
         } else {
           var a3 = this.heduanjindu1
           var b3 = this.heduanweidu1
-          // this.form2.setFieldsValue({ startjwd2: a3 + ',' + b3 })
           this.form2.startjwd2 = a3 + ',' + b3
           this.handleCancelMap = false
         }
@@ -1515,14 +1279,11 @@ export default {
     // 保存按钮触发
     savePopup () {
       this.$refs.form2.validate(err => {
-        // console.log(err)
-        // console.log(parseInt(this.hehutypevalue))
         if (err) {
-          // console.log(this.hehutypevalue)
           var reqData = {
             name: this.form2.name,
             water_type: parseInt(this.hehutypevalue),
-            water_id: this.form2.code,
+            water_num: this.form2.code,
             water_grade: parseInt(this.form2.hehucengji),
             // chief_id: this.form2.hehuzhang.toString(),
             chief_id: this.form2.hehuzhang,
@@ -1535,10 +1296,6 @@ export default {
             reqData.water_level = parseInt(this.form2.heliujibie)
             reqData.origin = [this.form2.startjwd]
             reqData.destination = [this.form2.endjwd]
-            // reqData.start = this.form2.start
-            // reqData.end = this.form2.end
-            // reqData.startjwd = this.form2.startjwd
-            // reqData.endjwd = this.form2.endjwd
           } else if (this.hehutypevalue === '2') {
             reqData.length = parseInt(this.form2.length2)
             reqData.water_level = parseInt(this.form2.heduanjibie)
@@ -1546,10 +1303,6 @@ export default {
             reqData.location = this.form2.weizhi
             reqData.origin = [this.form2.startjwd2]
             reqData.destination = [this.form2.endjwd2]
-            // reqData.start2 = this.form2.start2
-            // reqData.end2 = this.form2.end2
-            // reqData.startjwd2 = this.form2.startjwd2
-            // reqData.endjwd2 = this.form2.endjwd2
           } else if (this.hehutypevalue === '3') {
             reqData.location = this.form2.weizhihupo
             reqData.area = parseInt(this.form2.mianjihupo)
@@ -1572,11 +1325,11 @@ export default {
               console.log(res)
               this.searchClick()
               this.visible = false
-              // this.form2.resetFields()
               this.$refs.form2.clearValidate()
               this.$message.success('新增河湖库成功!')
             })
           } else if (this.addmodifyFlag === '2') {
+            reqData.water_id = this.rowData.water_id
             reqData.version = this.rowData.version
             updateRiverlake(this.rowData.water_id, reqData).then(res => {
               console.log(res)

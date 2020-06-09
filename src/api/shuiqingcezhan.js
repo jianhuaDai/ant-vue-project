@@ -5,9 +5,18 @@ const api = {
     addshuiqincezhan: '/monitoring_station',
     updateshuiqincezhan: '/monitoring_station/',
     delshuiqincezhan: '/monitoring_station/delete/',
+    getriver: '/water_infos/page_query',
     getgldwdata: '/enterprise_book/'
 }
 
+// 查询水体名称
+export function getRiver (parameter) {
+  return axios({
+    url: api.getriver,
+    method: 'post',
+    data: parameter
+  })
+}
 // 查询水情测站列表
 export function getShuiqingcezhanList (parameter) {
   return axios({

@@ -21,7 +21,10 @@ export const DictionaryEnum = {
   EMPLOYEE_TITLE: 'employee_title', // 职位
   DIC_SEWAGE_TYPE: 'sewage_type', // 排口类型
   DIC_SEWAGE_IN_WAY: 'sewage_in_way', // 排水去向
-  DIC_SEWAGE_WAY: 'sewage_way' // 排放方式
+  DIC_SEWAGE_WAY: 'sewage_way', // 排放方式,
+  DIC_WATER_LEVEL: 'water_level', // 河湖级别
+  DIC_STATION_TYPE: 'station_type', // 测站类型
+  DIC_IS_SALT: 'is_salt' // 咸淡水属性
 }
 export function getDictionary (type, pid = 0) {
   return axios({

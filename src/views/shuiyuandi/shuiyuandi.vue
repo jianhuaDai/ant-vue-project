@@ -163,19 +163,20 @@
                 label="所属水体"
                 prop="suoshushuiti"
                 ref="suoshushuiti">
-                <a-select
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.suoshushuiti">
                   <a-select-option value="1">河流</a-select-option>
                   <a-select-option value="2">湖泊</a-select-option>
                   <a-select-option value="3">水库</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in suoshuhedaovalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.suoshushuiti"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.WATER_TYPE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -209,18 +210,19 @@
                 label="属性"
                 prop="type2"
                 ref="type2">
-                <a-select
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.type2">
                   <a-select-option value="1">市级</a-select-option>
                   <a-select-option value="2">区级</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in wuranyuantypevalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.type2"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -228,7 +230,7 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd" placeholder="数据格式：xxx.xxxx,xx.xxxx">
+                <a-input v-model="form2.jwd">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                 </a-input>
                 <!-- <mapInput
@@ -253,21 +255,13 @@
                 label="当年考核目标"
                 prop="dnkhmb"
                 ref="dnkhmb">
-                <a-select
-                  placeholder="全部"
-                  v-model="form2.dnkhmb">
-                  <a-select-option value="1">I类</a-select-option>
-                  <a-select-option value="2">II类</a-select-option>
-                  <a-select-option value="3">III类</a-select-option>
-                  <a-select-option value="4">IV类</a-select-option>
-                  <a-select-option value="5">V类</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in guanzhujibievalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                <dictionary-select
+                  v-model="form2.dnkhmb"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.WATER_TARGET"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -275,14 +269,13 @@
                 label="十三五考核目标"
                 prop="sswkhmb"
                 ref="sswkhmb">
-                <a-select
-                  v-model="form2.sswkhmb">
-                  <a-select-option value="1">I类</a-select-option>
-                  <a-select-option value="2">II类</a-select-option>
-                  <a-select-option value="3">III类</a-select-option>
-                  <a-select-option value="4">IV类</a-select-option>
-                  <a-select-option value="5">V类</a-select-option>
-                </a-select>
+                <dictionary-select
+                  v-model="form2.sswkhmb"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.WATER_TARGET"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -290,12 +283,19 @@
                 label="测站类型"
                 prop="czlx"
                 ref="czlx">
-                <a-select
+                <!-- <a-select
                   v-model="form2.czlx">
                   <a-select-option value="1">泵站</a-select-option>
                   <a-select-option value="2">闸站</a-select-option>
                   <a-select-option value="3">阀站</a-select-option>
-                </a-select>
+                </a-select> -->
+                <dictionary-select
+                  v-model="form2.czlx"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_STATION_TYPE"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -525,7 +525,7 @@ export default {
         },
         {
           title: '水源地编码',
-          dataIndex: 'source_id'
+          dataIndex: 'source_num'
         },
         {
           title: '点位名称',
@@ -579,7 +579,7 @@ export default {
     // 水源地删除
     handleDel (value) {
       console.log(value)
-      this.rowData = value.id
+      this.rowData = value.source_id
       this.visibledel = true
     },
     // 删除按钮触发
@@ -690,7 +690,7 @@ export default {
       // console.log(this.form2)
       // console.log(this.form2.image_url)
       this.rowData = this.form2
-      if (this.form2.id) {
+      if (this.form2.source_id) {
         this.addmodifyflag = '2'
         this.title = '修改水源地信息'
         this.setFormValue(this.form2)
@@ -707,18 +707,18 @@ export default {
       console.log(data)
       console.log(data.image_url)
       this.$set(this.form2, 'name', data.name)
-      this.$set(this.form2, 'code', data.source_id)
+      this.$set(this.form2, 'code', data.source_num)
       this.$set(this.form2, 'pointname', data.point)
       this.$set(this.form2, 'weizhi', data.location)
-      this.$set(this.form2, 'suoshushuiti', data.source_type.toString())
+      this.$set(this.form2, 'suoshushuiti', data.source_type)
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'zxbz', data.standard)
-      this.$set(this.form2, 'type2', data.source_property.toString())
+      this.$set(this.form2, 'type2', data.source_property)
       this.$set(this.form2, 'jwd', data.lon_lat)
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
-      this.$set(this.form2, 'dnkhmb', data.current_target.toString())
-      this.$set(this.form2, 'sswkhmb', data.target.toString())
-      this.$set(this.form2, 'czlx', data.station_type.toString())
+      this.$set(this.form2, 'dnkhmb', data.current_target)
+      this.$set(this.form2, 'sswkhmb', data.target)
+      this.$set(this.form2, 'czlx', data.station_type)
       this.$set(this.form2, 'beizhu', data.note)
       // this.$set(this.form2, 'image_url', [])
       this.$set(this.form2, 'image_url', data.image_url)
@@ -743,7 +743,7 @@ export default {
         if (err) {
           var reqData = {
             name: this.form2.name,
-            source_id: this.form2.code === undefined ? '' : this.form2.code,
+            source_num: this.form2.code === undefined ? '' : this.form2.code,
             point: this.form2.pointname,
             location: this.form2.weizhi,
             source_type: parseInt(this.form2.suoshushuiti),
@@ -768,7 +768,7 @@ export default {
               this.$message.success('新增水源地成功!')
             })
           } else if (this.addmodifyflag === '2') {
-            reqData.id = this.rowData.id
+            reqData.source_id = this.rowData.source_id
             reqData.version = this.rowData.version
             console.log(reqData)
             updateShuiyuandi(this.rowData.id, reqData).then(res => {

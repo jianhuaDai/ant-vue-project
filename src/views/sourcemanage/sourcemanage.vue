@@ -159,7 +159,14 @@
                 label="污染源类型"
                 prop="wuranyuantype"
                 ref="wuranyuantype">
-                <a-select
+                <dictionary-select
+                  v-model="form2.wuranyuantype"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.POLLUTION_TYPE"
+                >
+                </dictionary-select>
+                <!-- <a-select
                   placeholder="全部"
                   v-model="form2.wuranyuantype">
                   <a-select-option
@@ -167,7 +174,7 @@
                     :key="item.key"
                     :value="item.key">
                     {{ item.name }}
-                  </a-select-option>
+                  </a-select-option> -->
                 </a-select>
               </a-form-model-item>
             </a-col>
@@ -176,7 +183,7 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd" placeholder="数据格式：xxx.xxxx,xx.xxxx">
+                <a-input v-model="form2.jwd">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
                   <!-- <a-icon type="environment" /> -->
                 </a-input>
@@ -190,19 +197,13 @@
                 label="关注类别"
                 prop="guanzhujibie"
                 ref="guanzhujibie">
-                <a-select
-                  placeholder="全部"
-                  v-model="form2.guanzhujibie">
-                  <a-select-option value="1">省级</a-select-option>
-                  <a-select-option value="2">市级</a-select-option>
-                  <a-select-option value="3">区县级</a-select-option>
-                  <!-- <a-select-option
-                    v-for="item in guanzhujibievalue"
-                    :key="item.key"
-                    :value="item.key">
-                    {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                <dictionary-select
+                  v-model="form2.guanzhujibie"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"
+                >
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -534,7 +535,7 @@ export default {
     // 水源地删除
     handleDel (value) {
       console.log(value)
-      this.rowData = value.id
+      this.rowData = value.pollution_id
       this.visibledel = true
     },
     handleOk () {
@@ -635,7 +636,7 @@ export default {
       this.form2 = { ...{}, ...data }
       console.log(this.form2)
       this.rowData = this.form2
-      if (this.form2.id) {
+      if (this.form2.pollution_id) {
         this.addmodifyflag = '2'
         this.title = '修改污染源信息'
         this.setFormValue(this.form2)
@@ -649,13 +650,13 @@ export default {
     },
     setFormValue (data) {
       this.$set(this.form2, 'name', data.pollution_name)
-      this.$set(this.form2, 'code', data.pollution_id)
+      this.$set(this.form2, 'code', data.pollution_num)
       this.$set(this.form2, 'suoshuhedao', data.water_id)
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'address', data.location)
-      this.$set(this.form2, 'wuranyuantype', data.pollution_type.toString())
+      this.$set(this.form2, 'wuranyuantype', data.pollution_type)
       this.$set(this.form2, 'jwd', data.lon_lat)
-      this.$set(this.form2, 'guanzhujibie', data.attention_level.toString())
+      this.$set(this.form2, 'guanzhujibie', data.attention_level)
       this.$set(this.form2, 'yxfanwei', data.range)
       this.$set(this.form2, 'zhiliqk', data.control)
       this.$set(this.form2, 'image_url', data.image_url)
@@ -679,7 +680,7 @@ export default {
         if (err) {
           var reqData = {
             pollution_name: this.form2.name,
-            pollution_id: this.form2.code === undefined ? '' : this.form2.code,
+            pollution_num: this.form2.code === undefined ? '' : this.form2.code,
             water_id: this.form2.suoshuhedao,
             regionalism_id: this.form2.suoshuquyu,
             location: this.form2.address === undefined ? '' : this.form2.address,
@@ -693,24 +694,24 @@ export default {
             image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
-          if (this.addmodifyflag === '1') {
-            addSource(reqData).then(res => {
-              this.searchClick()
-              this.visible = false
-              this.$refs.form2.clearValidate()
-              this.$message.success('新增污染源成功!')
-            })
-          } else if (this.addmodifyflag === '2') {
-            reqData.id = this.rowData.id
-            reqData.version = this.rowData.version
-            console.log(reqData)
-            updateSource(this.rowData.id, reqData).then(res => {
-              this.searchClick()
-              this.visible = false
-              this.$refs.form2.clearValidate()
-              this.$message.success('修改污染源成功!')
-            })
-          }
+          // if (this.addmodifyflag === '1') {
+          //   addSource(reqData).then(res => {
+          //     this.searchClick()
+          //     this.visible = false
+          //     this.$refs.form2.clearValidate()
+          //     this.$message.success('新增污染源成功!')
+          //   })
+          // } else if (this.addmodifyflag === '2') {
+          //   reqData.pollution_id = this.rowData.pollution_id
+          //   reqData.version = this.rowData.version
+          //   console.log(reqData)
+          //   updateSource(this.rowData.pollution_id, reqData).then(res => {
+          //     this.searchClick()
+          //     this.visible = false
+          //     this.$refs.form2.clearValidate()
+          //     this.$message.success('修改污染源成功!')
+          //   })
+          // }
         }
       })
     },
