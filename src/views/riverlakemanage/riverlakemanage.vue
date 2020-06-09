@@ -115,7 +115,8 @@
                     </div>
                   </template>
                   <span slot="status" slot-scope="text, record">
-                    <a-badge :status="text | statusBadge" :text="text | statusName" />
+                    <!-- <a-badge :status="text | statusBadge" :text="text | statusName" /> -->
+                    <a-switch :checked="text === 1" @click="changeStatus(record)"></a-switch>
                   </span>
                   <!-- <template
                     slot="status"
@@ -715,7 +716,7 @@ import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 import mapboxgl from 'mapbox-gl'
 import { treeData } from './data.js'
 import AreaTree from '@com/Hczy/AreaTree.vue'
-import { getRiverlakeList, delRiverlake, addRiverlake, updateRiverlake, getGldwdata } from '@/api/riverlakemanage'
+import { getRiverlakeList, delRiverlake, addRiverlake, updateRiverlake, getGldwdata, statusChange } from '@/api/riverlakemanage'
 // import { Scene, Zoom, Scale, PointLayer, PolygonLayer } from '@antv/l7'
 // import { Scene, Scale, PointLayer, LineLayer, PolygonLayer, MarkerLayer, Marker } from '@antv/l7'
 // import { Mapbox } from '@antv/l7-maps'
@@ -1080,8 +1081,7 @@ export default {
       queryParam: {
         regionalism_id: '',
         name: '',
-        water_type: 0,
-        status: 1
+        water_type: 0
       },
       // 加载表格数据
       loadData: parameter => {
@@ -1124,6 +1124,13 @@ export default {
     })
   },
   methods: {
+    changeStatus (record) {
+      const params = Object.assign({}, record, { id: record.water_id })
+      statusChange(params).then(() => {
+        this.$message.success('状态切换成功！')
+        this.$refs.table.refresh(true)
+      })
+    },
     getSelectNode (node) {
       console.log(node)
       this.regionalism_id = node[0]
