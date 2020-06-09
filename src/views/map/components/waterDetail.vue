@@ -9,7 +9,7 @@
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" tab="剖面图">
-          剖面图
+          <profileChart></profileChart>
         </a-tab-pane>
         <a-button slot="tabBarExtraContent">
           更多
@@ -31,7 +31,9 @@
 <script>
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/markPoint'
+import profileChart from './profileChart.vue'
 export default {
+  components: { profileChart },
   data () {
     return {
       chartSettings: {
