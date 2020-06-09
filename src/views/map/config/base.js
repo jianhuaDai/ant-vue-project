@@ -86,7 +86,10 @@ export function LayerBtns () {
     }, {
       id: 12,
       name: '水情',
-      icon: '/icons/water.svg'
+      icon: '/icons/water.svg',
+      bgColor: '#516c85',
+      detailModal: 'waterDetail',
+      detailTitle: '水情详情'
     }, {
       id: 13,
       name: '雨情',
@@ -390,17 +393,17 @@ export function GetDataByLayer (layerId) {
       })
     }
     case 12: {
+      // 水情列表
       return loadWaterOrRain({
         page_size: 0,
-        province_id: 32,
-        type: 1
+        station_type: 1
       })
     }
     case 13: {
+      // 雨情列表
       return loadWaterOrRain({
         page_size: 0,
-        province_id: 32,
-        type: 2
+        station_type: 2
       })
     }
     case 14: {

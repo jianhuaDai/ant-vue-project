@@ -70,6 +70,13 @@ export default {
       var _this = this
       var nav = new mapboxgl.NavigationControl()
       map.addControl(nav, 'top-left')
+      setTimeout(() => {
+              if (this.location) {
+        console.log([this.location], 'hhhhhhhhh')
+        marker.setLngLat(_this.location.split(',')).addTo(map)
+      }
+      }, 200)
+
       map.on('click', function (e) {
         console.log(e.lngLat.lng, 'e.lngLat.lng.')
         _this.lng = e.lngLat.lng.toFixed(6)

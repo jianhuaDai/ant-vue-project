@@ -55,7 +55,14 @@ export function deleteArchivesInfo (id) {
         method: 'post'
     })
 }
-
+// 档案启用禁用状态切换
+export function statusChange (params) {
+    return axios({
+        url: '/documents/status',
+        method: 'post',
+        data: params
+    })
+}
 // 分页查询档案信息
 /**
  * @param {

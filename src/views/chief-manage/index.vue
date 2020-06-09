@@ -44,8 +44,9 @@
             <span slot="serial" slot-scope="text, record, index">
               {{ index + 1 }}defaul
             </span>
-            <span slot="status" slot-scope="text">
-              <a-badge :status="text | statusBadge" :text="text | statusName" />
+            <span slot="status" slot-scope="text, record">
+              <!-- <a-badge :status="text | statusBadge" :text="text | statusName" /> -->
+              <a-switch :checked="text === 1" @click="changeStatus(record)"></a-switch>
             </span>
             <span slot="action" slot-scope="text, record, index">
               <template>
@@ -63,7 +64,7 @@
 
 <script>
   import { STable, Ellipsis } from '@/components'
-  import { getList, delChief } from '@/api/chief'
+  import { getList, delChief, statusChange } from '@/api/chief'
   import EditModule from './modules/EditModule'
   import AreaTree from '../../components/Hczy/AreaTree'
 
@@ -71,6 +72,13 @@
     name: 'ChiefManage',
     components: { STable, Ellipsis, EditModule, AreaTree },
     methods: {
+      changeStatus (record) {
+        const params = Object.assign({}, record, { id: record.employee_id })
+        statusChange(params).then(() => {
+          this.$message.success('状态切换成功！')
+          this.$refs.table.refresh(true)
+        })
+      },
       areaChange (areas) {
         this.queryParam.regionalism_id = areas[0]
         this.$refs.table.refresh(true)
@@ -91,6 +99,7 @@
           onOk () {
             delChief(record.employee_id).then(res => {
               _this.$message.success('删除成功')
+              _this.$refs.table.refresh(true)
             })
           },
           onCancel () {
@@ -105,7 +114,6 @@
         queryParam: {
           keyword: '',
           chief_level: null,
-          status: 1,
           regionalism_id: ''
         },
         columns: [

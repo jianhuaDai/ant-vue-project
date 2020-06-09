@@ -47,3 +47,11 @@ export function getGldwdata (parameter) {
       // params: parameter
   })
 }
+// 状态切换
+export function statusChange (params) {
+  return axios({
+    url: '/water_infos/status',
+    method: 'post',
+    data: params
+  })
+}

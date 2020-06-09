@@ -16,7 +16,8 @@
           </div>
         </template>
         <span slot="status" slot-scope="text, record">
-          <a-badge :status="text | statusBadge" :text="text | statusName" />
+          <!-- <a-badge :status="text | statusBadge" :text="text | statusName" /> -->
+          <a-switch :checked="text === 1" @click="changeStatus(record)"></a-switch>
         </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
@@ -32,7 +33,7 @@
 
 <script>
 import { STable, Ellipsis } from '@/components'
-import { getArchivesList, deleteArchivesInfo } from '@/api/infomanage' // 接口调用
+import { getArchivesList, deleteArchivesInfo, statusChange } from '@/api/infomanage' // 接口调用
 import { treeData } from '../data.js'
 import AddModule from '../modules/AddModule'
 const statusMap = {
@@ -114,8 +115,12 @@ export default {
     }
   },
   methods: {
-    goTo (record) {
-      this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
+    changeStatus (record) {
+      const params = Object.assign({}, record, { id: record.document_id })
+      statusChange(params).then(() => {
+        this.$message.success('状态切换成功！')
+        this.$refs.table.refresh(true)
+      })
     },
     handleEditOrNew (record = {}) {
       this.$refs.taskModule.showModal(record)

@@ -47,3 +47,11 @@ export function getRiverData (parameter) {
     data: parameter
   })
 }
+// 河湖长管理状态切换
+export function statusChange (params) {
+  return axios({
+    url: '/employees/status',
+    method: 'post',
+    data: params
+  })
+}
