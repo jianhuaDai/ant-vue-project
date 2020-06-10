@@ -149,10 +149,25 @@ export function loadComplaint (parameter) {
     params: parameter
   })
 }
+// 视频站点数据
 export function loadVideoMonitor (parameter) {
   return axios({
     url: api.videoMonitor,
     method: 'post',
     data: parameter
+  })
+}
+// 水情测站数据查询
+export function waterMonitors (id) {
+  return axios({
+    url: `/water_monitors/${id}`,
+    method: 'get'
+  })
+}
+// 雨情测站数据查询
+export function rainMonitors (id) {
+  return axios({
+    url: `/rain_monitors/${id}`,
+    method: 'get'
   })
 }

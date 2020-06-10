@@ -230,7 +230,14 @@
           case 12: {
             res.data.list.forEach((v) => {
               this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
-                layerItem, v.id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
+                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
+            })
+            break
+          }
+          case 13: {
+            res.data.list.forEach((v) => {
+              this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
+                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
             })
             break
           }

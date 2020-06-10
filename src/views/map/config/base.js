@@ -93,7 +93,10 @@ export function LayerBtns () {
     }, {
       id: 13,
       name: '雨情',
-      icon: '/icons/rain.svg'
+      icon: '/icons/rain.svg',
+        bgColor: '#516c85',
+        detailModal: 'rainDetail',
+      detailTitle: '雨情详情'
     }, {
       id: 14,
       name: '视频监控',
