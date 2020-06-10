@@ -40,6 +40,17 @@
           <div class="info-area" v-show="layerManager.activeLayerItem.id!==0" style="margin: 10px 0">
             <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
             <a-input-search placeholder="请输入搜索内容" style="width: 240px;margin-bottom: 24px" @search="()=>{}"/>
+            <a-range-picker
+              v-if="showRainTimeRange"
+              style="width: 300px;margin-bottom: 10px;"
+              :show-time="{
+                hideDisabledOptions: true
+              }"
+              valueFormat="YYYY-MM-DD HH:mm:ss"
+              format="YYYY-MM-DD HH:mm:ss"
+              v-model="rainTimeRange"
+              @ok="rainTimeRangeChange"
+            />
             <a-table
               v-show="tableList.columns.length>0"
               :rowKey="tableList.rowKey"
@@ -82,13 +93,14 @@
     GetTableRowKey, TableColumnsByLayer, GetLayerItem
   } from './config/base'
   import DetailModal from './modules/DetailModal'
-
+  import moment from 'moment'
   let Map = null
   export default {
     name: 'OneMap',
     data () {
       return {
-        showWaterIcons: false,
+        rainTimeRange: ['2020-06-10 00:00:00', '2020-06-10 18:18:14'],
+        showRainTimeRange: false,
         mapOptions: {
           pitch: 30,
           zoom: 7,
@@ -122,6 +134,10 @@
     },
     components: { DetailModal, MapboxView, MaskPageView },
     methods: {
+      moment,
+      rainTimeRangeChange () {
+        console.log(this.rainTimeRange)
+      },
       initMap () {
         this.nav(1)
         fetch('/data/js.geojson').then(res => res.json()).then(data => {
@@ -218,7 +234,7 @@
       },
       // 渲染Layer
       renderLayer (layerItem, res) {
-        this.showWaterIcons = layerItem.id === 12
+        this.showRainTimeRange = layerItem.id === 13
         switch (layerItem.id) {
           case 11: {
             res.data.list.forEach((v) => {

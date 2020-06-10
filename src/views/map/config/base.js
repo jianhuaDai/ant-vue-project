@@ -17,6 +17,7 @@ import IconChiefSelected from '@assets/map-icons/chief-selected.svg?inline'
 import {
   loadWFS,
   loadWaterOrRain,
+  loadRain,
   loadPollution,
   loadRiverAndLake,
   loadGetWater,
@@ -94,8 +95,8 @@ export function LayerBtns () {
       id: 13,
       name: '雨情',
       icon: '/icons/rain.svg',
-        bgColor: '#516c85',
-        detailModal: 'rainDetail',
+      bgColor: '#516c85',
+      detailModal: 'rainDetail',
       detailTitle: '雨情详情'
     }, {
       id: 14,
@@ -404,9 +405,11 @@ export function GetDataByLayer (layerId) {
     }
     case 13: {
       // 雨情列表
-      return loadWaterOrRain({
-        page_size: 0,
-        station_type: 2
+      return loadRain({
+        'end_time': '2020-06-10 00:00:00',
+        'page_size': 0,
+        'start_time': '2020-06-10 18:00:00',
+        'station_name': ''
       })
     }
     case 14: {

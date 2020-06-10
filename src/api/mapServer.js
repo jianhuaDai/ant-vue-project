@@ -56,7 +56,14 @@ export function loadWaterOrRain (parameter) {
     data: parameter
   })
 }
-
+// 雨情表格数据
+export function loadRain (params) {
+  return axios({
+    url: '/rain_monitors/list',
+    method: 'post',
+    data: params
+  })
+}
 export function loadRiverAndLake (parameter) {
   return axios({
     url: api.riverAndLake,
