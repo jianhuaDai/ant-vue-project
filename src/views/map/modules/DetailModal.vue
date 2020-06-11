@@ -47,6 +47,7 @@
     watch: {},
     methods: {
       showModal (id = '', detailModal = '', title = '详情') {
+        console.log(id, 'pollution_idpollution_id')
         this.dataId = id
         this.detailModal = detailModal
         this.title = title

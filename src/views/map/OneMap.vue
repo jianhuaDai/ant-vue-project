@@ -173,7 +173,6 @@
         this.layerRadioHandle(this.baseData.layerItems[navId][0])
       },
       layerManagerHandle (layerItem) {
-        console.log(layerItem, 'kkkkk')
         this.clearSelect()
         if (!this.layerManager.existLayerGroup[layerItem.id]) {
           this.layerManager.existLayerGroup[layerItem.id] = {
@@ -238,8 +237,9 @@
         switch (layerItem.id) {
           case 11: {
             res.data.list.forEach((v) => {
+              console.log(v, 'renderLayer')
               this.renderMarker(v.lon_lat.split(','),
-                layerItem, v.id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
+                layerItem, v.pollution_id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
             })
             break
           }
@@ -336,7 +336,6 @@
         })
       },
       rowSelect (record) {
-        console.log(record, 'dddddd')
         if (record.lon_lat) {
           const coordinate = Array.isArray(record.lon_lat) ? record.lon_lat[0].split(',') : record.lon_lat.split(',')
           Map.flyTo({
