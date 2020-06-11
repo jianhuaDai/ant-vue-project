@@ -16,7 +16,7 @@ import IconChief from '@assets/map-icons/chief.svg?inline'
 import IconChiefSelected from '@assets/map-icons/chief-selected.svg?inline'
 import {
   loadWFS,
-  loadWaterOrRain,
+  loadWater,
   loadRain,
   loadPollution,
   loadRiverAndLake,
@@ -186,27 +186,38 @@ const TableColumns = {
   },
   12: {
     rowKey: 'water_rain_id',
-    columns: [{
-      title: '水量(cm)',
-      dataIndex: 'value',
-      width: '40%'
-    }, {
-      title: '站点名称',
-      dataIndex: 'station_name',
-      width: '70%'
-    }]
+    columns: [
+      {
+        title: '站点名称',
+        dataIndex: 'station_name'
+      },
+      {
+        title: '上游水位(m)',
+        dataIndex: 'up_value',
+        scopedSlots: { customRender: 'up_value' }
+      },
+      {
+        title: '下游水位(m)',
+        dataIndex: 'down_value',
+        scopedSlots: { customRender: 'down_value' }
+      }
+    ]
   },
   13: {
     rowKey: 'water_rain_id',
-    columns: [{
-      title: '雨量(mm)',
-      dataIndex: 'value',
-      width: '40%'
-    }, {
-      title: '站点名称',
-      dataIndex: 'station_name',
-      width: '70%'
-    }]
+    columns: [
+      {
+        title: '站点名称',
+        dataIndex: 'station_name',
+        width: '70%'
+      },
+      {
+        title: '雨量(mm)',
+        dataIndex: 'value',
+        width: '40%',
+        scopedSlots: { customRender: 'value' }
+      }
+    ]
   },
   14: {
     rowKey: 'video_monitor_id',
@@ -401,9 +412,10 @@ export function GetDataByLayer () {
     }
     case 12: {
       // 水情列表
-      return loadWaterOrRain({
+      return loadWater({
         page_size: 0,
-        station_type: 1
+        station_type: 1,
+        ...params
       })
     }
     case 13: {

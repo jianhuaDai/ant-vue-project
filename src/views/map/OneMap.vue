@@ -62,13 +62,22 @@
               :rowSelection="tableList.options.rowSelection"
               :scroll="{ y: 500 }"
             >
-              <span slot="m3s" slot-scope="text, record, index">
+              <span slot="up_value" slot-scope="text">
+                {{ text ? text.toFixed(2) : '' }}
+              </span>
+              <span slot="down_value" slot-scope="text">
+                {{ text ? text.toFixed(2) : '' }}
+              </span>
+              <span slot="value" slot-scope="text">
+                {{ text ? text.toFixed(0) : '' }}
+              </span>
+              <span slot="m3s" slot-scope="text">
                 {{ text }}m<sup>3</sup>/s
               </span>
-              <span slot="t/a" slot-scope="text, record, index">
+              <span slot="t/a" slot-scope="text">
                 {{ text }}t/a
               </span>
-              <span slot="hasOrNo" slot-scope="text, record, index">
+              <span slot="hasOrNo" slot-scope="text">
                 {{ text === 1 ? '有': '无' }}
               </span>
             </a-table>
