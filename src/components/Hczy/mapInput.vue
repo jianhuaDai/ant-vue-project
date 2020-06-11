@@ -45,8 +45,6 @@ export default {
   watch: {
     location: {
       handler (val) {
-        console.log(this.location, 'ooooooo')
-        // this.$emit('change', this.location)
       }
     }
   },
@@ -72,13 +70,11 @@ export default {
       map.addControl(nav, 'top-left')
       setTimeout(() => {
         if (this.location !== '[]') {
-          console.log([this.location], 'hhhhhhhhh')
           marker.setLngLat(JSON.parse(_this.location)).addTo(map)
         }
       }, 200)
 
       map.on('click', function (e) {
-        console.log(e.lngLat.lng, 'e.lngLat.lng.')
         _this.lng = e.lngLat.lng.toFixed(6)
         _this.lat = e.lngLat.lat.toFixed(6)
         marker.setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map)
