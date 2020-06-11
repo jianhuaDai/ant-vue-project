@@ -36,7 +36,7 @@
             <a-col :span="12">
               <a-form-model-item label="所属水源地" prop="source_id" ref="source_id">
                 <a-select v-model="form.source_id">
-                  <a-select-option v-for="item in waterSourceList" :value="item.id" :key="item.id">
+                  <a-select-option v-for="item in waterSourceList" :value="item.source_id" :key="item.source_id">
                     {{ item.name }}
                   </a-select-option>
                 </a-select>

@@ -64,6 +64,12 @@ export function loadRain (params) {
     data: params
   })
 }
+// 水情表格数据
+export function loadWater (params) {
+  return axios({
+    url: ''
+  })
+}
 export function loadRiverAndLake (parameter) {
   return axios({
     url: api.riverAndLake,

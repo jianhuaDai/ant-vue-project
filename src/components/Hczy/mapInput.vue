@@ -41,12 +41,13 @@ export default {
   },
   created () {
     console.log(this, 'dsddss')
-    this.location = this.value[0]
+    this.location = JSON.stringify(this.value)
   },
   watch: {
     location: {
       handler (val) {
-        this.$emit('change', [this.location])
+        console.log(this.location, 'ooooooo')
+        // this.$emit('change', this.location)
       }
     }
   },
@@ -71,10 +72,10 @@ export default {
       var nav = new mapboxgl.NavigationControl()
       map.addControl(nav, 'top-left')
       setTimeout(() => {
-              if (this.location) {
-        console.log([this.location], 'hhhhhhhhh')
-        marker.setLngLat(_this.location.split(',')).addTo(map)
-      }
+        if (this.location !== '[]') {
+          console.log([this.location], 'hhhhhhhhh')
+          marker.setLngLat(_this.location).addTo(map)
+        }
       }, 200)
 
       map.on('click', function (e) {
@@ -85,8 +86,8 @@ export default {
       })
     },
     AddDraw () {
-      this.location = this.lng + ', ' + this.lat
-      this.$emit('change', [this.location])
+      this.location = JSON.stringify([this.lng, this.lat])
+      this.$emit('change', [this.lng * 1, this.lat * 1])
       this.showMapDom = false
     },
     cancelAddDraw () {

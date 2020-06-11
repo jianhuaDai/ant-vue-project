@@ -188,7 +188,7 @@ const TableColumns = {
     rowKey: 'water_rain_id',
     columns: [{
       title: '水量(cm)',
-      dataIndex: 'rain_amount',
+      dataIndex: 'value',
       width: '40%'
     }, {
       title: '站点名称',
@@ -200,7 +200,7 @@ const TableColumns = {
     rowKey: 'water_rain_id',
     columns: [{
       title: '雨量(mm)',
-      dataIndex: 'rain_amount',
+      dataIndex: 'value',
       width: '40%'
     }, {
       title: '站点名称',
@@ -386,14 +386,17 @@ export function GetTableRowKey (layerId) {
 export function TableColumnsByLayer (layerId) {
   return TableColumns[layerId] && TableColumns[layerId].columns ? TableColumns[layerId].columns : []
 }
-
-export function GetDataByLayer (layerId) {
+// 第一个参数传id，第二个参数传Object作为查询接口请求参数
+export function GetDataByLayer () {
+  const layerId = arguments[0] ? arguments[0] : ''
+  const params = arguments[1] ? arguments[1] : {}
   switch (layerId) {
     case 11: {
       return loadPollution({
         page_size: 0,
         province_id: 32,
-        status: 1
+        status: 1,
+        ...params
       })
     }
     case 12: {
@@ -406,10 +409,11 @@ export function GetDataByLayer (layerId) {
     case 13: {
       // 雨情列表
       return loadRain({
-        'end_time': '2020-06-10 00:00:00',
-        'page_size': 0,
-        'start_time': '2020-06-10 18:00:00',
-        'station_name': ''
+        start_time: '2020-06-10 00:00:00',
+        page_size: 0,
+        end_time: '2020-06-10 18:00:00',
+        station_name: '',
+        ...params
       })
     }
     case 14: {
@@ -417,7 +421,8 @@ export function GetDataByLayer (layerId) {
         page_size: 0,
         station_type: 5,
         regionalism_id: '',
-        water_type: null
+        water_type: null,
+        ...params
       })
     }
     case 21: {

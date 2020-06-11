@@ -39,7 +39,7 @@
           <!--        </div>-->
           <div class="info-area" v-show="layerManager.activeLayerItem.id!==0" style="margin: 10px 0">
             <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
-            <a-input-search placeholder="请输入搜索内容" style="width: 240px;margin-bottom: 24px" @search="()=>{}"/>
+            <a-input-search placeholder="请输入搜索内容" v-model="searchName" style="width: 240px;margin-bottom: 24px" @search="searchFilter(layerManager.activeLayerItem, searchName)"/>
             <a-range-picker
               v-if="showRainTimeRange"
               style="width: 300px;margin-bottom: 10px;"
@@ -99,6 +99,7 @@
     name: 'OneMap',
     data () {
       return {
+        searchName: '',
         rainTimeRange: ['2020-06-10 00:00:00', '2020-06-10 18:18:14'],
         showRainTimeRange: false,
         mapOptions: {
@@ -198,6 +199,22 @@
           }
         }
       },
+      searchFilter (layerItem, searchName) {
+        console.log(layerItem, 'layerItem')
+        GetDataByLayer(layerItem.id, { station_name: searchName }).then(res => {
+          this.tableList.data = res.data.list
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach((marker) => {
+              marker.remove()
+            })
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.clear()
+          if (res) {
+            console.log(res, 'dddddddd')
+            setTimeout(() => {
+              this.renderLayer(layerItem, res)
+            }, 100)
+          }
+        })
+      },
       loadLayer (layerItem) {
         GetDataByLayer(layerItem.id).then(res => {
           if (res) {
@@ -238,49 +255,49 @@
           case 11: {
             res.data.list.forEach((v) => {
               console.log(v, 'renderLayer')
-              this.renderMarker(v.lon_lat.split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.pollution_id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
             })
             break
           }
           case 12: {
             res.data.list.forEach((v) => {
-              this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
             })
             break
           }
           case 13: {
             res.data.list.forEach((v) => {
-              this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
             })
             break
           }
           case 14: {
             res.data.list.forEach((v) => {
-              this.renderMarker(Array.isArray(v.lon_lat) ? v.lon_lat[0].split(',') : v.lon_lat.split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
             })
             break
           }
           case 31: {
             res.data.list.forEach((v) => {
-              this.renderMarker(v.lon_lat[0].split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.get_water_id, layerItem.icon, layerItem.bgColor, v.name, `取水留量：${v.ammount}m<sup>3</sup>/s`)
             })
             break
           }
           case 32: {
             res.data.list.forEach((v) => {
-              this.renderMarker(v.lon_lat[0].split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.func_id, layerItem.icon, layerItem.bgColor, v.func_name, `水质目标：${v.water_target_name}`)
             })
             break
           }
           case 51: {
             res.data.list.forEach((v) => {
-              this.renderMarker(v.lon_lat[0].split(','),
+              this.renderMarker(v.lon_lat,
                 layerItem, v.sewage_id, layerItem.icon, layerItem.bgColor, v.sewage_name, `${v.sewage_type_name}`)
             })
             break
@@ -302,6 +319,7 @@
         if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
           this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
         }
+        // this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
         const el = document.createElement('div')
         el.className = 'hc-marker-container'
         const child = document.createElement('div')
@@ -337,7 +355,7 @@
       },
       rowSelect (record) {
         if (record.lon_lat) {
-          const coordinate = Array.isArray(record.lon_lat) ? record.lon_lat[0].split(',') : record.lon_lat.split(',')
+          const coordinate = record.lon_lat
           Map.flyTo({
             center: coordinate,
             zoom: 11
