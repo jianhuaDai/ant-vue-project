@@ -174,8 +174,8 @@
                     :key="item.key"
                     :value="item.key">
                     {{ item.name }}
-                  </a-select-option> -->
-                </a-select>
+                  </a-select-option>
+                </a-select>-->
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -344,6 +344,7 @@ export default {
       console.log(value)
       console.log(this.suoshuhedaovalue)
       console.log(this.hezhanFlag)
+      console.log(this.hezhanFlag.data.list.length)
       for (var k = 0; k < this.hezhanFlag.data.list.length; k++) {
         if (this.hezhanFlag.data.list[k].water_id === value) {
           this.form2.sshezhang = this.hezhanFlag.data.list[k].chief_name
@@ -651,11 +652,11 @@ export default {
     setFormValue (data) {
       this.$set(this.form2, 'name', data.pollution_name)
       this.$set(this.form2, 'code', data.pollution_num)
-      this.$set(this.form2, 'suoshuhedao', data.water_id)
+      this.$set(this.form2, 'suoshuhedao', data.water_id.toString())
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'address', data.location)
       this.$set(this.form2, 'wuranyuantype', data.pollution_type)
-      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'jwd', data.lon_lat[0])
       this.$set(this.form2, 'guanzhujibie', data.attention_level)
       this.$set(this.form2, 'yxfanwei', data.range)
       this.$set(this.form2, 'zhiliqk', data.control)
@@ -685,7 +686,7 @@ export default {
             regionalism_id: this.form2.suoshuquyu,
             location: this.form2.address === undefined ? '' : this.form2.address,
             pollution_type: parseInt(this.form2.wuranyuantype),
-            lon_lat: this.form2.jwd,
+            lon_lat: [this.form2.jwd],
             attention_level: parseInt(this.form2.guanzhujibie),
             // discover_time: this.form2.time.format('YYYY-MM-DD'),
             // discover_time: this.time,

@@ -24,7 +24,13 @@ export const DictionaryEnum = {
   DIC_SEWAGE_WAY: 'sewage_way', // 排放方式,
   DIC_WATER_LEVEL: 'water_level', // 河湖级别
   DIC_STATION_TYPE: 'station_type', // 测站类型
-  DIC_IS_SALT: 'is_salt' // 咸淡水属性
+  DIC_IS_SALT: 'is_salt', // 咸淡水属性
+  DIC_LINE_TYPE: 'line_type', // 岸线类别
+  DIC_PROJECT_TYPE: 'project_type', // 工程类型
+  DIC_BUILD_STEP: 'build_step', // 建设阶段
+  DIC_PROJECT_SIZE: 'project_size', // 工程规模
+  DIC_LINE_BUSINESS: 'line_business', // 岸线工程信息
+  DIC_LAND_TYPE: 'land_type' // 土地用途
 }
 export function getDictionary (type, pid = 0) {
   return axios({

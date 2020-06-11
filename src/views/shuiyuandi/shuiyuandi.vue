@@ -714,7 +714,7 @@ export default {
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'zxbz', data.standard)
       this.$set(this.form2, 'type2', data.source_property)
-      this.$set(this.form2, 'jwd', data.lon_lat)
+      this.$set(this.form2, 'jwd', data.lon_lat[0])
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
       this.$set(this.form2, 'dnkhmb', data.current_target)
       this.$set(this.form2, 'sswkhmb', data.target)
@@ -750,7 +750,7 @@ export default {
             regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
             standard: this.form2.zxbz === undefined ? '' : this.form2.zxbz,
             source_property: parseInt(this.form2.type2),
-            lon_lat: this.form2.jwd,
+            lon_lat: [this.form2.jwd],
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             current_target: this.form2.dnkhmb === undefined ? null : parseInt(this.form2.dnkhmb),
             target: this.form2.sswkhmb === undefined ? null : parseInt(this.form2.sswkhmb),
