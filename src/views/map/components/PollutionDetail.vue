@@ -108,7 +108,7 @@
     name: 'PollutionDetail',
     created () {
       this.confirmLoading = true
-      getPollutionDetail(this.dataId).then(res => {
+      getPollutionDetail(this.id).then(res => {
         this.form = res.data
         this.confirmLoading = false
       })
@@ -117,7 +117,7 @@
       MapboxView
     },
     props: {
-      dataId: {
+      id: {
         type: null,
         default: null
       }

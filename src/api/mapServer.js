@@ -15,7 +15,7 @@ const api = {
   sewage: '/sewage/page_query',
   riverLine: '/river_protect/rivers_lines',
   blackWater: '/info_serve/get_water_monitors',
-  videoMonitor: '/monitor/video_monitor'
+  videoMonitor: '/monitoring_station/page_query'
 }
 
 export function loadWFS (parameter) {
@@ -56,7 +56,14 @@ export function loadWaterOrRain (parameter) {
     data: parameter
   })
 }
-
+// 雨情表格数据
+export function loadRain (params) {
+  return axios({
+    url: '/rain_monitors/list',
+    method: 'post',
+    data: params
+  })
+}
 export function loadRiverAndLake (parameter) {
   return axios({
     url: api.riverAndLake,
@@ -149,10 +156,25 @@ export function loadComplaint (parameter) {
     params: parameter
   })
 }
+// 视频站点数据
 export function loadVideoMonitor (parameter) {
   return axios({
     url: api.videoMonitor,
-    method: 'get',
-    params: parameter
+    method: 'post',
+    data: parameter
+  })
+}
+// 水情测站数据查询
+export function waterMonitors (id) {
+  return axios({
+    url: `/water_monitors/${id}`,
+    method: 'get'
+  })
+}
+// 雨情测站数据查询
+export function rainMonitors (id) {
+  return axios({
+    url: `/rain_monitors/${id}`,
+    method: 'get'
   })
 }

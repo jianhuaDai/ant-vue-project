@@ -33,3 +33,10 @@ export function deleteWaterFun (id) {
     method: 'delete'
   })
 }
+// 单条水功能区详情
+export function oneWaterFun (id) {
+  return axios({
+    url: `/water_functionals/${id}`,
+    method: 'get'
+  })
+}

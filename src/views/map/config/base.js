@@ -17,6 +17,7 @@ import IconChiefSelected from '@assets/map-icons/chief-selected.svg?inline'
 import {
   loadWFS,
   loadWaterOrRain,
+  loadRain,
   loadPollution,
   loadRiverAndLake,
   loadGetWater,
@@ -93,7 +94,10 @@ export function LayerBtns () {
     }, {
       id: 13,
       name: '雨情',
-      icon: '/icons/rain.svg'
+      icon: '/icons/rain.svg',
+      bgColor: '#516c85',
+      detailModal: 'rainDetail',
+      detailTitle: '雨情详情'
     }, {
       id: 14,
       name: '视频监控',
@@ -207,12 +211,12 @@ const TableColumns = {
   14: {
     rowKey: 'video_monitor_id',
     columns: [{
-      title: '名称',
-      dataIndex: 'video_monitor_name',
+      title: '站点名称',
+      dataIndex: 'station_name',
       width: '50%'
     }, {
       title: '地址',
-      dataIndex: 'address',
+      dataIndex: 'location',
       width: '50%'
     }]
   },
@@ -401,15 +405,19 @@ export function GetDataByLayer (layerId) {
     }
     case 13: {
       // 雨情列表
-      return loadWaterOrRain({
-        page_size: 0,
-        station_type: 2
+      return loadRain({
+        'end_time': '2020-06-10 00:00:00',
+        'page_size': 0,
+        'start_time': '2020-06-10 18:00:00',
+        'station_name': ''
       })
     }
     case 14: {
       return loadVideoMonitor({
         page_size: 0,
-        province_id: 32
+        station_type: 5,
+        regionalism_id: '',
+        water_type: null
       })
     }
     case 21: {

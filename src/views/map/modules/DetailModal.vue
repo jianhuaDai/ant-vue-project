@@ -9,7 +9,7 @@
       :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
-      <component :is="detailModal" :dataId="dataId"></component>
+      <component :is="detailModal" :id="dataId"></component>
     </a-modal>
   </div>
 </template>
@@ -21,6 +21,7 @@
   import GetWaterDetail from '../components/GetWaterDetail'
   import PollutionDetail from '../components/PollutionDetail'
   import waterDetail from '../components/waterDetail'
+  import rainDetail from '../components/rainDetail'
   export default {
     props: {
     },
@@ -30,7 +31,8 @@
       getWaterFun,
       GetWaterDetail,
       PollutionDetail,
-      waterDetail
+      waterDetail,
+      rainDetail
     },
     data () {
       return {
@@ -45,6 +47,7 @@
     watch: {},
     methods: {
       showModal (id = '', detailModal = '', title = '详情') {
+        console.log(id, 'pollution_idpollution_id')
         this.dataId = id
         this.detailModal = detailModal
         this.title = title

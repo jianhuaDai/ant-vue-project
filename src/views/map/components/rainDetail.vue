@@ -1,19 +1,12 @@
 <template>
   <div class="body-detail">
     <div class="left-area">
-      <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="水情">
-          <div class="water-chart">
-            <ve-line :data="chartData" :extend="chartExtend" :settings="chartSettings"> </ve-line>
-          </div>
-        </a-tab-pane>
-        <a-tab-pane key="2" tab="剖面图">
-          <profileChart></profileChart>
-        </a-tab-pane>
-        <a slot="tabBarExtraContent" style="position: absolute;right: 0; top: -7px;">
+      <div class="water-chart">
+        <ve-histogram :data="chartData" :extend="chartExtend" :settings="chartSettings"> </ve-histogram>
+        <a slot="tabBarExtraContent" style="position: absolute;right: 30px; top: -7px;">
           更多&gt;&gt;
         </a>
-      </a-tabs>
+      </div>
     </div>
     <div class="right-area">
       <div>
@@ -27,7 +20,7 @@
 <script>
 import 'echarts/lib/component/markLine'
 import profileChart from './profileChart.vue'
-import { waterMonitors } from '@/api/mapServer'
+import { rainMonitors } from '@/api/mapServer'
 export default {
   components: { profileChart },
   props: {
@@ -39,44 +32,28 @@ export default {
   data () {
     return {
       chartSettings: {
+        showLine: ['diff_value'],
         labelMap: {
-          down_value: '下游',
-          up_value: '上游'
+          diff_value: '雨量',
+          sum_value: '累积量'
         },
-        yAxisName: ['水位(m)', '']
+        yAxisName: ['降水量(mm)', '']
       },
       chartExtend: {
         legend: {
-          right: 30
+          bottom: 20,
+          right: '30%'
         },
         grid: {
           left: '4%',
           right: '6%'
         },
         series: {
-          markLine: {
-            silent: true,
-            label: {
-              show: true,
-              position: 'start',
-              distance: -60,
-              formatter: '警戒水位',
-              color: 'red'
-            },
-            lineStyle: {
-              color: 'red'
-            },
-            data: [
-              {
-                yAxis: 100,
-                name: '警戒水位'
-              }
-            ]
-          }
+          barWidth: 20
         }
       },
       chartData: {
-        columns: ['date', 'down_value', 'up_value'],
+        columns: ['date', 'diff_value', 'sum_value'],
         rows: []
       },
       columns: [
@@ -86,13 +63,13 @@ export default {
           scopedSlots: { customRender: 'name' }
         },
         {
-          title: '上游(m)',
-          className: 'up_value',
-          dataIndex: 'up_value'
+          title: '雨量(mm)',
+          className: 'diff_value',
+          dataIndex: 'diff_value'
         },
         {
-          title: '下游(m)',
-          dataIndex: 'down_value'
+          title: '累积量(mm)',
+          dataIndex: 'sum_value'
         }
       ],
       tabelData: [
@@ -104,21 +81,20 @@ export default {
   },
   methods: {
     getData () {
-      waterMonitors(this.id).then((res) => {
-        console.log(res.data, 'dsdsdsdsds')
+      rainMonitors(this.id).then((res) => {
         const resData = res.data
         this.tabelData = res.data.map((element) => {
           return {
             ...element,
-            down_value: element.down_value.toFixed(2),
-            up_value: element.up_value.toFixed(2)
+            diff_value: element.diff_value.toFixed(2),
+            sum_value: element.sum_value.toFixed(2)
           }
         })
         this.chartData.rows = resData.map((item) => {
           return {
             date: item.collect_time,
-            down_value: item.down_value.toFixed(2),
-            up_value: item.up_value.toFixed(2)
+            diff_value: item.diff_value.toFixed(2),
+            sum_value: item.sum_value.toFixed(2)
           }
         })
       })
@@ -142,6 +118,7 @@ export default {
     .water-chart {
       height: 100%;
       width: 100%;
+      position: relative;
     }
   }
   .right-area {

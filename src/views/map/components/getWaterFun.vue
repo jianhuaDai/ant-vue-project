@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import { getHehuanxian } from '@/api/inforserve'
+import { oneWaterFun } from '@/api/waterfun'
 import getWaterFunAttrbute from './getWaterFunAttribute.vue'
 import waterQuality from './waterQuality.vue'
 import attributeTrend from './attributeTrend.vue'
@@ -64,14 +64,8 @@ export default {
       var reqData = {
         id: this.id
       }
-      getHehuanxian(reqData).then(res => {
-        this.infoDetail = res.data.list[0]
-        this.tabDatasource = res.data.list[0].affiliate_tab[0]
-        this.startPoint = this.infoDetail.geo_info.substring(1, 39)
-        this.endPoint = this.infoDetail.geo_info.substring(
-          this.infoDetail.geo_info.length - 41,
-          this.infoDetail.geo_info.length - 1
-        )
+      oneWaterFun(this.id).then(res => {
+        this.infoDetail = res.data
       })
     }
   }
