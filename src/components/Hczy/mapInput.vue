@@ -40,7 +40,6 @@ export default {
     }
   },
   created () {
-    console.log(this, 'dsddss')
     this.location = JSON.stringify(this.value)
   },
   watch: {
@@ -74,7 +73,7 @@ export default {
       setTimeout(() => {
         if (this.location !== '[]') {
           console.log([this.location], 'hhhhhhhhh')
-          marker.setLngLat(_this.location).addTo(map)
+          marker.setLngLat(JSON.parse(_this.location)).addTo(map)
         }
       }, 200)
 
@@ -86,7 +85,7 @@ export default {
       })
     },
     AddDraw () {
-      this.location = JSON.stringify([this.lng, this.lat])
+      this.location = JSON.stringify([this.lng * 1, this.lat * 1])
       this.$emit('change', [this.lng * 1, this.lat * 1])
       this.showMapDom = false
     },
