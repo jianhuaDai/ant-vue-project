@@ -100,7 +100,6 @@
         <a-form-model
           ref="form2"
           :model="form2"
-          labelAlign="left"
           :rules="rules"
           :label-col="labelCol"
           :wrapper-col="wrapperCol">
@@ -563,7 +562,8 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
-
+      this.form.namesearch = ''
+      this.form.wrytype = ''
     },
     // 点击获取地图坐标
     showMap () {
@@ -587,7 +587,7 @@ export default {
         var a = this.jindu
         var b = this.weidu
         // this.form2.setFieldsValue({ startjwd: a + ',' + b })
-        this.form2.jwd = a + ',' + b
+        this.form2.jwd = [parseFloat(a), parseFloat(b)]
         this.handleCancelMap = false
       }
     },
@@ -650,13 +650,14 @@ export default {
       }, 1)
     },
     setFormValue (data) {
+      console.log(data)
       this.$set(this.form2, 'name', data.pollution_name)
       this.$set(this.form2, 'code', data.pollution_num)
       this.$set(this.form2, 'suoshuhedao', data.water_id.toString())
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'address', data.location)
       this.$set(this.form2, 'wuranyuantype', data.pollution_type)
-      this.$set(this.form2, 'jwd', data.lon_lat[0])
+      this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'guanzhujibie', data.attention_level)
       this.$set(this.form2, 'yxfanwei', data.range)
       this.$set(this.form2, 'zhiliqk', data.control)
@@ -686,7 +687,7 @@ export default {
             regionalism_id: this.form2.suoshuquyu,
             location: this.form2.address === undefined ? '' : this.form2.address,
             pollution_type: parseInt(this.form2.wuranyuantype),
-            lon_lat: [this.form2.jwd],
+            lon_lat: this.form2.jwd,
             attention_level: parseInt(this.form2.guanzhujibie),
             // discover_time: this.form2.time.format('YYYY-MM-DD'),
             // discover_time: this.time,

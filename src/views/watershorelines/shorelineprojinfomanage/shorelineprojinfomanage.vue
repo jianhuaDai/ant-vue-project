@@ -450,7 +450,7 @@ export default {
   },
   data () {
     return {
-      title: '新增污染源',
+      title: '新增岸线工程信息',
       cardHeight: window.innerHeight - 207,
       labelCol: { span: 7 },
       wrapperCol: { span: 15 },
@@ -564,7 +564,7 @@ export default {
       queryParam: {
         project_name: '',
         regionalism_id: '',
-        line_type: 0,
+        line_type: null,
         river_line_id: '',
         project_type: 0,
         build_state: 0,
@@ -626,13 +626,14 @@ export default {
     // 查询按钮触发
     searchClick () {
       // console.log(this.form)
+      console.log(this.form.gcgm)
       this.queryParam.project_name = this.form.namesearch
-      this.queryParam.regionalism_id = this.form.anxiantype === '' ? '' : parseInt(this.form.anxiantype)
-      this.queryParam.line_type = this.form.anxiantype === '' ? 0 : this.form.anxiantype
-      this.queryParam.river_line_id = this.form.anxiantype2 === '' ? '' : this.form.anxiantype2
+      this.queryParam.regionalism_id = this.form.suoshuquyu === '' ? '' : this.form.suoshuquyu
+      this.queryParam.line_type = this.form.anxiantype === '' ? null : this.form.anxiantype
+      this.queryParam.river_line_id = this.form.anxiantype2 === '' ? null : this.form.anxiantype2
       this.queryParam.project_type = this.form.projtype === '' ? 0 : this.form.projtype
       this.queryParam.build_state = this.form.jsjd === '' ? 0 : this.form.jsjd
-      this.queryParam.project_info = this.form.gcgm === '' ? '' : this.form.gcgm
+      this.queryParam.project_info = this.form.gcgm === null ? '' : this.form.gcgm.toString()
       this.$refs.table.refresh(true)
     },
     // 重置按钮触发
@@ -678,7 +679,7 @@ export default {
       } else {
         var a = this.jindu
         var b = this.weidu
-        this.form2.jwd = a + ',' + b
+        this.form2.jwd = [parseFloat(a), parseFloat(b)]
         this.handleCancelMap = false
       }
     },
@@ -753,7 +754,7 @@ export default {
       this.$set(this.form2, 'anxiantype4', data.river_line_id)
       this.$set(this.form2, 'jsjd2', data.build_state)
       this.$set(this.form2, 'gcgm2', parseInt(data.project_info))
-      this.$set(this.form2, 'jwd', data.lon_lat[0])
+      this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'zyaxlength', data.occupy_line)
       this.$set(this.form2, 'hflymianji', data.line_land_area)
       this.$set(this.form2, 'lddyzyanlength', data.occupy_land_line)
@@ -773,7 +774,7 @@ export default {
             river_line_id: this.form2.anxiantype4,
             build_state: this.form2.jsjd2,
             project_info: this.form2.gcgm2.toString(),
-            lon_lat: [this.form2.jwd],
+            lon_lat: this.form2.jwd,
             occupy_line: parseInt(this.form2.zyaxlength),
             line_land_area: parseInt(this.form2.hflymianji),
             occupy_land_line: parseInt(this.form2.lddyzyanlength),

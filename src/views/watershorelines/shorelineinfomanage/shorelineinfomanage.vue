@@ -456,6 +456,8 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
+      this.form.namesearch = ''
+      this.form.anxiantype = ''
     },
     // 点击获取地图坐标
     showMap1 () {
@@ -486,10 +488,12 @@ export default {
     AddDraw () {
       this.disabled = false
       if (this.jwdFlag === '1') {
-        this.form2.anxianscope = this.jindu + ',' + this.weidu
+        // [parseFloat(a1), parseFloat(b1)]
+        // this.form2.anxianscope = this.jindu + ',' + this.weidu
+        this.form2.anxianscope = [parseFloat(this.jindu), parseFloat(this.weidu)]
         this.handleCancelMap = false
       } else if (this.jwdFlag === '2') {
-        this.form2.anxianscope2 = this.jindu2 + ',' + this.weidu2
+        this.form2.anxianscope2 = [parseFloat(this.jindu2), parseFloat(this.weidu2)]
         this.handleCancelMap = false
       }
       // if (this.jindu === '' || this.weidu === '') {
@@ -568,8 +572,9 @@ export default {
       this.$set(this.form2, 'code', data.line_num)
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'anxiantype2', data.line_type)
-      this.$set(this.form2, 'anxianscope', data.line_start[0])
-      this.$set(this.form2, 'anxianscope2', data.line_end[0])
+      // this.$set(this.form2, 'anxianscope', data.line_start[0])
+      this.$set(this.form2, 'anxianscope', [parseFloat(data.line_start[0]), parseFloat(data.line_start[1])])
+      this.$set(this.form2, 'anxianscope2', [parseFloat(data.line_end[0]), parseFloat(data.line_end[1])])
       this.$set(this.form2, 'anxianlength', data.line_length)
       this.$set(this.form2, 'gldw', data.dept_id)
       this.$set(this.form2, 'beizhu', data.explain)
@@ -583,8 +588,8 @@ export default {
             line_num: this.form2.code === undefined ? '' : this.form2.code,
             regionalism_id: this.form2.suoshuquyu,
             line_type: this.form2.anxiantype2,
-            line_start: [this.form2.anxianscope],
-            line_end: [this.form2.anxianscope2],
+            line_start: this.form2.anxianscope,
+            line_end: this.form2.anxianscope2,
             line_length: this.form2.anxianlength,
             dept_id: this.form2.gldw,
             explain: this.form2.beizhu

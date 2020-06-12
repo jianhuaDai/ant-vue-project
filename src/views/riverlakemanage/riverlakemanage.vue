@@ -623,7 +623,7 @@ export default {
       console.log(value2)
       console.log(this.form2.heliujibie)
       if (value2 === 1) {
-        this.hehutypevalue = '1'
+        this.hehutypevalue = 1
         this.heliuShow = true
         this.heduanShow = false
         this.hupoShow = false
@@ -631,7 +631,7 @@ export default {
         this.shuikuShow = false
         this.shuikupianShow = false
       } else if (value2 === 2) {
-        this.hehutypevalue = '2'
+        this.hehutypevalue = 2
         this.heliuShow = false
         this.heduanShow = true
         this.hupoShow = false
@@ -639,7 +639,7 @@ export default {
         this.shuikuShow = false
         this.shuikupianShow = false
       } else if (value2 === 3) {
-        this.hehutypevalue = '3'
+        this.hehutypevalue = 3
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = true
@@ -647,7 +647,7 @@ export default {
         this.shuikuShow = false
         this.shuikupianShow = false
       } else if (value2 === 4) {
-        this.hehutypevalue = '4'
+        this.hehutypevalue = 4
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
@@ -655,7 +655,7 @@ export default {
         this.shuikuShow = false
         this.shuikupianShow = false
       } else if (value2 === 5) {
-        this.hehutypevalue = '5'
+        this.hehutypevalue = 5
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
@@ -663,7 +663,7 @@ export default {
         this.shuikuShow = true
         this.shuikupianShow = false
       } else if (value2 === 6) {
-        this.hehutypevalue = '6'
+        this.hehutypevalue = 6
         this.heliuShow = false
         this.heduanShow = false
         this.hupoShow = false
@@ -742,7 +742,7 @@ export default {
       bearing: 0,
       container: 'add-map',
       antialias: true,
-      hehutypevalue: '1',
+      hehutypevalue: 1,
       attributionControl: false, // 隐藏地图所属信息
       doubleClickZoom: false,
       // form: this.$form.createForm(this),
@@ -959,7 +959,7 @@ export default {
         this.addmodifyFlag = '1'
         this.title = '新增河湖信息'
         // this.$refs.form2.resetFields()
-        this.hehutypevalue = '1'
+        this.hehutypevalue = 1
         this.form2.name = ''
         this.form2.code = ''
         this.form2.hehucengji = ''
@@ -996,6 +996,7 @@ export default {
 
     },
     setFormValue (value) {
+      console.log(value)
       if (value.water_type === 1) {
         this.heliuShow = true
         this.heduanShow = false
@@ -1048,25 +1049,29 @@ export default {
     },
     // 设置河流表单值
     setheliu (data) {
+      console.log(data)
       this.form2.name = data.name
       // this.form2.hehutypevalue = data.water_type
-      this.hehutypevalue = 1
+      this.form2.hehutypevalue = 1
       this.form2.code = data.water_num
-      this.form2.hehucengji = data.water_grade.toString()
+      this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
       this.form2.sjhehuku = data.p_name
       this.form2.length = data.length
       this.form2.heliujibie = data.water_level.toString()
-      this.form2.startjwd = data.origin[0]
-      this.form2.endjwd = data.destination[0]
+      this.form2.startjwd = [parseFloat(data.origin[0]), parseFloat(data.origin[1])]
+      this.form2.endjwd = [parseFloat(data.destination[0]), parseFloat(data.destination[1])]
+      // this.form2.startjwd = data.origin[0].toString() + ',' + data.origin[1].toString()
+      // this.form2.endjwd = data.destination[0].toString() + ',' + data.destination[1].toString()
       // console.log(data.origin.substring(1, data.origin.length - 1))
-      console.log(data.origin)
+      console.log(this.form2.startjwd)
+      console.log(typeof (this.form2.startjwd))
     },
     // 设置河段表单值
     setheduan (data) {
       this.form2.name = data.name
       // this.form2.hehutypevalue = '2'
-      this.hehutypevalue = 2
+      this.form2.hehutypevalue = 2
       this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
@@ -1075,8 +1080,8 @@ export default {
       this.form2.heduanjibie = data.water_level
       this.form2.xzqh = data.regionalism_id
       this.form2.weizhi = data.location
-      this.form2.startjwd2 = data.origin[0]
-      this.form2.endjwd2 = data.destination[0]
+      this.form2.startjwd2 = [parseFloat(data.origin[0]), parseFloat(data.origin[1])]
+      this.form2.endjwd2 = [parseFloat(data.destination[0]), parseFloat(data.destination[1])]
       // reqData.water_level = parseInt(this.form2.heduanjibie)
       //       reqData.regionalism_id = this.form2.xzqh
       //       reqData.location = this.form2.weizhi
@@ -1086,7 +1091,7 @@ export default {
     // 设置湖泊表单值
     sethupo (data) {
       this.form2.name = data.name
-      this.hehutypevalue = 3
+      this.form2.hehutypevalue = 3
       this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
@@ -1101,7 +1106,7 @@ export default {
     // 设置湖泊片表单值
     sethupopian (data) {
       this.form2.name = data.name
-      this.hehutypevalue = 4
+      this.form2.hehutypevalue = 4
       this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
@@ -1112,7 +1117,7 @@ export default {
     // 设置水库表单值
     setshuiku (data) {
       this.form2.name = data.name
-      this.hehutypevalue = 5
+      this.form2.hehutypevalue = 5
       this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
@@ -1129,7 +1134,7 @@ export default {
     // 设置水库片表单值
     setshuikupian (data) {
       this.form2.name = data.name
-      this.hehutypevalue = 6
+      this.form2.hehutypevalue = 6
       this.form2.code = data.water_num
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
@@ -1188,41 +1193,41 @@ export default {
       console.log(typeof (this.hehutypevalue))
       // console.log(this.jinweiduFlag)
       this.disabled = false
-      if (this.hehutypevalue === '1' && this.jinweiduFlag === '1') {
+      if (this.hehutypevalue === 1 && this.jinweiduFlag === '1') {
         if (this.heliujindu1 === '' || this.heliuweidu1 === '') {
           this.$message.info('请点击地图')
         } else {
           var a1 = this.heliujindu1
           var b1 = this.heliuweidu1
-          this.form2.startjwd = a1 + ',' + b1
+          this.form2.startjwd = [parseFloat(a1), parseFloat(b1)]
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag === '2') {
+      } else if (this.hehutypevalue === 1 && this.jinweiduFlag === '2') {
         if (this.heliujindu2 === '' || this.heliuweidu2 === '') {
           this.$message.info('请点击地图')
         } else {
           var a2 = this.heliujindu2
           var b2 = this.heliuweidu2
-          this.form2.endjwd = a2 + ',' + b2
+          this.form2.endjwd = [parseFloat(a2), parseFloat(b2)]
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '1') {
+      } else if (this.hehutypevalue === 2 && this.jinweiduFlag2 === '1') {
         if (this.heduanjindu1 === '' || this.heduanweidu1 === '') {
           this.$message.info('请点击地图')
         } else {
           var a3 = this.heduanjindu1
           var b3 = this.heduanweidu1
-          this.form2.startjwd2 = a3 + ',' + b3
+          this.form2.startjwd2 = [parseFloat(a3), parseFloat(b3)]
           this.handleCancelMap = false
         }
-      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '2') {
+      } else if (this.hehutypevalue === 2 && this.jinweiduFlag2 === '2') {
         if (this.heduanjindu2 === '' || this.heduanweidu2 === '') {
           this.$message.info('请点击地图')
         } else {
           var a4 = this.heduanjindu2
           var b4 = this.heduanweidu2
           // this.form2.setFieldsValue({ endjwd2: a4 + ',' + b4 })
-          this.form2.endjwd2 = a4 + ',' + b4
+          this.form2.endjwd2 = [parseFloat(a4), parseFloat(b4)]
           this.handleCancelMap = false
         }
       }
@@ -1266,18 +1271,19 @@ export default {
       // })
     },
     closeMap (e) {
-      console.log(this.hehutypevalue)
-      console.log(this.jinweiduFlag2)
-      if (this.hehutypevalue === '1' && this.jinweiduFlag === '1') {
+      // console.log(this.hehutypevalue)
+      // console.log(this.jinweiduFlag2)
+      console.log(e)
+      if (this.hehutypevalue === 1 && this.jinweiduFlag === '1') {
         this.heliujindu1 = e.lngLat.lng.toFixed(6)
         this.heliuweidu1 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '1' && this.jinweiduFlag === '2') {
+      } else if (this.hehutypevalue === 1 && this.jinweiduFlag === '2') {
         this.heliujindu2 = e.lngLat.lng.toFixed(6)
         this.heliuweidu2 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '1') {
+      } else if (this.hehutypevalue === 2 && this.jinweiduFlag2 === '1') {
         this.heduanjindu1 = e.lngLat.lng.toFixed(6)
         this.heduanweidu1 = e.lngLat.lat.toFixed(6)
-      } else if (this.hehutypevalue === '2' && this.jinweiduFlag2 === '2') {
+      } else if (this.hehutypevalue === 2 && this.jinweiduFlag2 === '2') {
         this.heduanjindu2 = e.lngLat.lng.toFixed(6)
         this.heduanweidu2 = e.lngLat.lat.toFixed(6)
       }
@@ -1298,41 +1304,42 @@ export default {
             // chief_id: this.form2.hehuzhang.toString(),
             chief_id: this.form2.hehuzhang,
             pid: this.form2.sjhehuku
-
           }
-          if (this.hehutypevalue === '1') {
+          if (this.hehutypevalue === 1) {
             reqData.length = parseInt(this.form2.length)
             // reqData.heliujibie = this.form2.heliujibie
             reqData.water_level = parseInt(this.form2.heliujibie)
-            reqData.origin = [this.form2.startjwd]
-            reqData.destination = [this.form2.endjwd]
-          } else if (this.hehutypevalue === '2') {
+            reqData.origin = this.form2.startjwd
+            reqData.destination = this.form2.endjwd
+          } else if (this.hehutypevalue === 2) {
             reqData.length = parseInt(this.form2.length2)
             reqData.water_level = parseInt(this.form2.heduanjibie)
             reqData.regionalism_id = this.form2.xzqh
             reqData.location = this.form2.weizhi
-            reqData.origin = [this.form2.startjwd2]
-            reqData.destination = [this.form2.endjwd2]
-          } else if (this.hehutypevalue === '3') {
+            reqData.origin = this.form2.startjwd2
+            reqData.destination = this.form2.endjwd2
+          } else if (this.hehutypevalue === 3) {
             reqData.location = this.form2.weizhihupo
             reqData.area = parseInt(this.form2.mianjihupo)
             reqData.is_salt = parseInt(this.form2.xdsshuxing)
-          } else if (this.hehutypevalue === '4') {
+          } else if (this.hehutypevalue === 4) {
             reqData.location = this.form2.weizhihupopian
             reqData.area = parseInt(this.form2.mianjihupopian)
-          } else if (this.hehutypevalue === '5') {
+          } else if (this.hehutypevalue === 5) {
             reqData.location = this.form2.weizhishuiku
             reqData.dept_id = this.form2.gldwname
             reqData.capacity = parseInt(this.form2.zkr)
             reqData.reservoir_project_level = parseInt(this.form2.gcdj)
             reqData.reservoir_type = parseInt(this.form2.sklx)
-          } else if (this.hehutypevalue === '6') {
+          } else if (this.hehutypevalue === 6) {
             reqData.location = this.form2.weizhishuikupian
           }
           console.log(reqData)
+          console.log(reqData.origin)
+          console.log(typeof (reqData.origin))
           if (this.addmodifyFlag === '1') {
             addRiverlake(reqData).then(res => {
-              console.log(res)
+              // console.log(res)
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()
@@ -1342,7 +1349,7 @@ export default {
             reqData.water_id = this.rowData.water_id
             reqData.version = this.rowData.version
             updateRiverlake(this.rowData.water_id, reqData).then(res => {
-              console.log(res)
+              // console.log(res)
               this.searchClick()
               this.visible = false
               // this.form2.resetFields()
