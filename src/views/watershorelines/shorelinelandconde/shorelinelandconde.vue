@@ -443,6 +443,10 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
+      this.form.landtype = ''
+      this.form.suoshuquyu = ''
+      this.form.anxiantype = ''
+      this.form.anxiantype2 = ''
     },
     selectChangehedao () {
       //
@@ -476,31 +480,6 @@ export default {
       this.$set(this.form2, 'landtype2', parseInt(data.land_type))
       this.$set(this.form2, 'tdmj', data.land_area)
       this.$set(this.form2, 'beizhu', data.explain)
-      // anxiantype3: "2"
-      // beizhu: "bbb"
-      // code: "2"
-      // create_at: "2020-06-10 16:51:38"
-      // delete_at: ""
-      // dept_id: ""
-      // dept_name: ""
-      // explain: "bbb"
-      // land_area: "222"
-      // land_id: "138529168726949889"
-      // land_num: "2"
-      // land_type: 2
-      // land_type_name: "耕地"
-      // landtype2: 2
-      // line_type: 0
-      // line_type_name: ""
-      // regionalism_id: "3201"
-      // regionalism_name: "江苏省-南京市"
-      // river_line_id: "2"
-      // river_line_name: ""
-      // status: 1
-      // suoshuquyu2: "3201"
-      // tdmj: "222"
-      // update_at: "2020-06-10 16:51:38"
-      // version: 1
     },
     savePopup () {
       // console.log(this.form2.time)

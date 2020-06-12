@@ -615,7 +615,9 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
-
+      this.form.namesearch = ''
+      this.form.area = ''
+      this.form.type = ''
     },
     // 点击获取地图坐标
     showMap () {
@@ -639,7 +641,7 @@ export default {
         var a = this.jindu
         var b = this.weidu
         // this.form2.setFieldsValue({ startjwd: a + ',' + b })
-        this.form2.jwd = a + ',' + b
+        this.form2.jwd = [parseFloat(a), parseFloat(b)]
         this.handleCancelMap = false
       }
     },
@@ -714,7 +716,7 @@ export default {
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'zxbz', data.standard)
       this.$set(this.form2, 'type2', data.source_property)
-      this.$set(this.form2, 'jwd', data.lon_lat[0])
+      this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
       this.$set(this.form2, 'dnkhmb', data.current_target)
       this.$set(this.form2, 'sswkhmb', data.target)
@@ -750,7 +752,7 @@ export default {
             regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
             standard: this.form2.zxbz === undefined ? '' : this.form2.zxbz,
             source_property: parseInt(this.form2.type2),
-            lon_lat: [this.form2.jwd],
+            lon_lat: this.form2.jwd,
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             current_target: this.form2.dnkhmb === undefined ? null : parseInt(this.form2.dnkhmb),
             target: this.form2.sswkhmb === undefined ? null : parseInt(this.form2.sswkhmb),

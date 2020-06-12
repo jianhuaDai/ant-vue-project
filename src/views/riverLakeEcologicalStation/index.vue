@@ -15,7 +15,7 @@
               <a-col :span="6">
                 <a-form-model-item label="所属区域:" prop="suoshuquyu" ref="suoshuquyu">
                   <!-- <a-input v-model="form.namesearch"></a-input> -->
-                  <a-tree-select v-model="form2.suoshuquyu" :treeData="options"> </a-tree-select>
+                  <a-tree-select v-model="form.suoshuquyu" :treeData="options"> </a-tree-select>
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
@@ -615,7 +615,7 @@ export default {
     searchClick () {
       console.log(this.form.type)
       // this.queryParam.regionalism_id = this.form.suoshuquyu
-      this.queryParam.regionalism_id = this.form.area === '' ? '' : this.form.area
+      this.queryParam.regionalism_id = this.form.suoshuquyu === '' ? '' : this.form.suoshuquyu
       this.queryParam.water_type = this.form.suoshushuiti === '' ? null : this.form.suoshushuiti
       // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
@@ -625,7 +625,8 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
-
+      this.form.suoshuquyu = ''
+      this.form.suoshushuiti = ''
     },
     // 点击获取地图坐标
     showMap () {
@@ -649,7 +650,7 @@ export default {
         var a = this.jindu
         var b = this.weidu
         // this.form2.setFieldsValue({ startjwd: a + ',' + b })
-        this.form2.jwd = a + ',' + b
+        this.form2.jwd = [parseFloat(a), parseFloat(b)]
         this.handleCancelMap = false
       }
     },
@@ -717,7 +718,7 @@ export default {
       this.$set(this.form2, 'suoshushuiti', data.water_type)
       this.$set(this.form2, 'suoshushuitiname', data.water_id)
       this.$set(this.form2, 'address', data.location)
-      this.$set(this.form2, 'jwd', data.lon_lat[0])
+      this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
       this.$set(this.form2, 'deptname', data.dept_id)
       this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
@@ -752,7 +753,7 @@ export default {
             water_type: this.form2.suoshushuiti,
             water_id: this.form2.suoshushuitiname,
             location: this.form2.address,
-            lon_lat: [this.form2.jwd],
+            lon_lat: this.form2.jwd,
             dept_id: this.form2.deptname,
             regionalism_id: this.form2.suoshuquyu2 === undefined ? '' : this.form2.suoshuquyu2,
             station_type: 4,
