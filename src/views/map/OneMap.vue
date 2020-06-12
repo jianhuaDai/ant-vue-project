@@ -210,19 +210,7 @@
       },
       searchFilter (layerItem, searchName) {
         console.log(layerItem, 'layerItem')
-        const params = () => {
-          const noStationArr = [31]
-          if (noStationArr.includes(layerItem.id)) {
-            return {
-              name: searchName
-            }
-          } else {
-            return {
-              station_name: searchName
-            }
-          }
-        }
-        GetDataByLayer(layerItem.id, params).then(res => {
+        GetDataByLayer(layerItem.id, { station_name: searchName, name: searchName }).then(res => {
           this.tableList.data = res.data.list
           this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach((marker) => {
               marker.remove()
