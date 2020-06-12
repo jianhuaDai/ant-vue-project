@@ -141,7 +141,7 @@ export function LayerBtns () {
       id: 51,
       name: '排污口',
       icon: '/icons/outfall.svg',
-      detailModal: 'GetWaterDetail',
+      detailModal: 'outFallDetail',
       bgColor: '#516c85',
       detailTitle: '排污口详情'
     }],

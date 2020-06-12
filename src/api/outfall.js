@@ -1,6 +1,6 @@
 import { axios } from '@/utils/request'
 
-// 获取断面列表
+// 获取排污口列表
 export function getOutfallList (params) {
   return axios({
     url: '/sewage/page_query',
@@ -9,7 +9,7 @@ export function getOutfallList (params) {
   })
 }
 
-// 新增断面
+// 新增排污口
 export function addOutfall (params) {
   return axios({
     url: '/sewage',
@@ -18,7 +18,7 @@ export function addOutfall (params) {
   })
 }
 
-// 修改断面
+// 修改排污口
 export function editOutfall (id, params) {
   return axios({
     url: `/sewage/${id}`,
@@ -27,10 +27,10 @@ export function editOutfall (id, params) {
   })
 }
 
-// 删除断面
+// 删除排污口逻辑删除
 export function deleteOutfall (id) {
   return axios({
-    url: `/sewage/${id}`,
+    url: `/sewage/delete/${id}`,
     method: 'delete'
   })
 }

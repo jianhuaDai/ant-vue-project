@@ -260,6 +260,7 @@
       // 渲染Layer
       renderLayer (layerItem, res) {
         this.showRainTimeRange = layerItem.id === 13
+        console.log(layerItem.id, 'layerItem.id')
         switch (layerItem.id) {
           case 11: {
             res.data.list.forEach((v) => {
@@ -272,14 +273,14 @@
           case 12: {
             res.data.list.forEach((v) => {
               this.renderMarker(v.lon_lat,
-                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
+                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `上游：${v.up_value.toFixed(2)}m，下游：${v.down_value.toFixed(2)}m`)
             })
             break
           }
           case 13: {
             res.data.list.forEach((v) => {
               this.renderMarker(v.lon_lat,
-                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `${v.station_type_name}`)
+                layerItem, v.monitoring_id, layerItem.icon, layerItem.bgColor, v.station_name, `雨量：${v.value.toFixed(0)}mm`)
             })
             break
           }
