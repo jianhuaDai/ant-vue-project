@@ -29,14 +29,18 @@
               </a-col>
               <a-col :span="6">
                 <a-form-model-item label="测站类别:" prop="czlb" ref="czlb">
-                  <a-select v-model="form.czlb" placeholder="全部" allowClear>
+                  <!-- <a-select v-model="form.czlb" placeholder="全部" allowClear>
                     <a-select-option value="1">水文站</a-select-option>
                     <a-select-option value="2">水位站</a-select-option>
                     <a-select-option value="3">闸坝站</a-select-option>
                     <a-select-option value="4">水库站</a-select-option>
                     <a-select-option value="5">泵站</a-select-option>
                     <a-select-option value="6">潮位站</a-select-option>
-                  </a-select>
+                  </a-select> -->
+                  <dictionary-select
+                    v-model="form.czlb"
+                    :dictionary-type="DictionaryEnum.DIC_STATION_USE_TYPE">
+                  </dictionary-select>
                 </a-form-model-item>
               </a-col>
               <a-col
@@ -86,7 +90,7 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
-                <template
+                <!-- <template
                   slot="station_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
@@ -104,7 +108,7 @@
                   <div v-if="record.status === 5">
                     <span>视频站</span>
                   </div>
-                </template>
+                </template> -->
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -210,6 +214,14 @@
                 prop="suoshuquyu2"
                 ref="suoshuquyu2">
                 <a-tree-select v-model="form2.suoshuquyu2" :treeData="options2"> </a-tree-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item label="测站类别:" prop="czlb2" ref="czlb2">
+                <dictionary-select
+                  v-model="form2.czlb2"
+                  :dictionary-type="DictionaryEnum.DIC_STATION_USE_TYPE">
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -392,6 +404,7 @@ export default {
         suoshushuiti: '',
         suoshushuitiname: '',
         suoshuquyu2: '',
+        czlb2: '',
         deptname: '',
         jwd: '',
         jcfs: '',
@@ -415,6 +428,9 @@ export default {
         ],
         suoshuquyu2: [
           { required: true, message: '所属区域不能为空', trigger: 'blur' }
+        ],
+        czlb2: [
+          { required: true, message: '测站类别不能为空', trigger: 'blur' }
         ],
         suoshushuitiname: [
           { required: true, message: '水体名称不能为空', trigger: 'blur' }
@@ -533,8 +549,7 @@ export default {
         },
         {
           title: '测站类别',
-          dataIndex: 'station_type',
-          scopedSlots: { customRender: 'station_type' }
+          dataIndex: 'station_use_name'
         },
         {
           title: '监测方式',
@@ -559,6 +574,7 @@ export default {
       queryParam: {
         regionalism_id: '',
         water_type: null,
+        station_use: 0,
         station_type: 1
         // status: 1
       },
@@ -621,7 +637,7 @@ export default {
       this.queryParam.water_type = this.form.suoshushuiti === '' ? null : this.form.suoshushuiti
       // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
-      this.queryParam.station_use = this.form.czlb === '' ? null : parseInt(this.form.czlb)
+      this.queryParam.station_use = this.form.czlb === '' ? 0 : parseInt(this.form.czlb)
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
     },
@@ -723,6 +739,7 @@ export default {
       this.$set(this.form2, 'address', data.location)
       this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
+      this.$set(this.form2, 'czlb2', data.station_type)
       this.$set(this.form2, 'deptname', data.dept_id)
       this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
@@ -760,6 +777,7 @@ export default {
             dept_id: this.form2.deptname,
             regionalism_id: this.form2.suoshuquyu2 === undefined ? '' : this.form2.suoshuquyu2,
             station_type: 1,
+            station_use: this.form2.czlb2,
             monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             base_name: this.form2.jmmc,

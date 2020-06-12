@@ -638,6 +638,13 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
+      this.form.namesearch = ''
+      this.form.suoshuquyu = ''
+      this.form.anxiantype = ''
+      this.form.anxiantype2 = ''
+      this.form.projtype = ''
+      this.form.jsjd = ''
+      this.form.gcgm = ''
     },
     // 点击获取地图坐标
     showMap1 () {

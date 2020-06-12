@@ -32,7 +32,7 @@
                   <!-- <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select> -->
                 </a-form-model-item>
               </a-col>
-              <a-col :span="6">
+              <!-- <a-col :span="6">
                 <a-form-model-item label="测站类别:" prop="czlb" ref="czlb">
                   <a-select v-model="form.czlb" placeholder="全部" allowClear>
                     <a-select-option value="1">水文站</a-select-option>
@@ -43,7 +43,7 @@
                     <a-select-option value="6">潮位站</a-select-option>
                   </a-select>
                 </a-form-model-item>
-              </a-col>
+              </a-col> -->
               <a-col
                 :span="5"
                 :offset="1"
@@ -91,7 +91,7 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
-                <template
+                <!-- <template
                   slot="station_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
@@ -109,7 +109,7 @@
                   <div v-if="record.status === 5">
                     <span>视频站</span>
                   </div>
-                </template>
+                </template> -->
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -266,11 +266,11 @@
                 <a-input v-model="form2.beizhu"></a-input>
               </a-form-model-item>
             </a-col>
-            <a-col :span="12">
+            <!-- <a-col :span="12">
               <a-form-model-item label="图片" prop="image_url" ref="image_url">
                 <uploadSingleImg v-model="form2.image_url"></uploadSingleImg>
               </a-form-model-item>
-            </a-col>
+            </a-col> -->
           </a-row>
         </a-form-model>
       </a-spin>
@@ -401,8 +401,8 @@ export default {
         jwd: '',
         jcfs: '',
         jcpc: '',
-        beizhu: '',
-        image_url: ''
+        beizhu: ''
+        // image_url: ''
       },
       rules: {
         name: [
@@ -490,11 +490,11 @@ export default {
           title: '所属区域',
           dataIndex: 'regionalism_name'
         },
-        {
-          title: '测站类别',
-          dataIndex: 'station_type',
-          scopedSlots: { customRender: 'station_type' }
-        },
+        // {
+        //   title: '测站类别',
+        //   dataIndex: 'station_type',
+        //   scopedSlots: { customRender: 'station_type' }
+        // },
         {
           title: '监测方式',
           dataIndex: 'monitoring_type_name'
@@ -518,6 +518,7 @@ export default {
       queryParam: {
         regionalism_id: '',
         water_type: null,
+        station_use_type: '',
         station_type: 2
         // status: 1
       },
@@ -687,7 +688,7 @@ export default {
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
       // this.$set(this.form2, 'jmmc', data.base_name)
       this.$set(this.form2, 'beizhu', data.explain)
-      this.$set(this.form2, 'image_url', data.image_url)
+      // this.$set(this.form2, 'image_url', data.image_url)
       // this.form2.code = data.monitoring_num
       // this.form2.suoshushuiti = data.water_id.toString()
       // this.form2.address = data.location
@@ -713,12 +714,13 @@ export default {
             lon_lat: this.form2.jwd,
             dept_id: this.form2.deptname,
             regionalism_id: this.form2.suoshuquyu2 === undefined ? '' : this.form2.suoshuquyu2,
+            station_use: this.form2.czlb2,
             station_type: 2,
             monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             // base_name: this.form2.jmmc,
-            explain: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
-            image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
+            explain: this.form2.beizhu === undefined ? '' : this.form2.beizhu
+            // image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
           if (this.addmodifyflag === '1') {
