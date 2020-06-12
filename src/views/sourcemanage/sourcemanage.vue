@@ -396,61 +396,6 @@ export default {
           { required: true, message: '经纬度不能为空', trigger: 'blur' }
         ]
       },
-      // 污染源类型
-      wrytypevalue: [
-        {
-          value: '1',
-          name: '工业污染源'
-        },
-        {
-          value: '2',
-          name: '农业污染源'
-        }, {
-          value: '3',
-          name: '城镇污染源'
-        }
-      ],
-      // 所属河道
-      suoshuhedaovalue: [],
-      // 所属河长
-      sshezhangvalue: [],
-      // 所属区域
-      suoshuquyuvalue: [
-      ],
-      // 污染源类型
-      wuranyuantypevalue: [
-        {
-          key: '1',
-          name: '工业污染源'
-        },
-        {
-          key: '2',
-          name: '农业污染源'
-        },
-        {
-          key: '3',
-          name: '城镇污染源'
-        }
-      ],
-      // 关注类别
-      guanzhujibievalue: [
-        {
-          value: '0',
-          name: '省级'
-        },
-        {
-          value: '1',
-          name: '市级'
-        },
-        {
-          value: '2',
-          name: '区级'
-        },
-        {
-          value: '3',
-          name: '县级'
-        }
-      ],
       // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
       visible: false,

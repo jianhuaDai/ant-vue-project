@@ -90,7 +90,7 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
-                <template
+                <!-- <template
                   slot="station_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
@@ -108,7 +108,7 @@
                   <div v-if="record.status === 5">
                     <span>视频站</span>
                   </div>
-                </template>
+                </template> -->
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -127,7 +127,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <!-- 新增水情 -->
+    <!-- 新增视频测站 -->
     <a-modal
       :title="title"
       width="60%"
@@ -276,11 +276,11 @@
                 <a-input v-model="form2.beizhu"></a-input>
               </a-form-model-item>
             </a-col>
-            <a-col :span="12">
+            <!-- <a-col :span="12">
               <a-form-model-item label="图片" prop="image_url" ref="image_url">
                 <uploadSingleImg v-model="form2.image_url"></uploadSingleImg>
               </a-form-model-item>
-            </a-col>
+            </a-col> -->
           </a-row>
         </a-form-model>
       </a-spin>
@@ -296,7 +296,7 @@
           @click="savePopup">保存</a-button>
       </template>
     </a-modal>
-    <!-- 水情信息删除 -->
+    <!-- 视频测站删除 -->
     <a-modal
       title="水情信息删除"
       :visible="visibledel"
@@ -500,11 +500,11 @@ export default {
           title: '所属区域',
           dataIndex: 'regionalism_name'
         },
-        {
-          title: '测站类别',
-          dataIndex: 'station_type',
-          scopedSlots: { customRender: 'station_type' }
-        },
+        // {
+        //   title: '测站类别',
+        //   dataIndex: 'station_type',
+        //   scopedSlots: { customRender: 'station_type' }
+        // },
         {
           title: '监测方式',
           dataIndex: 'monitoring_type_name'
@@ -696,7 +696,7 @@ export default {
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
       this.$set(this.form2, 'jmmc', data.base_name)
       this.$set(this.form2, 'beizhu', data.explain)
-      this.$set(this.form2, 'image_url', data.image_url)
+      // this.$set(this.form2, 'image_url', data.image_url)
 
       // setTimeout(() => {
       //   this.$set(this.form2, 'image_url', [])
@@ -731,8 +731,8 @@ export default {
             monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             base_name: this.form2.jmmc,
-            explain: this.form2.beizhu === undefined ? '' : this.form2.beizhu,
-            image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
+            explain: this.form2.beizhu === undefined ? '' : this.form2.beizhu
+            // image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
           console.log(this.form2)

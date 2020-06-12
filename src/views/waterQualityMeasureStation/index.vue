@@ -34,14 +34,18 @@
               </a-col>
               <a-col :span="6">
                 <a-form-model-item label="测站类别:" prop="czlb" ref="czlb">
-                  <a-select v-model="form.czlb" placeholder="全部" allowClear>
+                  <!-- <a-select v-model="form.czlb" placeholder="全部" allowClear>
                     <a-select-option value="1">水文站</a-select-option>
                     <a-select-option value="2">水位站</a-select-option>
                     <a-select-option value="3">闸坝站</a-select-option>
                     <a-select-option value="4">水库站</a-select-option>
                     <a-select-option value="5">泵站</a-select-option>
                     <a-select-option value="6">潮位站</a-select-option>
-                  </a-select>
+                  </a-select> -->
+                  <dictionary-select
+                    v-model="form.czlb"
+                    :dictionary-type="DictionaryEnum.DIC_STATION_USE_TYPE">
+                  </dictionary-select>
                 </a-form-model-item>
               </a-col>
               <a-col
@@ -91,7 +95,7 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
-                <template
+                <!-- <template
                   slot="station_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
@@ -109,7 +113,7 @@
                   <div v-if="record.status === 5">
                     <span>视频站</span>
                   </div>
-                </template>
+                </template> -->
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -128,7 +132,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <!-- 新增水质 -->
+    <!-- 新增水质测站 -->
     <a-modal
       :title="title"
       width="60%"
@@ -236,14 +240,17 @@
                 <a-tree-select v-model="form2.suoshuquyu2" :treeData="options2"> </a-tree-select>
               </a-form-model-item>
             </a-col>
-            <!-- <a-col :span="12">
+            <a-col :span="12">
               <a-form-model-item
                 label="测站类别"
-                prop="czlb"
-                ref="czlb">
-                <a-input v-model="form2.czlb"></a-input>
+                prop="czlb2"
+                ref="czlb2">
+                <dictionary-select
+                  v-model="form2.czlb2"
+                  :dictionary-type="DictionaryEnum.DIC_STATION_USE_TYPE">
+                </dictionary-select>
               </a-form-model-item>
-            </a-col> -->
+            </a-col>
             <a-col :span="12">
               <a-form-model-item
                 label="监测方式"
@@ -428,6 +435,7 @@ export default {
         suoshushuiti: '',
         suoshushuitiname: '',
         suoshuquyu2: '',
+        czlb2: '',
         deptname: '',
         jwd: '',
         jcfs: '',
@@ -452,6 +460,9 @@ export default {
         suoshuquyu2: [
           { required: true, message: '所属区域不能为空', trigger: 'blur' }
         ],
+        czlb2: [
+          { required: true, message: '测站类别不能为空', trigger: 'blur' }
+        ],
         jcfs: [
           { required: true, message: '监测方式不能为空', trigger: 'blur' }
         ],
@@ -471,67 +482,6 @@ export default {
           { required: true, message: '经纬度不能为空', trigger: 'blur' }
         ]
       },
-      // 污染源类型
-      wrytypevalue: [
-        {
-          value: '1',
-          name: '工业污染源'
-        },
-        {
-          value: '2',
-          name: '农业污染源'
-        }, {
-          value: '3',
-          name: '城镇污染源'
-        }
-      ],
-      // 所属河道
-      suoshuhedaovalue: [
-        {
-          value: '0',
-          name: '长江'
-        },
-        {
-          value: '1',
-          name: '秦淮河'
-        }
-      ],
-      // 所属区域
-      suoshuquyuvalue: [],
-      // 污染源类型
-      wuranyuantypevalue: [
-        {
-          value: '0',
-          name: '工业污染源'
-        },
-        {
-          value: '1',
-          name: '农业污染源'
-        },
-        {
-          value: '2',
-          name: '城镇污染源'
-        }
-      ],
-      // 关注类别
-      guanzhujibievalue: [
-        {
-          value: '0',
-          name: '省级'
-        },
-        {
-          value: '1',
-          name: '市级'
-        },
-        {
-          value: '2',
-          name: '区级'
-        },
-        {
-          value: '3',
-          name: '县级'
-        }
-      ],
       // form: this.$form.createForm(this),
       // form2: this.$form.createForm(this),
       visible: false,
@@ -566,8 +516,7 @@ export default {
         },
         {
           title: '测站类别',
-          dataIndex: 'station_type',
-          scopedSlots: { customRender: 'station_type' }
+          dataIndex: 'station_use_name'
         },
         {
           title: '监测方式',
@@ -592,6 +541,7 @@ export default {
       queryParam: {
         regionalism_id: '',
         water_type: null,
+        station_use: 0,
         station_type: 3
         // status: 1
       },
@@ -654,7 +604,7 @@ export default {
       this.queryParam.water_type = this.form.suoshushuiti === '' ? null : this.form.suoshushuiti
       // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
-      this.queryParam.station_type = 3
+      this.queryParam.station_use = this.form.czlb === '' ? 0 : this.form.czlb
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
     },
@@ -756,6 +706,7 @@ export default {
       this.$set(this.form2, 'address', data.location)
       this.$set(this.form2, 'jwd', [parseFloat(data.lon_lat[0]), parseFloat(data.lon_lat[1])])
       this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
+      this.$set(this.form2, 'czlb2', data.station_type)
       this.$set(this.form2, 'deptname', data.dept_id)
       this.$set(this.form2, 'jcfs', data.monitoring_type.toString())
       this.$set(this.form2, 'jcpc', data.monitoring_frequency)
@@ -788,10 +739,11 @@ export default {
             water_type: this.form2.suoshushuiti,
             water_id: this.form2.suoshushuitiname,
             location: this.form2.address,
+            station_use: this.form2.czlb2,
+            station_type: 3,
             lon_lat: this.form2.jwd,
             dept_id: this.form2.deptname,
             regionalism_id: this.form2.suoshuquyu2 === undefined ? '' : this.form2.suoshuquyu2,
-            station_type: 3,
             monitoring_type: parseInt(this.form2.jcfs),
             monitoring_frequency: this.form2.jcpc === undefined ? 0 : parseInt(this.form2.jcpc),
             station_level: this.form2.czdj === undefined ? 0 : parseInt(this.form2.czdj),

@@ -1050,6 +1050,7 @@ export default {
     // 设置河流表单值
     setheliu (data) {
       console.log(data)
+      console.log(typeof ([parseFloat(data.origin[0]), parseFloat(data.origin[1])]))
       this.form2.name = data.name
       // this.form2.hehutypevalue = data.water_type
       this.form2.hehutypevalue = 1
@@ -1335,8 +1336,8 @@ export default {
             reqData.location = this.form2.weizhishuikupian
           }
           console.log(reqData)
-          console.log(reqData.origin)
-          console.log(typeof (reqData.origin))
+          // console.log(reqData.origin)
+          // console.log(typeof (reqData.origin))
           if (this.addmodifyFlag === '1') {
             addRiverlake(reqData).then(res => {
               // console.log(res)
