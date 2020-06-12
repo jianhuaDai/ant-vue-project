@@ -186,3 +186,17 @@ export function rainMonitors (id) {
     method: 'get'
   })
 }
+// 排污口getOutFallDetail
+export function getOutFallDetail (id) {
+  return axios({
+    url: `/sewage_monitors/${id}`,
+    method: 'get'
+  })
+}
+// 排污口详情
+export function getOutFallAttribute (id) {
+  return axios({
+    url: `/sewage/${id}`,
+    method: 'get'
+  })
+}

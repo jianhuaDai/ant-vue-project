@@ -22,6 +22,7 @@
   import PollutionDetail from '../components/PollutionDetail'
   import waterDetail from '../components/waterDetail'
   import rainDetail from '../components/rainDetail'
+  import outFallDetail from '../components/outfallDetail'
   export default {
     props: {
     },
@@ -32,7 +33,8 @@
       GetWaterDetail,
       PollutionDetail,
       waterDetail,
-      rainDetail
+      rainDetail,
+      outFallDetail
     },
     data () {
       return {

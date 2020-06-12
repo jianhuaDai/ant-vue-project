@@ -95,11 +95,11 @@
                 </dictionary-select>
               </a-form-model-item>
             </a-col>
-            <!-- <a-col :span="12">
-              <a-form-model-item label="所属河长" prop="river_chief_id" ref="river_chief_id">
-                <a-input v-model="form.river_chief_id" />
+            <a-col :span="12">
+              <a-form-model-item label="详细地址" prop="location" ref="location">
+                <a-input v-model="form.location" />
               </a-form-model-item>
-            </a-col> -->
+            </a-col>
             <a-col :span="12">
               <a-form-model-item label="设计入河量" prop="in_river_plan" ref="in_river_plan">
                 <a-input v-model="form.in_river_plan">
