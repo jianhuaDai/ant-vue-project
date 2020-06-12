@@ -5,7 +5,7 @@
       <a-tabs type="card">
         <a-tab-pane key="1" tab="水质详情">
           <div style="width: 100%; height: 300px;">
-            <waterQuality></waterQuality>
+            <waterQuality :qualityInfo="qualityInfo"></waterQuality>
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" tab="属性趋势图">
@@ -24,6 +24,7 @@
 </template>
 <script>
 import { oneWaterFun } from '@/api/waterfun'
+import { waterQualityDetail } from '@/api/mapServer'
 import getWaterFunAttrbute from './getWaterFunAttribute.vue'
 import waterQuality from './waterQuality.vue'
 import attributeTrend from './attributeTrend.vue'
@@ -47,7 +48,8 @@ export default {
       infoDetail: {},
       tabDatasource: {},
       startPoint: '',
-      endPoint: ''
+      endPoint: '',
+      qualityInfo: {}
     }
   },
   created () {
@@ -55,17 +57,11 @@ export default {
   },
   methods: {
     loadDetailData () {
-      // var reqData = {
-      //   page: '1',
-      //   page_size: '10',
-      //   keyword: '',
-      //   city_id: '3201'
-      // }
-      var reqData = {
-        id: this.id
-      }
       oneWaterFun(this.id).then(res => {
         this.infoDetail = res.data
+      })
+      waterQualityDetail(this.id).then((res) => {
+        this.qualityInfo = res.data
       })
     }
   }

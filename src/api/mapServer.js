@@ -87,7 +87,7 @@ export function loadGetWater (parameter) {
     data: parameter
   })
 }
-
+// 获取取水口详情上半部分
 export function getWaterDetail (id) {
   return axios({
     url: `${api.getWaterDetail}/${id}`,
@@ -95,7 +95,20 @@ export function getWaterDetail (id) {
     params: {}
   })
 }
-
+// 获取取水口详情图表数据
+export function getWaterChart (id) {
+  return axios({
+    url: `monitoring_count/chart/${id}`,
+    method: 'get'
+  })
+}
+// 获取水功能详情部分的水质详情
+export function waterQualityDetail (id) {
+  return axios({
+    url: `/water_fun_monitors/${id}`,
+    method: 'get'
+  })
+}
 export function loadWaterEmphasiss (parameter) {
   return axios({
     url: api.waterEmphasiss,

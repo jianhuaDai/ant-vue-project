@@ -99,16 +99,27 @@
 </template>
 
 <script>
-  import { getWaterDetail } from '@/api/mapServer'
+  import { getWaterDetail, getWaterChart } from '@/api/mapServer'
 
   export default {
     name: 'GetWaterDetail',
     created () {
-        console.log(this.id)
-        this.confirmLoading = true
-        getWaterDetail(this.id).then(res => {
-          this.form = res.data
-          this.confirmLoading = false
+      getWaterDetail(this.id).then(res => {
+        this.form = res.data
+      })
+      getWaterChart('138203484309684001').then((res) => {
+        const yearsArr = res.data[0].map((item) => {
+          return item.mon_year
+        })
+        this.chartData.rows = res.data.map((item) => {
+          const rowObj = {}
+          yearsArr.forEach((element, index) => {
+            rowObj[element] = item[0].value
+            rowObj['月份'] = item[0].mon_month
+          })
+          return rowObj
+        })
+        this.chartData.columns = ['月份'].concat(yearsArr)
       })
     },
     props: {
@@ -120,32 +131,33 @@
     data: function () {
       return {
         form: {},
+        qualityForm: {},
         confirmLoading: false,
         colors: ['#3FD4A2', '#6885B8', '#FF6010'],
         chartSettings: {
-          labelMap: {
-            value: '取水量',
-            month: '月份'
-          }
         },
         extend: {
           grid: {
-            bottom: 0
+            bottom: 0,
+            right: '2%'
             // top: 24
           },
           xAxis: {
+            show: true,
             type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+            data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+            name: '月份'
           },
-          splitLine: {
+          yAxis: {
+            show: true,
+            name: 'm3'
           }
         },
         chartData: {
-          columns: ['月份', '2018年', '2019年', '2020年'],
+          // columns: ['月份', '2018年', '2019年', '2020年'],
+          columns: [],
           rows: [
-            { '月份': '1月', '2018年': 1393, '2019年': 1093, '2020年': 2000 },
-            { '月份': '2月', '2018年': 3530, '2019年': 3230, '2020年': 3000 },
-            { '月份': '3月', '2018年': 2923, '2019年': 2623, '2020年': 2000 }
+            // { '月份': '1月', '2018年': 1393, '2019年': 1093, '2020年': 2000 },
           ]
         }
       }

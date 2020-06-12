@@ -461,7 +461,8 @@ export function GetDataByLayer () {
     case 31: {
       return loadGetWater({
         page: 1,
-        page_size: 0
+        page_size: 0,
+        ...params
       })
     }
     case 32: {
