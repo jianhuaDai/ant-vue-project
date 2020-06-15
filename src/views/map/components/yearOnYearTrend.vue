@@ -1,54 +1,117 @@
 <template>
-  <div class="year-on-year-trend">
+  <div class="attribute-trend">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-          <a-col :md="12" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="时间" style="margin-bottom: 0">
-              <a-range-picker :mode="queryParam.time" />
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <a-form-item label="浑浊度" style="margin-bottom: 0; z-index: 110000">
-              <a-select v-model="queryParam.status" placeholder="请选择">
-                <a-select-option value="">全部</a-select-option>
-                <a-select-option :value="1">未制定方案</a-select-option>
-                <a-select-option :value="2">已制定方案</a-select-option>
-                <a-select-option :value="3">已完成</a-select-option>
+              <a-select v-model="queryParam.start_time" @change="drawStartLine">
+                <a-select-option v-for="item in years" :key="item" :value="item">
+                  {{ item }}
+                </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="24">
-            <div style="float: right">
-              <a-button type="primary">查询</a-button>
-            </div>
+          <a-col :md="5" :sm="24">
+            <a-form-item label="" style="margin-bottom: 0">
+              <a-select v-model="queryParam.end_time" @change="drawEndLine">
+                <a-select-option v-for="item in years" :key="item" :value="item">
+                  {{ item }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="维度" style="margin-bottom: 0; z-index: 110000">
+              <dictionary-select
+                v-model="queryParam.indicator"
+                :insert-option-all="false"
+                :select-first="true"
+                :dictionary-type="DictionaryEnum.FUNC_INDICATOR">
+              </dictionary-select>
+            </a-form-item>
           </a-col>
         </a-row>
       </a-form>
     </div>
-    <div id="year-on-year-trend-chart"></div>
+    <div id="year-on-year-chart"></div>
   </div>
 </template>
 
 <script>
+import { waterFunTrend } from '@/api/mapServer'
 var echarts = require('echarts/lib/echarts')
 export default {
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       queryParam: {
-        time: [],
-        status: 1
+        start_time: '',
+        end_time: '',
+        indicator: 1
       },
-      myChart: null
+      myChart: null,
+      lineTimeData: [],
+      lineDataOne: [],
+      lineDataTwo: [],
+      years: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020']
+    }
+  },
+  watch: {
+    'queryParam.indicator': {
+      handler (v) {
+        this.drawStartLine()
+        this.drawEndLine()
+      },
+      deep: true
     }
   },
   created () {
     this.$nextTick().then(() => {
-      this.myChart = echarts.init(document.getElementById('year-on-year-trend-chart'))
+      this.myChart = echarts.init(document.getElementById('year-on-year-chart'))
       this.loadChart()
     })
   },
   methods: {
+    drawStartLine () {
+      const params = {
+        id: this.id,
+        indicator: this.queryParam.indicator,
+        start_time: `${this.queryParam.start_time}-01-01`,
+        end_time: `${this.queryParam.start_time}-12-31`
+      }
+      waterFunTrend(params).then((res) => {
+        if (res.data.length > 0) {
+          this.lineTimeData = res.data.map(item => item.collect_time.split('-')[1])
+          this.lineDataOne = res.data.map(item => item.value)
+        } else {
+          this.lineDataOne = []
+        }
+        this.loadChart()
+      })
+    },
+    drawEndLine () {
+      const params = {
+        id: this.id,
+        indicator: this.queryParam.indicator,
+        start_time: `${this.queryParam.end_time}-01-01`,
+        end_time: `${this.queryParam.end_time}-12-31`
+      }
+      waterFunTrend(params).then((res) => {
+        if (res.data.length > 0) {
+          this.lineTimeData = res.data.map(item => item.collect_time.split('-')[1])
+          this.lineDataTwo = res.data.map(item => item.value)
+        } else {
+          this.lineDataTwo = []
+        }
+        this.loadChart()
+      })
+    },
     loadChart () {
       var option = {
         title: {
@@ -60,41 +123,27 @@ export default {
           padding: [2, 10],
           textStyle: {
             fontSize: 16
+          },
+          formatter: (params) => {
+            console.log(params, 'params')
+            let str = ''
+            params.forEach((item) => {
+              if (item.seriesIndex === 0) {
+                str += '<p>' + this.queryParam.start_time + ': ' + item.data + '</p>'
+              } else {
+                str += '<p>' + this.queryParam.end_time + ': ' + item.data + '</p>'
+              }
+            })
+            return str
           }
         },
         xAxis: {
           type: 'category',
+          name: '月份',
           splitLine: {
             show: false
           },
-          axisLine: {
-            lineStyle: {
-              width: 3
-            }
-          },
-          axisTick: {
-            show: true,
-            alignWithLabel: true,
-            lineStyle: {
-              width: 3
-            }
-          },
-          axisLabel: {
-            rotate: 45,
-            fontWeight: 'bold',
-            formatter: function (value) {
-              return value.split(' ')[1]
-            }
-          },
-          data: [
-            '2017-09-11 16:23:34',
-            '2017-09-11 16:28:34',
-            '2017-09-11 16:33:34',
-            '2017-09-11 16:38:34',
-            '2017-09-11 16:43:34',
-            '2017-09-11 16:48:34',
-            '2017-09-11 16:53:34'
-          ]
+          data: this.lineTimeData
         },
         grid: {
           left: '2%',
@@ -102,70 +151,15 @@ export default {
           bottom: '4%',
           containLabel: true
         },
-        visualMap: [
-          {
-            show: false,
-            pieces: [
-              {
-                gt: 0,
-                lte: 100,
-                color: 'red'
-              },
-              {
-                gt: 100,
-                color: 'blue'
-              }
-            ],
-            seriesIndex: 1
-          },
-          {
-            show: false,
-            pieces: [
-              {
-                gt: 0,
-                lte: 80,
-                color: 'yellow'
-              },
-              {
-                gt: 80,
-                color: 'blue'
-              }
-            ],
-            seriesIndex: 0
-          }
-        ],
         yAxis: {
           type: 'value',
-          name: 'M',
+          name: '数值',
           splitLine: {
             show: false
           },
-          axisLine: {
-            lineStyle: {
-              width: 3,
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: 'red'
-                  },
-                  {
-                    offset: 1,
-                    color: 'blue'
-                  }
-                ],
-                globalCoord: false // 缺省为 false
-              }
-            }
-          },
           axisTick: {
             lineStyle: {
-              width: 3
+              width: 1
             }
           },
           axisLabel: {
@@ -175,77 +169,11 @@ export default {
         series: [
           {
             type: 'line',
-            symbol: 'circle',
-            symbolSize: 10,
-            animationDuration: 2000,
-            itemStyle: {
-              normal: {
-                color: 'rgb(103, 99, 99)',
-                shadowBlur: 2,
-                shadowColor: 'rgba(0, 0, 0, .12)',
-                shadowOffsetX: 2,
-                shadowOffsetY: 2
-              }
-            },
-            lineStyle: {
-              normal: {
-                width: 3,
-                shadowColor: 'rgba(0,0,0,0.4)',
-                shadowBlur: 10,
-                shadowOffsetX: 4,
-                shadowOffsetY: 10
-              }
-            },
-            data: [120, 90, 34, 65, 89, 201, 130],
-            markLine: {
-              silent: true,
-              data: [
-                {
-                  yAxis: 100
-                }
-              ]
-            },
-            markPoint: {
-              label: {
-                normal: {
-                  show: true,
-                  align: 'center',
-                  color: 'WHITE',
-                  fontWeight: 100,
-                  formatter: '{b}'
-                }
-              },
-              itemStyle: {
-                normal: {
-                  color: {
-                    type: 'radial',
-                    x: 0.4,
-                    y: 0.4,
-                    r: 0.9,
-                    colorStops: [
-                      {
-                        offset: 0,
-                        color: '#51e0a2'
-                      },
-                      {
-                        offset: 1,
-                        color: 'rgb(33,150,243)'
-                      }
-                    ],
-                    globalCoord: false
-                  },
-                  shadowColor: 'rgba(0, 0, 0, 0.5)',
-                  shadowBlur: 10
-                }
-              },
-              data: [
-                {
-                  name: '触发',
-                  value: 120,
-                  coord: [0, 120]
-                }
-              ]
-            }
+            data: this.lineDataOne
+          },
+          {
+            type: 'line',
+            data: this.lineDataTwo
           }
         ]
       }
@@ -256,10 +184,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.year-on-year-trend {
+.attribute-trend {
   height: 100%;
   width: 100%;
-  #year-on-year-trend-chart {
+  #year-on-year-chart {
     width: 100%;
     height: calc(100% - 35px);
   }

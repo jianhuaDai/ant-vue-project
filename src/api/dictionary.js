@@ -31,7 +31,8 @@ export const DictionaryEnum = {
   DIC_PROJECT_SIZE: 'project_size', // 工程规模
   DIC_LINE_BUSINESS: 'line_business', // 岸线工程信息
   DIC_LAND_TYPE: 'land_type', // 土地用途
-  DIC_STATION_USE_TYPE: 'station_use_type' // 测站类别
+  DIC_STATION_USE_TYPE: 'station_use_type', // 测站类别
+  FUNC_INDICATOR: 'func_indicator'
 }
 export function getDictionary (type, pid = 0) {
   return axios({

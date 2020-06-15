@@ -24,7 +24,7 @@
 
       <a-col :span="12">
         <div class="item-title">经纬度:</div>
-        <div class="item-content">{{ infoDetail.lon_lat[0] }}</div>
+        <div class="item-content">{{ infoDetail.lon_lat }}</div>
       </a-col>
       <a-col :span="12">
         <div class="item-title">水质目标:</div>

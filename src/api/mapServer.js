@@ -109,6 +109,14 @@ export function waterQualityDetail (id) {
     method: 'get'
   })
 }
+// 水功能区按编码查询指标趋势数据
+export function waterFunTrend (params) {
+  return axios({
+    url: '/water_fun_monitors/trend',
+    method: 'post',
+    data: params
+  })
+}
 export function loadWaterEmphasiss (parameter) {
   return axios({
     url: api.waterEmphasiss,

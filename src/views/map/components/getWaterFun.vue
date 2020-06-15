@@ -10,12 +10,12 @@
         </a-tab-pane>
         <a-tab-pane key="2" tab="属性趋势图">
           <div style="width: 100%; height: 300px;">
-            <attributeTrend></attributeTrend>
+            <attributeTrend :id="id"></attributeTrend>
           </div>
         </a-tab-pane>
         <a-tab-pane key="3" tab="同比趋势图">
           <div style="width: 100%; height: 300px;">
-            <yearOnYearTrend></yearOnYearTrend>
+            <yearOnYearTrend :id="id"></yearOnYearTrend>
           </div>
         </a-tab-pane>
       </a-tabs>
