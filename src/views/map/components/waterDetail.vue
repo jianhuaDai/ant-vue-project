@@ -120,7 +120,7 @@ export default {
             down_value: item.down_value.toFixed(2),
             up_value: item.up_value.toFixed(2)
           }
-        })
+        }).reverse()
       })
     }
   }

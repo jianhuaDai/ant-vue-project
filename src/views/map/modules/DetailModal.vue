@@ -9,7 +9,7 @@
       :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
-      <component :is="detailModal" :id="dataId"></component>
+      <component :is="detailModal" :id="dataId" :outfallValue="outfallValue"></component>
     </a-modal>
   </div>
 </template>
@@ -51,7 +51,8 @@
       showModal (id = '', detailModal = '', title = '详情') {
         console.log(id, 'pollution_idpollution_id')
         this.dataId = id
-        this.detailModal = detailModal
+        this.detailModal = detailModal.detailModal
+        this.outfallValue = detailModal.value
         this.title = title
         this.visible = true
       },

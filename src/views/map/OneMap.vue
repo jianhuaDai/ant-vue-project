@@ -74,11 +74,11 @@
               <span slot="m3s" slot-scope="text">
                 {{ text }}m<sup>3</sup>/s
               </span>
-              <span slot="t/a" slot-scope="text">
-                {{ text }}t/a
-              </span>
               <span slot="hasOrNo" slot-scope="text">
                 {{ text === 1 ? '有': '无' }}
+              </span>
+              <span slot="in_river" slot-scope="text">
+                {{ text.toFixed(2) }}t/a
               </span>
             </a-table>
           </div>
@@ -307,7 +307,7 @@
           case 51: {
             res.data.list.forEach((v) => {
               this.renderMarker(v.lon_lat,
-                layerItem, v.sewage_id, layerItem.icon, layerItem.bgColor, v.sewage_name, `${v.sewage_type_name}`)
+                { ...layerItem, value: v.in_river }, v.sewage_id, layerItem.icon, layerItem.bgColor, v.sewage_name, `${v.in_river.toFixed(2)}t/a`)
             })
             break
           }
@@ -320,7 +320,8 @@
       },
       markerClick (dataId, layerItem) {
         if (layerItem.detailModal) {
-          this.$refs.detailModal.showModal(dataId, layerItem.detailModal, layerItem.detailTitle)
+          console.log(layerItem, 'layerItem.')
+          this.$refs.detailModal.showModal(dataId, layerItem, layerItem.detailTitle)
         }
       },
       // 渲染marker

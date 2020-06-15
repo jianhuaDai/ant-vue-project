@@ -336,8 +336,8 @@ const TableColumns = {
       scopedSlots: { customRender: 'hasOrNo' }
     }, {
       title: '排污量',
-      dataIndex: 'come_from',
-      scopedSlots: { customRender: 't/a' }
+      dataIndex: 'in_river',
+      scopedSlots: { customRender: 'in_river' }
     }]
   },
   61: {
@@ -485,8 +485,7 @@ export function GetDataByLayer () {
     case 51: {
       return loadSewage({
         page_size: 0,
-        province_id: 32,
-        status: 1
+        ...params
       })
     }
     case 61: {

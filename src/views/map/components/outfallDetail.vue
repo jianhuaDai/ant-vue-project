@@ -82,7 +82,7 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">实际入河量:</div>
-              <div class="value">空缺</div>
+              <div class="value">{{ outfallValue.toFixed(2) }}</div>
             </div>
           </a-col>
         </a-row>
@@ -143,6 +143,10 @@
       id: {
         type: null,
         default: null
+      },
+      outfallValue: {
+        type: Number,
+        default: 0
       }
     },
     data: function () {

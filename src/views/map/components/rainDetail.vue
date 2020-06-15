@@ -96,7 +96,7 @@ export default {
             diff_value: item.diff_value.toFixed(2),
             sum_value: item.sum_value.toFixed(2)
           }
-        })
+        }).reverse()
       })
     }
   }

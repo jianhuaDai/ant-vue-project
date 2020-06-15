@@ -12,7 +12,7 @@ const api = {
   getWaterDetail: '/get_waters',
   waterEmphasiss: '/info_serve/get_water_emphasiss',
   waterFunction: '/water_functionals/page_query',
-  sewage: '/sewage/page_query',
+  sewage: '/sewage_monitors/list',
   riverLine: '/river_protect/rivers_lines',
   blackWater: '/info_serve/get_water_monitors',
   videoMonitor: '/monitoring_station/page_query'
@@ -137,7 +137,7 @@ export function loadSewage (parameter) {
   return axios({
     url: api.sewage,
     method: 'post',
-    params: parameter
+    data: parameter
   })
 }
 
