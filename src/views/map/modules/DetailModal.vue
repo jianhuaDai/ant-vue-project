@@ -41,7 +41,8 @@
         title: '详情',
         visible: false,
         dataId: '',
-        detailModal: ''
+        detailModal: '',
+        outfallValue: 0
       }
     },
     created () {

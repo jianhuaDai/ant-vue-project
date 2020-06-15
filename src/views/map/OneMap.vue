@@ -102,6 +102,7 @@
     GetTableRowKey, TableColumnsByLayer, GetLayerItem
   } from './config/base'
   import DetailModal from './modules/DetailModal'
+  import { getAllriver } from '@/api/mapServer'
   import moment from 'moment'
   let Map = null
   export default {
@@ -146,11 +147,19 @@
     methods: {
       moment,
       rainTimeRangeChange () {
-        console.log(this.rainTimeRange)
       },
-      initMap () {
-        this.nav(1)
-        fetch('/data/js.geojson').then(res => res.json()).then(data => {
+      async initMap () {
+         const riverData = await getAllriver().then((resData) => {
+          const features = resData.data.geo_info.features
+          // eslint-disable-next-line no-undef
+          return new Promise(resolve => { resolve(features) })
+        })
+        await this.nav(1)
+        await fetch('/data/js.geojson').then(res => {
+            return res.json()
+          }).then(data => {
+            // data.features = data.features.concat(riverData)
+            data.features = riverData
           Map.addSource('320000', {
             'type': 'geojson',
             'data': data
@@ -166,6 +175,7 @@
             }
           }, 'landuse-residential')
         })
+
         // this.renderMarker()
       },
       mapLoaded (map) {
@@ -199,7 +209,6 @@
         if (isShow) {
           this.loadLayer(layerItem)
         } else {
-          console.log('hide===', layerGroup)
           if (layerGroup.markerGroup) {
             layerGroup.markerGroup.forEach((marker) => {
               marker.remove()
@@ -209,7 +218,6 @@
         }
       },
       searchFilter (layerItem, searchName) {
-        console.log(layerItem, 'layerItem')
         GetDataByLayer(layerItem.id, { station_name: searchName, name: searchName }).then(res => {
           this.tableList.data = res.data.list
           this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach((marker) => {
@@ -259,11 +267,9 @@
       // 渲染Layer
       renderLayer (layerItem, res) {
         this.showRainTimeRange = layerItem.id === 13
-        console.log(layerItem.id, 'layerItem.id')
         switch (layerItem.id) {
           case 11: {
             res.data.list.forEach((v) => {
-              console.log(v, 'renderLayer')
               this.renderMarker(v.lon_lat,
                 layerItem, v.pollution_id, layerItem.icon, layerItem.bgColor, v.pollution_name, `${v.pollution_type_name}`)
             })
@@ -320,7 +326,6 @@
       },
       markerClick (dataId, layerItem) {
         if (layerItem.detailModal) {
-          console.log(layerItem, 'layerItem.')
           this.$refs.detailModal.showModal(dataId, layerItem, layerItem.detailTitle)
         }
       },

@@ -17,7 +17,14 @@ const api = {
   blackWater: '/info_serve/get_water_monitors',
   videoMonitor: '/monitoring_station/page_query'
 }
-
+// 初始化河湖地图
+export function getAllriver (params) {
+  return axios({
+    url: '/water_infos/monitor/page_query',
+    method: 'post',
+    data: params
+  })
+}
 export function loadWFS (parameter) {
   return protoAxios({
     url: api.SERVER_MAP,
