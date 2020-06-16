@@ -179,7 +179,8 @@
               'fill-color': '#fff',
               'fill-outline-color': '#ccc'
             }
-          }, 'landuse-residential')
+          })
+          // 'landuse-residential'
         // })
 
         // this.renderMarker()
