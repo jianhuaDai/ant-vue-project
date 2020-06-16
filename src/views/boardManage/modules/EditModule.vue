@@ -165,7 +165,7 @@ export default {
         if (valid) {
           const params = _this.form
           if (params.billboard_id) {
-            editBoard(params)
+            editBoard(params.billboard_id, params)
               .then(res => {
                 _this.$message.success('编辑成功！')
                 _this.visible = false
