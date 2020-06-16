@@ -37,6 +37,9 @@
         <span slot="is_transfer" slot-scope="text">
           {{ text | isExamineName }}
         </span>
+        <span slot="lon_lat" slot-scope="text">
+          {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+        </span>
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEditOrNew(record)">编辑</a>
@@ -79,7 +82,8 @@ export default {
         },
         {
           title: '经纬度',
-          dataIndex: 'lon_lat'
+          dataIndex: 'lon_lat',
+          scopedSlots: { customRender: 'lon_lat' }
         },
         {
           title: '是否为引调水工程取水口',

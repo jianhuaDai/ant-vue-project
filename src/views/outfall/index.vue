@@ -40,8 +40,8 @@
         :data="loadData"
         showPagination="auto"
       >
-        <span slot="name" slot-scope="text, record">
-          <a @click="goTo(record)">{{ text }}</a>
+        <span slot="lon_lat" slot-scope="text">
+          {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
         </span>
 
         <span slot="action" slot-scope="text, record">
@@ -86,7 +86,8 @@ export default {
         },
         {
           title: '经纬度',
-          dataIndex: 'lon_lat'
+          dataIndex: 'lon_lat',
+          scopedSlots: { customRender: 'lon_lat' }
         },
         {
           title: '排水去向',

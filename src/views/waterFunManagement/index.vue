@@ -37,6 +37,9 @@
         <span slot="is_examine" slot-scope="text">
           {{ text | isExamineName }}
         </span>
+        <span slot="lon_lat" slot-scope="text">
+          {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+        </span>
         <span slot="action" slot-scope="text, record, index">
           <template>
             <a @click="handleEditOrNew(record)">编辑</a>

@@ -34,6 +34,13 @@
           </a-row>
           <a-row :gutter="24">
             <a-col :md="12" :sm="24">
+              <a-form-model-item label="经纬度" prop="lon_lat">
+                <mapInput v-model="form.lon_lat" v-if="visible"></mapInput>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :md="12" :sm="24">
               <a-form-model-item prop="chief_task" label="河长任务">
                 <a-input v-model="form.chief_task"></a-input>
               </a-form-model-item>
@@ -91,6 +98,7 @@ import { treeData } from '@/config/areaTreeSelectData'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 import { getRiverlakeList } from '@/api/riverlakemanage'
 import { editBoard, addBoard, getBoardById } from '@/api/boardManage'
+import mapInput from '@/components/Hczy/mapInput.vue'
 export default {
   props: {
     orgData: {
@@ -98,7 +106,7 @@ export default {
       default: () => []
     }
   },
-  components: { uploadSingleImg },
+  components: { uploadSingleImg, mapInput },
   data () {
     return {
       regionalismTree: treeData,
@@ -110,6 +118,7 @@ export default {
       rules: {
         billboard_num: [{ required: true, message: '公示牌编号不能为空', trigger: 'blur' }],
         water_id: [{ required: true, message: '请选择河道', trigger: 'change' }],
+        lon_lat: [{ required: true, message: '请输入经纬度', trigger: 'change' }],
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           { pattern: /^1(3|4|5|6|7|8|9)\d{9}$/, message: '手机号格式不正确' }

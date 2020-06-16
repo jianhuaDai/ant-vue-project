@@ -10,7 +10,8 @@ export const columns = [
   },
   {
     title: '经纬度',
-    dataIndex: 'lon_lat'
+    dataIndex: 'lon_lat',
+    scopedSlots: { customRender: 'lon_lat' }
   },
   {
     title: '是否为考核水功能区',
