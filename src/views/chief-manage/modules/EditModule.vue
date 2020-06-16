@@ -172,7 +172,8 @@
         visible: false
       }
     },
-    watch: {},
+    watch: {
+    },
     created () {
       this.initDeptTree()
       this.initBook()
