@@ -155,11 +155,17 @@
           return new Promise(resolve => { resolve(features) })
         })
         await this.nav(1)
-        await fetch('/data/js.geojson').then(res => {
-            return res.json()
-          }).then(data => {
+        // await fetch('/data/js.geojson').then(res => {
+        //     return res.json()
+        //   }).then(data => {
             // data.features = data.features.concat(riverData)
-            data.features = riverData
+            const data = {
+                      'type': 'FeatureCollection',
+                      'name': 'js',
+                      'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+                      'features': riverData
+                    }
+            // data.features = riverData
           Map.addSource('320000', {
             'type': 'geojson',
             'data': data
@@ -174,7 +180,7 @@
               'fill-outline-color': '#ccc'
             }
           }, 'landuse-residential')
-        })
+        // })
 
         // this.renderMarker()
       },
