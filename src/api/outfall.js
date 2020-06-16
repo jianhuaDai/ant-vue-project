@@ -27,10 +27,10 @@ export function editOutfall (id, params) {
   })
 }
 
-// 删除排污口逻辑删除
+// 删除排污口物理删除
 export function deleteOutfall (id) {
   return axios({
-    url: `/sewage/delete/${id}`,
+    url: `/sewage/${id}`,
     method: 'delete'
   })
 }

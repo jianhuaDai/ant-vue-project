@@ -58,7 +58,7 @@ export default {
         center: [118.806266, 32.059868],
         zoom: 5,
         minZoom: 6,
-        maxZoom: 10,
+        maxZoom: 22,
         token: MAPBOX_TOKEN
       })
       var marker = new mapboxgl.Marker({

@@ -152,6 +152,22 @@ export const asyncRouterMap = [
             ]
           },
           {
+            path: '/info-manage/board',
+            component: PageView,
+            meta: {
+              title: '河长公示牌',
+              permission: ['dashboard']
+            },
+            children: [
+              {
+                path: '/info-manage/board/board-management',
+                name: 'BoardManagement',
+                component: () => import('@/views/boardManage/index.vue'),
+                meta: { title: '公示牌管理', keepAlive: true, permission: ['dashboard'] }
+              }
+            ]
+          },
+          {
             path: '/info-manage/shoreline-info',
             component: PageView,
             meta: {

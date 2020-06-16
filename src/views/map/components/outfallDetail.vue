@@ -40,7 +40,7 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">所属河长:</div>
-              <div class="value">{{ form.river_chief_name }}m<sup>3</sup>/s</div>
+              <div class="value">{{ form.river_chief_name }}</div>
             </div>
           </a-col>
         </a-row>
