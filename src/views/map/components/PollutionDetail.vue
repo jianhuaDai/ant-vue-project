@@ -6,7 +6,7 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">污染源编号：</div>
-              <div class="value">{{ form.id }}</div>
+              <div class="value">{{ form.pollution_num }}</div>
             </div>
           </a-col>
           <a-col :md="12">

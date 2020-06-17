@@ -73,7 +73,7 @@
                 prop="is_transfer"
                 ref="is_transfer"
                 :labelCol="{ span: 12 }"
-                :wrapperCol="{ span: 10}"
+                :wrapperCol="{ span: 10 }"
               >
                 <a-switch v-model="form.is_transfer" checked-children="是" un-checked-children="否" default-checked />
               </a-form-model-item>
@@ -122,7 +122,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="开始取水时间" prop="use_time" ref="use_time">
-                <a-date-picker v-model="form.use_time" show-time type="date" placeholder="" style="width: 100%;" />
+                <a-date-picker
+                  valueFormat="YYYY-MM-DD HH:mm:ss"
+                  v-model="form.use_time"
+                  show-time
+                  type="date"
+                  placeholder=""
+                  style="width: 100%;"
+                />
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -189,7 +196,7 @@ export default {
         ammount: [
           { required: true, message: '取水流量不能为空', trigger: ['blur', 'change'] },
           { pattern: /^[0-9]+$/, message: '请输入整数', trigger: ['blur', 'change'] }
-          ]
+        ]
       },
       visible: false
     }

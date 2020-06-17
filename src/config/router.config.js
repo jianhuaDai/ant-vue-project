@@ -164,6 +164,12 @@ export const asyncRouterMap = [
                 name: 'BoardManagement',
                 component: () => import('@/views/boardManage/index.vue'),
                 meta: { title: '公示牌管理', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/board/template-management',
+                name: 'TemplateManage',
+                component: () => import('@/views/templateManage/index.vue'),
+                meta: { title: '模版管理', keepAlive: true, permission: ['dashboard'] }
               }
             ]
           },
