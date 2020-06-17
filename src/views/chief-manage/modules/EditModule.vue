@@ -157,9 +157,9 @@
           employee_name: [
             { required: true, message: '姓名不能为空', trigger: 'blur' }
           ],
-          water_ids: [
-            { required: true, message: '请选择河湖', trigger: 'change' }
-          ],
+          // water_ids: [
+          //   { required: true, message: '请选择河湖', trigger: 'change' }
+          // ],
           pid: [
             { required: true, message: '请选择上级河湖长', trigger: 'change' }
           ],
