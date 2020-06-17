@@ -287,10 +287,6 @@ const TableColumns = {
   32: {
     rowKey: 'func_id',
     columns: [{
-      title: '级别',
-      dataIndex: 'func_grade',
-      width: '60px'
-    }, {
       title: '功能分类',
       dataIndex: 'functional_type_name',
       width: '120px'
@@ -367,8 +363,8 @@ const TableColumns = {
   81: {
     rowKey: 'id',
     columns: [{
-      title: '名称',
-      dataIndex: 'name',
+      title: '公示牌编码',
+      dataIndex: 'billboard_num',
       width: '100'
     }]
   },
@@ -467,7 +463,8 @@ export function GetDataByLayer () {
     }
     case 32: {
       return loadWaterFunction({
-        page_size: 0
+        page_size: 0,
+        ...params
       })
     }
     case 33: {
@@ -505,9 +502,7 @@ export function GetDataByLayer () {
     case 81: {
       return loadBoard({
         page_size: 0,
-        province_id: 32
-      }).then(res => {
-        return Promise.resolve(res.data)
+        ...params
       })
     }
     case 82: {
