@@ -49,8 +49,10 @@
                 label="上级河湖长"
                 prop="pid">
                 <a-tree-select
+                  :allowClear="true"
                   :treeDefaultExpandedKeys="expendBook"
                   :treeIcon="true"
+                  :dropdownStyle="{ maxHeight: '600px', overflow: 'auto' }"
                   placeholder="请选择上级河湖长"
                   :treeData="bookData"
                   v-model="form.pid">
@@ -151,7 +153,7 @@
           regionalism_id: '',
           title_id: null,
           water_ids: [],
-          dept_ids: []
+          dept_ids: ''
         },
         rules: {
           employee_name: [
@@ -176,7 +178,6 @@
     },
     created () {
       this.initDeptTree()
-      this.initBook()
       this.initRiverData()
     },
     methods: {
@@ -212,7 +213,7 @@
                 scopedSlots: {
                   title: 'title'
                 },
-                selectable: true
+                selectable: this.form.employee_id !== employee.employee_id
               }
               deptItem.children.push(employeeItem)
             })
@@ -257,6 +258,8 @@
         })
       },
       showModal (data = {}) {
+        this.initBook()
+
         this.title = data.employee_id ? '编辑' : '新建'
         this.visible = true
         if (data.employee_id) {
@@ -266,10 +269,13 @@
             this.form.water_ids = res.data.water_info_vo.map((v) => {
               return v.water_id
             })
-            this.form.dept_ids = res.data.depts.map((v) => {
-              return v.dept_id
-            })
-            console.log('chief: ', this.form)
+            this.form.dept_ids = res.data.depts.length > 0 ? res.data.depts[0].dept_id : ''
+            if (this.form.pid === '0') {
+            this.form.pid = ''
+          }
+            // this.form.dept_ids = res.data.depts.map((v) => {
+            //   return v.dept_id
+            // })
           }).finally(() => {
             this.confirmLoading = false
           })
@@ -299,6 +305,7 @@
           if (valid) {
             _this.confirmLoading = true
             const params = _this.form
+            params.dept_ids = [params.dept_ids]
             saveChief(params).then((res) => {
               _this.$message.success('保存成功')
               _this.visible = false
