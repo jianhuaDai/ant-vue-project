@@ -92,6 +92,12 @@
                   :columns="columns"
                   :data="loadData"
                   :showPagination="true">
+                  <span slot="origin" slot-scope="text">
+                    {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+                  </span>
+                  <span slot="destination" slot-scope="text">
+                    {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+                  </span>
                   <template
                     slot="water_type"
                     slot-scope="text, record">
@@ -822,12 +828,13 @@ export default {
         },
         {
           title: '起点',
-          dataIndex: 'destination'
+          dataIndex: 'destination',
+          scopedSlots: { customRender: 'destination' }
         },
         {
           title: '终点',
-          dataIndex: 'origin'
-          // sorter: true
+          dataIndex: 'origin',
+          scopedSlots: { customRender: 'origin' }
         },
         {
           title: '类型',

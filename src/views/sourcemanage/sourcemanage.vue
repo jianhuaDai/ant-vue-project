@@ -73,6 +73,9 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
+                <span slot="lon_lat" slot-scope="text">
+                  {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+                </span>
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -426,7 +429,8 @@ export default {
         },
         {
           title: '经纬度',
-          dataIndex: 'lon_lat'
+          dataIndex: 'lon_lat',
+          scopedSlots: { customRender: 'lon_lat' }
         },
         {
           title: '污染源类型',
