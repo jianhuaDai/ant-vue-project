@@ -458,7 +458,7 @@ export default {
           { required: true, message: '地址不能为空', trigger: 'blur' }
         ],
         suoshuquyu2: [
-          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+          { required: true, message: '所属区域不能为空', trigger: 'change' }
         ],
         czlb2: [
           { required: true, message: '测站类别不能为空', trigger: 'blur' }

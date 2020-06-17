@@ -428,7 +428,7 @@ export default {
           { required: true, message: '地址不能为空', trigger: 'blur' }
         ],
         suoshuquyu2: [
-          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+          { required: true, message: '所属区域不能为空', trigger: 'change' }
         ],
         jcfs: [
           { required: true, message: '监测方式不能为空', trigger: 'blur' }

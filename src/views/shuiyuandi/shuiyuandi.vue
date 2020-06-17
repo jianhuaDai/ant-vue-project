@@ -430,6 +430,9 @@ export default {
         suoshushuiti: [
           { required: true, message: '所属水体不能为空', trigger: 'blur' }
         ],
+        suoshuquyu: [
+          { required: true, message: '所属区域不能为空', trigger: ['change'] }
+        ],
         area2: [
           { required: true, message: '所属区域不能为空', trigger: 'blur' }
         ],
@@ -664,6 +667,9 @@ export default {
       var _this = this
       var nav = new mapboxgl.NavigationControl()
       map.addControl(nav, 'top-left')
+      if (this.rowData.lon_lat) {
+        marker.setLngLat([this.rowData.lon_lat[0], this.rowData.lon_lat[1]]).addTo(map)
+      }
       map.on('click', function (e) {
         // alert(e.lngLat.lng, e.lngLat.lat);
         _this.closeMap(e)
@@ -773,7 +779,7 @@ export default {
             reqData.source_id = this.rowData.source_id
             reqData.version = this.rowData.version
             console.log(reqData)
-            updateShuiyuandi(this.rowData.id, reqData).then(res => {
+            updateShuiyuandi(this.rowData.source_id, reqData).then(res => {
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()

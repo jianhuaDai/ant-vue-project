@@ -245,9 +245,6 @@
                   :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
                 </dictionary-select> -->
                 <a-select v-model="form2.hehuzhang">
-                  <!-- <a-select-option value="0">省级</a-select-option>
-                  <a-select-option value="1">市级</a-select-option>
-                  <a-select-option value="2">区县级</a-select-option> -->
                   <a-select-option
                     v-for="item in hehuzhangvalue"
                     :key="item.key"
@@ -270,9 +267,9 @@
               <a-col :span="12">
                 <a-form-item
                   label="河流长度:"
-                  prop="length"
-                  ref="length">
-                  <a-input v-model="form2.length"></a-input>
+                  prop="hehulength"
+                  ref="hehulength">
+                  <a-input v-model="form2.hehulength"></a-input>
                 </a-form-item>
               </a-col>
               <a-col :span="12">
@@ -759,7 +756,7 @@ export default {
         hehucengji: '',
         hehuzhang: '',
         sjhehuku: '',
-        length: '',
+        hehulength: '',
         startjwd: '',
         endjwd: '',
         heliujibie: '',
@@ -779,6 +776,18 @@ export default {
         ],
         code: [
           { required: true, message: '河湖编码不能为空', trigger: 'blur' }
+        ],
+        startjwd: [
+          { required: true, message: '起点经纬度不能为空', trigger: 'blur' }
+        ],
+        endjwd: [
+          { required: true, message: '终点经纬度不能为空', trigger: 'blur' }
+        ],
+        startjwd2: [
+          { required: true, message: '起点经纬度不能为空', trigger: 'blur' }
+        ],
+        endjwd2: [
+          { required: true, message: '终点经纬度不能为空', trigger: 'blur' }
         ],
         hehucengji: [
           { required: true, message: '河湖层级不能为空', trigger: 'blur' }
@@ -837,32 +846,7 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      typevalue: [
-        {
-          value: '0',
-          name: '河流'
-        },
-        {
-          value: '1',
-          name: '河段'
-        },
-        {
-          value: '2',
-          name: '湖泊'
-        },
-        {
-          value: '3',
-          name: '湖泊片'
-        },
-        {
-          value: '4',
-          name: '水库'
-        },
-        {
-          value: '5',
-          name: '水库片'
-        }
-      ],
+      typevalue: [],
       addmodifyFlag: '1',
       gldwnamevalue: [],
       hehuzhangvalue: [],
@@ -959,13 +943,13 @@ export default {
         this.addmodifyFlag = '1'
         this.title = '新增河湖信息'
         // this.$refs.form2.resetFields()
-        this.hehutypevalue = 1
+        this.form2.hehutypevalue = 1
         this.form2.name = ''
         this.form2.code = ''
         this.form2.hehucengji = ''
         this.form2.hehuzhang = ''
         this.form2.sjhehuku = ''
-        this.form2.length = ''
+        this.form2.hehulength = ''
         this.form2.heliujibie = ''
         this.form2.startjwd = ''
         this.form2.endjwd = ''
@@ -1058,7 +1042,7 @@ export default {
       this.form2.hehucengji = data.water_grade
       this.form2.hehuzhang = data.chief_id
       this.form2.sjhehuku = data.p_name
-      this.form2.length = data.length
+      this.form2.hehulength = data.length
       this.form2.heliujibie = data.water_level.toString()
       this.form2.startjwd = [parseFloat(data.origin[0]), parseFloat(data.origin[1])]
       this.form2.endjwd = [parseFloat(data.destination[0]), parseFloat(data.destination[1])]
@@ -1255,6 +1239,7 @@ export default {
       var _this = this
       var nav = new mapboxgl.NavigationControl()
       map.addControl(nav, 'top-left')
+      console.log(this.rowData)
       map.on('click', function (e) {
         // alert(e.lngLat.lng, e.lngLat.lat);
         _this.closeMap(e)
@@ -1307,9 +1292,9 @@ export default {
             pid: this.form2.sjhehuku
           }
           if (this.hehutypevalue === 1) {
-            reqData.length = parseInt(this.form2.length)
+            reqData.length = this.form2.hehulength === '' ? 0 : parseInt(this.form2.hehulength)
             // reqData.heliujibie = this.form2.heliujibie
-            reqData.water_level = parseInt(this.form2.heliujibie)
+            reqData.water_level = this.form2.heliujibie === '' ? 0 : parseInt(this.form2.heliujibie)
             reqData.origin = this.form2.startjwd
             reqData.destination = this.form2.endjwd
           } else if (this.hehutypevalue === 2) {
@@ -1350,10 +1335,8 @@ export default {
             reqData.water_id = this.rowData.water_id
             reqData.version = this.rowData.version
             updateRiverlake(this.rowData.water_id, reqData).then(res => {
-              // console.log(res)
               this.searchClick()
               this.visible = false
-              // this.form2.resetFields()
               this.$refs.form2.clearValidate()
               this.$message.success('编辑河湖库成功!')
             })

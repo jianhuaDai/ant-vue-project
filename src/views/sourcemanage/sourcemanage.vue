@@ -363,6 +363,7 @@ export default {
         namesearch: '',
         wrytype: undefined
       },
+      suoshuhedaovalue: [],
       time: '',
       form2: {
         name: '',
@@ -387,7 +388,7 @@ export default {
           { required: true, message: '所属河道不能为空', trigger: 'blur' }
         ],
         suoshuquyu: [
-          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+          { required: true, message: '所属区域不能为空', trigger: ['blur', 'change'] }
         ],
         wuranyuantype: [
           { required: true, message: '污染源类型不能为空', trigger: 'blur' }
@@ -555,6 +556,9 @@ export default {
       var _this = this
       var nav = new mapboxgl.NavigationControl()
       map.addControl(nav, 'top-left')
+      if (this.rowData.lon_lat) {
+        marker.setLngLat([this.rowData.lon_lat[0], this.rowData.lon_lat[1]]).addTo(map)
+      }
       map.on('click', function (e) {
         // alert(e.lngLat.lng, e.lngLat.lat);
         _this.closeMap(e)
