@@ -160,9 +160,9 @@
           // water_ids: [
           //   { required: true, message: '请选择河湖', trigger: 'change' }
           // ],
-          pid: [
-            { required: true, message: '请选择上级河湖长', trigger: 'change' }
-          ],
+          // pid: [
+          //   { required: true, message: '请选择上级河湖长', trigger: 'change' }
+          // ],
           phone: [
             { required: true, message: '手机号不能为空', trigger: 'blur' },
             { pattern: /^1(3|4|5|6|7|8|9)\d{9}$/, message: '手机号格式不正确' }
