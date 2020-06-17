@@ -792,9 +792,9 @@ export default {
         hehucengji: [
           { required: true, message: '河湖层级不能为空', trigger: 'blur' }
         ],
-        hehuzhang: [
-          { required: true, message: '河湖长不能为空', trigger: 'blur' }
-        ],
+        // hehuzhang: [
+        //   { required: true, message: '河湖长不能为空', trigger: 'blur' }
+        // ],
         zkr: [
           { required: true, message: '河湖层级不能为空', trigger: 'change' }
         ]
