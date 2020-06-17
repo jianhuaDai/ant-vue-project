@@ -88,19 +88,20 @@ export function LayerBtns () {
       id: 12,
       name: '水情',
       icon: '/icons/water.svg',
-      bgColor: '#516c85',
+      bgColor: '#2c92d9',
       detailModal: 'waterDetail',
       detailTitle: '水情详情'
     }, {
       id: 13,
       name: '雨情',
       icon: '/icons/rain.svg',
-      bgColor: '#516c85',
+      bgColor: '#13c7ff',
       detailModal: 'rainDetail',
       detailTitle: '雨情详情'
     }, {
       id: 14,
       name: '视频监控',
+      bgColor: '#3677fe',
       icon: '/icons/video.svg'
     }],
     2: [{
@@ -173,7 +174,7 @@ export function LayerBtns () {
 
 const TableColumns = {
   11: {
-    rowKey: 'id',
+    rowKey: 'pollution_id',
     columns: [{
       title: '污染源',
       dataIndex: 'pollution_name',
