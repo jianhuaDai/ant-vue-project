@@ -490,7 +490,7 @@ export default {
           { required: true, message: '工程类型不能为空', trigger: 'blur' }
         ],
         suoshuquyu2: [
-          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+          { required: true, message: '所属区域不能为空', trigger: 'change' }
         ],
         quanshu: [
           { required: true, message: '权属不能为空', trigger: 'blur' }

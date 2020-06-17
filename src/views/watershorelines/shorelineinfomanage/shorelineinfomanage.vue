@@ -329,7 +329,7 @@ export default {
           { required: true, message: '岸线范围不能为空', trigger: 'blur' }
         ],
         suoshuquyu: [
-          { required: true, message: '所属区域不能为空', trigger: 'blur' }
+          { required: true, message: '所属区域不能为空', trigger: 'change' }
         ],
         gldw: [
           { required: true, message: '管理单位不能为空', trigger: 'blur' }
