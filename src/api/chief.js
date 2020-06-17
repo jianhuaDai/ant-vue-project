@@ -27,7 +27,6 @@ export function getChief (id) {
 export function saveChief (parameter) {
   const method = parameter.employee_id ? 'put' : 'post'
   const url = parameter.employee_id ? `${api.chief}/${parameter.employee_id}` : api.chief
-  parameter.dept_ids = parameter.employee_id ? parameter.dept_ids : [parameter.dept_ids]
   return axios({
     url: url,
     method: method,
