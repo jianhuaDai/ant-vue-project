@@ -71,12 +71,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/shuiyuandi/shuiyuandi'),
             meta: { title: '水源地管理', keepAlive: true, permission: ['dashboard'] }
           },
-          {
-            path: '/info-manage/areamanage',
-            name: 'areamanage',
-            component: () => import('@/views/areamanage/areamanage'),
-            meta: { title: '区域管理', keepAlive: true, permission: ['dashboard'] }
-          },
+          // {
+          //   path: '/info-manage/areamanage',
+          //   name: 'areamanage',
+          //   component: () => import('@/views/areamanage/areamanage'),
+          //   meta: { title: '区域管理', keepAlive: true, permission: ['dashboard'] }
+          // },
           {
             path: '/info-manage/riverlakemanage',
             name: 'riverlakemanage',
