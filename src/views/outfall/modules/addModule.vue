@@ -96,7 +96,7 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="详细地址" prop="location" ref="location">
+              <a-form-model-item label="位置" prop="location" ref="location">
                 <a-input v-model="form.location" />
               </a-form-model-item>
             </a-col>

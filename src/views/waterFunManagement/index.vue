@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="类型" style="margin-bottom: 0">
+              <a-form-item label="级别类型" style="margin-bottom: 0">
                 <a-tree-select v-model="queryParam.functional_type" :allowClear="true" :treeData="treeData" :treeDataSimpleMode="true" placeholder="" />
               </a-form-item>
             </a-col>
