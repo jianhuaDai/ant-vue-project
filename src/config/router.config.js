@@ -71,12 +71,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/shuiyuandi/shuiyuandi'),
             meta: { title: '水源地管理', keepAlive: true, permission: ['dashboard'] }
           },
-          {
-            path: '/info-manage/areamanage',
-            name: 'areamanage',
-            component: () => import('@/views/areamanage/areamanage'),
-            meta: { title: '区域管理', keepAlive: true, permission: ['dashboard'] }
-          },
+          // {
+          //   path: '/info-manage/areamanage',
+          //   name: 'areamanage',
+          //   component: () => import('@/views/areamanage/areamanage'),
+          //   meta: { title: '区域管理', keepAlive: true, permission: ['dashboard'] }
+          // },
           {
             path: '/info-manage/riverlakemanage',
             name: 'riverlakemanage',
@@ -123,13 +123,13 @@ export const asyncRouterMap = [
                 path: '/info-manage/monitor-info/water',
                 name: 'Water',
                 component: () => import('@/views/water/index.vue'),
-                meta: { title: '水情', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '水情测站', keepAlive: true, permission: ['dashboard'] }
               },
               {
                 path: '/info-manage/monitor-info/rain',
                 name: 'Rain',
                 component: () => import('@/views/rain/index.vue'),
-                meta: { title: '雨情', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '雨情测站', keepAlive: true, permission: ['dashboard'] }
               },
               {
                 path: '/info-manage/monitor-info/water-quality-measure-station',
@@ -147,7 +147,7 @@ export const asyncRouterMap = [
                 path: '/info-manage/monitor-info/video-station',
                 name: 'VideoStation',
                 component: () => import('@/views/videoStation/index.vue'),
-                meta: { title: '视频站', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '视频测站', keepAlive: true, permission: ['dashboard'] }
               }
             ]
           },

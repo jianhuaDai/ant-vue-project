@@ -19,16 +19,17 @@
                 </a-form-model-item>
               </a-col>
               <a-col :span="6">
-                <a-form-model-item label="所属水体:" prop="suoshushuiti" ref="suoshushuiti">
+                <a-form-model-item label="测站名称:" prop="czmc" ref="czmc">
+                  <a-input v-model="form.czmc"></a-input>
                   <!-- <a-select v-model="form.suoshushuiti" placeholder="全部">
                     <a-select-option value="1">河流</a-select-option>
                     <a-select-option value="2">湖泊</a-select-option>
                     <a-select-option value="3">水库</a-select-option>
                   </a-select> -->
-                  <dictionary-select
+                  <!-- <dictionary-select
                     v-model="form.suoshushuiti"
                     :dictionary-type="DictionaryEnum.WATER_TYPE">
-                  </dictionary-select>
+                  </dictionary-select> -->
                   <!-- <a-tree-select v-model="form.area" :treeData="options"> </a-tree-select> -->
                 </a-form-model-item>
               </a-col>
@@ -381,8 +382,7 @@ export default {
       confirmLoading: false,
       form: {
         suoshuquyu: '',
-        suoshushuiti: '',
-        czlb: ''
+        czmc: ''
       },
       suoshushuitinamevalue: [],
       options: treeData,
@@ -517,7 +517,7 @@ export default {
        // 查询参数
       queryParam: {
         regionalism_id: '',
-        water_type: null,
+        station_name: '',
         station_use_type: '',
         station_type: 2
         // status: 1
@@ -578,7 +578,7 @@ export default {
       console.log(this.form.type)
       // this.queryParam.regionalism_id = this.form.suoshuquyu
       this.queryParam.regionalism_id = this.form.suoshuquyu === '' ? '' : this.form.suoshuquyu
-      this.queryParam.water_type = this.form.suoshushuiti === '' ? null : this.form.suoshushuiti
+      this.queryParam.station_name = this.form.czmc === '' ? '' : this.form.czmc
       // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       this.queryParam.station_use = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       // console.log(this.queryParam)
