@@ -172,10 +172,10 @@ export function loadProject (parameter) {
   })
 }
 export function loadBoard (parameter) {
-  return protoAxios({
-    url: '/data/board.json',
-    method: 'get',
-    params: parameter
+  return axios({
+    url: '/billboard/page_billboard',
+    method: 'post',
+    data: parameter
   })
 }
 export function loadEvent (parameter) {

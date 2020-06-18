@@ -75,6 +75,12 @@
                 :columns="columns"
                 :data="loadData"
                 :showPagination="true">
+                <span slot="line_start" slot-scope="text">
+                  {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+                </span>
+                <span slot="line_end" slot-scope="text">
+                  {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
+                </span>
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -367,11 +373,13 @@ export default {
         },
         {
           title: '岸线起点',
-          dataIndex: 'line_start'
+          dataIndex: 'line_start',
+          scopedSlots: { customRender: 'line_start' }
         },
         {
           title: '岸线终点',
-          dataIndex: 'line_end'
+          dataIndex: 'line_end',
+          scopedSlots: { customRender: 'line_end' }
         },
         {
           title: '岸线长度',

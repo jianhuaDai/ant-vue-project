@@ -85,7 +85,7 @@
                 <span slot="lon_lat" slot-scope="text">
                   {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
                 </span>
-                <template
+                <!-- <template
                   slot="source_type"
                   slot-scope="text, record">
                   <div v-if="record.status === 1">
@@ -97,7 +97,7 @@
                   <div v-if="record.status === 2">
                     <span>水库</span>
                   </div>
-                </template>
+                </template> -->
                 <span
                   slot="action"
                   slot-scope="text, record, index">
@@ -166,20 +166,23 @@
                 label="所属水体"
                 prop="suoshushuiti"
                 ref="suoshushuiti">
-                <!-- <a-select
-                  placeholder="全部"
-                  v-model="form2.suoshushuiti">
-                  <a-select-option value="1">河流</a-select-option>
-                  <a-select-option value="2">湖泊</a-select-option>
-                  <a-select-option value="3">水库</a-select-option>
-                </a-select> -->
-                <dictionary-select
+                <!-- <dictionary-select
                   v-model="form2.suoshushuiti"
                   :insert-option-all="false"
                   :select-first="false"
                   :dictionary-type="DictionaryEnum.WATER_TYPE"
                 >
-                </dictionary-select>
+                </dictionary-select> -->
+                <a-select
+                  placeholder="全部"
+                  v-model="form2.suoshushuiti">
+                  <a-select-option
+                    v-for="item in suoshushuitivalue"
+                    :key="item.key"
+                    :value="item.key">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -375,7 +378,7 @@
 import { STable } from '@/components'
 import { MAPBOX_TOKEN, Style } from '@/components/Hczy/Map/config'
 // import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { getShuiyuandiList, addShuiyuandi, updateShuiyuandi, delShuiyuandi } from '@/api/shuiyuandi'
+import { getShuiyuandiList, addShuiyuandi, updateShuiyuandi, delShuiyuandi, getRiverlakeList } from '@/api/shuiyuandi'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 import { treeData } from '@/config/areaTreeSelectData'
 import mapboxgl from 'mapbox-gl'
@@ -399,6 +402,7 @@ export default {
         area: '',
         type: null
       },
+      suoshushuitivalue: [],
       options: treeData,
       options2: treeData,
       addmodifyflag: '1',
@@ -486,8 +490,8 @@ export default {
         },
         {
           title: '所属水体',
-          dataIndex: 'source_type',
-          scopedSlots: { customRender: 'source_type' }
+          dataIndex: 'water_name',
+          scopedSlots: { customRender: 'water_name' }
         },
         {
           title: '所属区域',
@@ -518,6 +522,18 @@ export default {
     }
   },
   created () {
+    getRiverlakeList().then(res => {
+      console.log(res)
+      // this.hezhanFlag = res
+      for (var i = 0; i < res.data.list.length; i++) {
+        this.suoshushuitivalue.push(
+          {
+            key: res.data.list[i].water_id,
+            name: res.data.list[i].name
+          }
+        )
+      }
+    })
   },
   methods: {
     // 水源地删除
@@ -659,7 +675,7 @@ export default {
       this.$set(this.form2, 'code', data.source_num)
       this.$set(this.form2, 'pointname', data.point)
       this.$set(this.form2, 'weizhi', data.location)
-      this.$set(this.form2, 'suoshushuiti', data.source_type)
+      this.$set(this.form2, 'suoshushuiti', data.water_id)
       this.$set(this.form2, 'suoshuquyu', data.regionalism_id)
       this.$set(this.form2, 'zxbz', data.standard)
       this.$set(this.form2, 'type2', data.source_property)
@@ -695,7 +711,7 @@ export default {
             source_num: this.form2.code === undefined ? '' : this.form2.code,
             point: this.form2.pointname,
             location: this.form2.weizhi,
-            source_type: parseInt(this.form2.suoshushuiti),
+            water_id: this.form2.suoshushuiti,
             regionalism_id: this.form2.suoshuquyu === undefined ? '' : this.form2.suoshuquyu,
             standard: this.form2.zxbz === undefined ? '' : this.form2.zxbz,
             source_property: parseInt(this.form2.type2),

@@ -3,6 +3,7 @@
     :mode="mode"
     :disabled="disabled"
     v-model="val"
+    :allowClear="allowClear"
     :placeholder="placeholder">
     <a-spin v-if="fetching" slot="notFoundContent" />
     <a-select-option v-for="item in data" :key="item.value">{{ item.name }}</a-select-option>
@@ -22,6 +23,10 @@
           value: {
             type: null,
             default: null
+          },
+          allowClear: {
+            type: Boolean,
+            default: true
           },
           insertOptionAll: {
             type: Boolean,

@@ -19,11 +19,13 @@
               </a-col>
               <a-col :span="8">
                 <a-form-model-item label="污染源类型:" prop="wrytype">
-                  <a-select v-model="form.wrytype" placeholder="全部" allowClear>
-                    <a-select-option value="1">工业污染源</a-select-option>
-                    <a-select-option value="2">农业污染源</a-select-option>
-                    <a-select-option value="3">城镇污染源</a-select-option>
-                  </a-select>
+                  <dictionary-select
+                    v-model="form.wrytype"
+                    :insert-option-all="false"
+                    :select-first="false"
+                    :dictionary-type="DictionaryEnum.POLLUTION_TYPE"
+                  >
+                  </dictionary-select>
                 </a-form-model-item>
               </a-col>
               <a-col
@@ -196,7 +198,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item
-                label="关注类别"
+                label="关注级别"
                 prop="guanzhujibie"
                 ref="guanzhujibie">
                 <dictionary-select

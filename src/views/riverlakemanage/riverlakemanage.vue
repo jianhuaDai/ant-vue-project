@@ -237,7 +237,7 @@
                 ref="hehucengji">
                 <dictionary-select
                   v-model="form2.hehucengji"
-                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL">
+                  :dictionary-type="DictionaryEnum.DIC_WATER_GRADE">
                 </dictionary-select>
               </a-form-model-item>
             </a-col>
@@ -988,7 +988,7 @@ export default {
     },
     setFormValue (value) {
       console.log(value)
-      if (value.water_type === 1) {
+      if (value.water_type === 1 || value.water_type === -1) {
         this.heliuShow = true
         this.heduanShow = false
         this.hupoShow = false
@@ -1372,7 +1372,8 @@ export default {
       // }
       this.queryParam.water_type = this.form.type === '' ? 0 : this.form.type
       this.queryParam.name = this.form.namesearch
-      console.log(this.queryParam)
+      // console.log(this.queryParam)
+      this.queryParam.regionalism_id = this.regionalism_id
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
       // console.log(reqData)

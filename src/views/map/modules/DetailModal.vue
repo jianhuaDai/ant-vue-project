@@ -5,7 +5,7 @@
       :title="title"
       :destroyOnClose="true"
       :footer="null"
-      width="70%"
+      :width="modelWidth"
       :bodyStyle="{paddingBottom: '24px'}"
       @cancel="cancel"
     >
@@ -25,6 +25,10 @@
   import outFallDetail from '../components/outfallDetail'
   export default {
     props: {
+      modelWidth: {
+        type: String,
+        default: '70%'
+      }
     },
     components: {
       anxianDetail,

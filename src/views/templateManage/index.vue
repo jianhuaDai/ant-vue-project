@@ -34,7 +34,7 @@
   import { boardManageList, deleteBoard } from '@/api/boardManage'
   import EditModule from './modules/EditModule'
   import AreaTree from '../../components/Hczy/AreaTree'
-  import { templateList } from '@/api/template'
+  import { templateList, deleteTemplate } from '@/api/template'
   export default {
     name: 'ChiefManage',
     components: { STable, Ellipsis, EditModule, AreaTree },
@@ -55,9 +55,9 @@
         const _this = this
         this.$confirm({
           title: '删除操作',
-          content: `确定要删除${record.billboard_num}吗`,
+          content: `确定要删除${record.template_name}吗`,
           onOk () {
-            deleteBoard(record.billboard_id).then(res => {
+            deleteTemplate(record.template_id).then(res => {
               _this.$message.success('删除成功')
               _this.$refs.table.refresh(true)
             })

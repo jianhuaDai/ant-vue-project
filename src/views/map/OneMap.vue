@@ -349,6 +349,13 @@ export default {
           })
           break
         }
+        case 81: {
+          res.data.list.forEach((v) => {
+            this.renderMarker(v.lon_lat,
+              layerItem, v.billboard_id, layerItem.icon, layerItem.bgColor, '公示牌', `${v.billboard_num}`)
+          })
+          break
+        }
         case 51: {
           res.data.list.forEach(v => {
             this.renderMarker(

@@ -6,7 +6,7 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="所属区域" style="margin-bottom: 0">
-                <a-input v-model="queryParam.regionalism_id" placeholder="" />
+                <a-tree-select v-model="queryParam.regionalism_id" :treeData="treeData"> </a-tree-select>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -57,11 +57,12 @@ import PageView from '../../layouts/PageView'
 import { STable, Ellipsis } from '@/components'
 import { getWaterList, deleteWater } from '@/api/getWater'
 import AddModule from './modules/addModule'
-
+import { treeData } from '@/config/areaTreeSelectData'
 export default {
   name: 'GetWaterManagement',
   data () {
     return {
+      treeData,
       queryParam: {
         regionalism_id: null,
         name: ''
