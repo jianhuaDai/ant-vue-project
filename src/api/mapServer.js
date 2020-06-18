@@ -18,7 +18,7 @@ const api = {
   videoMonitor: '/monitoring_station/page_query'
 }
 // 初始化河湖地图
-export function getAllriver (params) {
+export function getRiver (params) {
   return axios({
     url: '/water_infos/monitor/page_query',
     method: 'post',
