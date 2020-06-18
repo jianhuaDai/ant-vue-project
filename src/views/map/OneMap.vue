@@ -115,7 +115,7 @@ export default {
       mapOptions: {
         pitch: 30,
         zoom: 7,
-        style: '/bright2'
+        style: '/bright'
       },
       ready: false,
       baseData: {
@@ -273,22 +273,20 @@ export default {
     },
     // 加载河湖图层
     renderRiverLayer (sourceName, data) {
-          Map.addSource(sourceName, {
-            type: 'geojson',
-            data: data
-          })
-          Map.addLayer(
-            {
-              id: sourceName,
-              type: 'fill',
-              source: sourceName,
-              layout: {},
-              paint: {
-                'fill-color': 'blue',
-                'fill-outline-color': '#ccc'
-              }
-            }
-          )
+      Map.addSource(sourceName, {
+        type: 'geojson',
+        data: data
+      })
+      Map.addLayer({
+        id: sourceName,
+        type: 'fill',
+        source: sourceName,
+        layout: {},
+        paint: {
+          'fill-color': 'blue',
+          'fill-outline-color': '#ccc'
+        }
+      })
     },
     // 渲染Layer
     renderLayer (layerItem, res) {
@@ -380,9 +378,16 @@ export default {
           break
         }
         case 81: {
-          res.data.list.forEach((v) => {
-            this.renderMarker(v.lon_lat,
-              layerItem, v.billboard_id, layerItem.icon, layerItem.bgColor, '公示牌', `${v.billboard_num}`)
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.billboard_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              '公示牌',
+              `${v.billboard_num}`
+            )
           })
           break
         }
@@ -415,10 +420,10 @@ export default {
             Map.removeSource('23')
           }
           const data = {
-             'type': 'FeatureCollection',
-            'name': 'js',
-            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
-            'features': res.data.geo_info.features
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
           }
           this.renderRiverLayer('21', data)
           break
@@ -428,7 +433,7 @@ export default {
             Map.removeLayer('22')
             Map.removeSource('22')
           }
-           if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+          if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
             Map.removeLayer('21')
             Map.removeSource('21')
           }
@@ -437,10 +442,10 @@ export default {
             Map.removeSource('23')
           }
           const data = {
-             'type': 'FeatureCollection',
-            'name': 'js',
-            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
-            'features': res.data.geo_info.features
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
           }
           this.renderRiverLayer('22', data)
           break
@@ -459,10 +464,10 @@ export default {
             Map.removeSource('21')
           }
           const data = {
-             'type': 'FeatureCollection',
-            'name': 'js',
-            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
-            'features': res.data.geo_info.features
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
           }
           this.renderRiverLayer('23', data)
           break
@@ -518,7 +523,8 @@ export default {
         this.tableList.data = res.data.list
         if (res.data.geo_info) {
           res.data.geo_info.features.forEach((item, index) => {
-            this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
+            // this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
+            this.tableList.data[index].coordinates = item.geometry.coordinates
           })
         }
       })
@@ -531,6 +537,34 @@ export default {
           zoom: 13
         })
       }
+      if (record.coordinates) {
+        const boundingBox = this.getBoundingBox(record.coordinates)
+        Map.fitBounds([
+          [boundingBox.xMin, boundingBox.yMin],
+          [boundingBox.xMax, boundingBox.yMax]
+        ])
+      }
+    },
+    getBoundingBox (data) {
+      var bounds = {}
+      var coords
+      var latitude
+      var longitude
+
+      for (var i = 0; i < data.length; i++) {
+        coords = data
+        coords[i].forEach(item => {
+          item.forEach(value => {
+            longitude = value[0]
+            latitude = value[1]
+            bounds.xMin = bounds.xMin < longitude ? bounds.xMin : longitude
+            bounds.xMax = bounds.xMax > longitude ? bounds.xMax : longitude
+            bounds.yMin = bounds.yMin < latitude ? bounds.yMin : latitude
+            bounds.yMax = bounds.yMax > latitude ? bounds.yMax : latitude
+          })
+        })
+      }
+      return bounds
     },
     customRow (record, index) {
       return {
