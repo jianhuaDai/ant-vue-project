@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     initMap () {
+      console.log('111111111111111111111111')
       const map = new mapboxgl.Map({
         container: 'add-map',
         style: Style.chiefStyle,

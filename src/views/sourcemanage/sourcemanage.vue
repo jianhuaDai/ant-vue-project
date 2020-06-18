@@ -187,13 +187,12 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd">
+                <!-- <a-input v-model="form2.jwd" @change="inputChange">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
-                  <!-- <a-icon type="environment" /> -->
-                </a-input>
-                <!-- <mapInput
-                  v-model="form2.location"
-                  v-if="visible"></mapInput> -->
+                </a-input> -->
+                <mapInput
+                  v-model="form2.jwd"
+                  v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -291,38 +290,6 @@
       @cancel="handleCancelDel">
       <p>确定删除该条记录?</p>
     </a-modal>
-    <div
-      id="distance"
-      class="distance-container"
-      v-show="handleCancelMap"></div>
-    <div
-      class="add-mask"
-      v-show="handleCancelMap"></div>
-    <div
-      class="add-map-box"
-      v-show="handleCancelMap">
-      <!-- <div id="add-map" style="width:100%;height:428px" v-show="handleCancelMap"></div> -->
-      <div
-        id="add-map"
-        class="map-view"
-        style="width:100%;height:428px"></div>
-      <div class="add-map-submit">
-        <a-button
-          class="add-map-submit-btn"
-          type="primary"
-          @click="AddDraw"
-          v-if="sureBtnShow"
-          disabled>确定</a-button>
-        <a-button
-          class="add-map-submit-btn"
-          type="primary"
-          @click="AddDraw"
-          v-if="!sureBtnShow">确定</a-button>
-        <a-button
-          class="add-map-submit-btn"
-          @click="cancelAddDraw">取消</a-button>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -399,7 +366,7 @@ export default {
           { required: true, message: '污染源类型不能为空', trigger: 'blur' }
         ],
         jwd: [
-          { required: true, message: '经纬度不能为空', trigger: 'blur' }
+          { required: true, message: '经纬度不能为空', trigger: ['blur', 'change'] }
         ]
       },
       // form: this.$form.createForm(this),
@@ -476,13 +443,17 @@ export default {
   },
   methods: {
     moment,
+    inputChange () {
+      // alert(this.form2.jwd)
+      // this.form2.jwd = parseInt(this.form2.jwd)
+      console.log(this.form2.jwd.length)
+    },
     dateChange (date, dateString) {
       console.log(date)
       console.log(dateString)
       this.time = dateString
     },
     getCurrentData () {
-
     },
     // 水源地删除
     handleDel (value) {
@@ -617,22 +588,9 @@ export default {
       this.$set(this.form2, 'yxfanwei', data.range)
       this.$set(this.form2, 'zhiliqk', data.control)
       this.$set(this.form2, 'image_url', data.image_url)
-
-      // this.form2.name = data.pollution_name
-      // this.form2.code = data.pollution_id
-      // this.form2.suoshuhedao = data.water_id
-      // this.form2.suoshuquyu = data.regionalism_id
-      // this.form2.address = data.location
-      // this.form2.wuranyuantype = data.pollution_type.toString()
-      // this.form2.jwd = data.lon_lat
-      // this.form2.guanzhujibie = data.attention_level.toString()
-      // this.form2.time = new Date(data.discover_time)
-      // this.form2.yxfanwei = data.range
-      // this.form2.zhiliqk = data.control
-      // this.form2.image_url = data.image_url
     },
     savePopup () {
-      console.log(this.form2.time)
+      // console.log(this.form2.time)
       this.$refs.form2.validate(err => {
         if (err) {
           var reqData = {
@@ -651,6 +609,7 @@ export default {
             image_url: this.form2.image_url === undefined ? [] : this.form2.image_url
           }
           console.log(reqData)
+          console.log(typeof (reqData.lon_lat))
           if (this.addmodifyflag === '1') {
             addSource(reqData).then(res => {
               this.searchClick()
@@ -682,7 +641,7 @@ export default {
 }
 </script>
 <style scoped>
-.add-mask {
+/* .add-mask {
   position: fixed;
   top: 0;
   left: 0;
@@ -708,5 +667,5 @@ export default {
 .add-map-submit-btn {
   float: right;
   margin-left: 20px;
-}
+} */
 </style>

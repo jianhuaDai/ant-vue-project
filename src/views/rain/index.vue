@@ -202,12 +202,12 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd">
+                <!-- <a-input v-model="form2.jwd">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
-                </a-input>
-                <!-- <mapInput
+                </a-input> -->
+                <mapInput
                   v-model="form2.jwd"
-                  v-if="visible"></mapInput> -->
+                  v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -303,7 +303,7 @@
       @cancel="handleCancelGL">
 
     </a-modal>
-    <div
+    <!-- <div
       id="distance"
       class="distance-container"
       v-show="handleCancelMap"></div>
@@ -313,7 +313,6 @@
     <div
       class="add-map-box"
       v-show="handleCancelMap">
-      <!-- <div id="add-map" style="width:100%;height:428px" v-show="handleCancelMap"></div> -->
       <div
         id="add-map"
         class="map-view"
@@ -334,7 +333,7 @@
           class="add-map-submit-btn"
           @click="cancelAddDraw">取消</a-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
