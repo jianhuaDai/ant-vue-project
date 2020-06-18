@@ -368,6 +368,9 @@ export default {
         getRiver({ water_type: value }).then(res => {
           this.suoshushuitinamevalue = []
         console.log(res)
+        if (res.data.list.length === 0) {
+          this.form2.suoshushuitiname = ''
+        }
         for (var i = 0; i < res.data.list.length; i++) {
           this.suoshushuitinamevalue.push(
             {
