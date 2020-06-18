@@ -107,14 +107,16 @@ export function LayerBtns () {
     2: [{
       id: 21,
       name: '河流'
-    }, {
+    },
+      {
       id: 22,
       name: '湖泊',
       externalLayer: ['lake', 'lakeText']
     }, {
       id: 23,
       name: '水库'
-    }],
+      }
+    ],
     3: [{
       id: 31,
       name: '取水口',
@@ -437,28 +439,25 @@ export function GetDataByLayer () {
     case 21: {
       return loadRiverAndLake({
         page_size: 0,
-        province_id: 32,
-        water_type: 'river_reach'
+        water_type: 1
       })
     }
     case 22: {
       return loadRiverAndLake({
         page_size: 0,
-        province_id: 32,
-        water_type: 'lake'
+        water_type: 3
       })
     }
     case 23: {
       return loadRiverAndLake({
         page_size: 0,
-        province_id: 32,
-        water_type: 'reservoir'
+        water_type: 5
       })
     }
     case 31: {
       return loadGetWater({
         page: 1,
-        page_size: 0,
+        page_size: 10,
         ...params
       })
     }
