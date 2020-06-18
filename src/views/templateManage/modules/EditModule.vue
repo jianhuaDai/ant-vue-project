@@ -2,7 +2,14 @@
   <div>
     <a-modal v-model="visible" @ok="handleOk" width="60%" :title="title" :confirmLoading="confirmLoading">
       <a-spin :spinning="confirmLoading">
-        <a-form-model ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-model
+          v-if="visible"
+          ref="form"
+          :model="form"
+          :rules="rules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+        >
           <a-row>
             <a-col :md="24" :sm="24">
               <a-form-model-item label="模版名称" prop="template_name" ref="template_name">
@@ -20,7 +27,6 @@
               </a-form-model-item>
             </a-col>
           </a-row>
-
         </a-form-model>
       </a-spin>
 
@@ -78,9 +84,7 @@ export default {
     }
   },
   watch: {},
-  created () {
-    console.log(E, 'dsdsdsd')
-  },
+  created () {},
   methods: {
     setEditor () {
       // this.editor = new E(this.$refs.toolbar, this.$refs.editor)
@@ -101,6 +105,7 @@ export default {
         'fullscreen' // 全屏
       ]
       this.editor.create()
+      this.editor.txt.html('')
     },
     showModal (data = {}) {
       this.title = data.template_id ? '编辑' : '新建'
@@ -113,11 +118,9 @@ export default {
               this.form = { ...{}, ...res.data }
               this.editor.txt.html(this.form.content)
             })
-            .finally(() => {
-            })
+            .finally(() => {})
         } else {
           this.form = { ...{}, data }
-          this.editor.txt.html(null)
         }
       })
       setTimeout(() => {
@@ -133,6 +136,7 @@ export default {
             editTemplate(params.template_id, params)
               .then(res => {
                 _this.$message.success('编辑成功！')
+                this.editor = null
                 _this.visible = false
                 _this.$emit('ok')
               })
@@ -143,6 +147,7 @@ export default {
             addTemplate(params)
               .then(res => {
                 _this.$message.success('新增成功！')
+                this.editor = null
                 _this.visible = false
                 _this.$emit('ok')
               })
@@ -163,5 +168,8 @@ export default {
   border: 1px solid #ddd;
   height: 400px;
   overflow: auto;
+  #editor {
+    height: 300px;
+  }
 }
 </style>
