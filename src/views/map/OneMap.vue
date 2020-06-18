@@ -185,6 +185,10 @@ export default {
       }
       this.layerManager.currentNav = navId
       this.showInfoPanel = true
+      if (navId !== 2 && Map.getSource('21')) {
+        Map.removeLayer('21')
+        Map.removeSource('21')
+      }
       this.layerRadioHandle(this.baseData.layerItems[navId][0])
     },
     layerManagerHandle (layerItem) {
@@ -219,6 +223,11 @@ export default {
     searchFilter (layerItem, searchName) {
       GetDataByLayer(layerItem.id, { station_name: searchName, name: searchName }).then(res => {
         this.tableList.data = res.data.list
+        if (res.data.geo_info) {
+          res.data.geo_info.features.forEach((item, index) => {
+            this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
+          })
+        }
         this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach(marker => {
           marker.remove()
         })
@@ -262,8 +271,28 @@ export default {
       }
       this.layerManagerHandle(layerItem)
     },
+    // 加载河湖图层
+    renderRiverLayer (sourceName, data) {
+          Map.addSource(sourceName, {
+            type: 'geojson',
+            data: data
+          })
+          Map.addLayer(
+            {
+              id: sourceName,
+              type: 'fill',
+              source: sourceName,
+              layout: {},
+              paint: {
+                'fill-color': 'blue',
+                'fill-outline-color': '#ccc'
+              }
+            }
+          )
+    },
     // 渲染Layer
     renderLayer (layerItem, res) {
+      console.log(layerItem.id, 'layerItem.id')
       this.showRainTimeRange = layerItem.id === 13
       switch (layerItem.id) {
         case 11: {
@@ -371,6 +400,73 @@ export default {
           })
           break
         }
+        case 21: {
+          console.log(this.layerManager.visibleLayerIds, 'this.layerManager.visibleLayerIds')
+          if (this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeSource('21')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeSource('22')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeSource('23')
+          }
+          const data = {
+             'type': 'FeatureCollection',
+            'name': 'js',
+            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            'features': res.data.geo_info.features
+          }
+          this.renderRiverLayer('21', data)
+          break
+        }
+        case 22: {
+          if (this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeSource('22')
+          }
+           if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeSource('21')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeSource('23')
+          }
+          const data = {
+             'type': 'FeatureCollection',
+            'name': 'js',
+            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            'features': res.data.geo_info.features
+          }
+          this.renderRiverLayer('22', data)
+          break
+        }
+        case 23: {
+          if (this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeSource('23')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeSource('22')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeSource('21')
+          }
+          const data = {
+             'type': 'FeatureCollection',
+            'name': 'js',
+            'crs': { 'type': 'name', 'properties': { 'name': 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            'features': res.data.geo_info.features
+          }
+          this.renderRiverLayer('23', data)
+          break
+        }
         default: {
           // geoData.features.forEach((v) => {
           //   this.renderMarker(v.geometry.coordinates, layerItem, v.properties.id, '/icons/water-env.svg', '#3FD4B4', v.properties.name, '关键信息展示')
@@ -420,6 +516,11 @@ export default {
       this.tableList.columns = TableColumnsByLayer(this.layerManager.activeLayerItem.id)
       GetDataByLayer(this.layerManager.activeLayerItem.id).then(res => {
         this.tableList.data = res.data.list
+        if (res.data.geo_info) {
+          res.data.geo_info.features.forEach((item, index) => {
+            this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
+          })
+        }
       })
     },
     rowSelect (record) {
@@ -427,7 +528,7 @@ export default {
         const coordinate = record.lon_lat
         Map.flyTo({
           center: coordinate,
-          zoom: 11
+          zoom: 13
         })
       }
     },
