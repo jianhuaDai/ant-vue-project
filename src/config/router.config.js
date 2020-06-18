@@ -123,13 +123,13 @@ export const asyncRouterMap = [
                 path: '/info-manage/monitor-info/water',
                 name: 'Water',
                 component: () => import('@/views/water/index.vue'),
-                meta: { title: '水情', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '水情测站', keepAlive: true, permission: ['dashboard'] }
               },
               {
                 path: '/info-manage/monitor-info/rain',
                 name: 'Rain',
                 component: () => import('@/views/rain/index.vue'),
-                meta: { title: '雨情', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '雨情测站', keepAlive: true, permission: ['dashboard'] }
               },
               {
                 path: '/info-manage/monitor-info/water-quality-measure-station',
@@ -147,7 +147,7 @@ export const asyncRouterMap = [
                 path: '/info-manage/monitor-info/video-station',
                 name: 'VideoStation',
                 component: () => import('@/views/videoStation/index.vue'),
-                meta: { title: '视频站', keepAlive: true, permission: ['dashboard'] }
+                meta: { title: '视频测站', keepAlive: true, permission: ['dashboard'] }
               }
             ]
           },

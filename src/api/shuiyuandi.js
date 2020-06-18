@@ -4,9 +4,17 @@ const api = {
     getshuiyuandiList: '/water_sources/page_query',
     addshuiyuandi: '/water_sources',
     updateshuiyuandi: '/water_sources/',
-    delshuiyuandi: '/water_sources/delete/'
+    delshuiyuandi: '/water_sources/delete/',
+    getriverlakeList: '/water_infos/page_query'
 }
-
+// 查询河湖列表--为获取所属河道信息
+export function getRiverlakeList (parameter) {
+  return axios({
+    url: api.getriverlakeList,
+    method: 'post',
+    data: parameter
+  })
+}
 // 查询水源地列表接口
 export function getShuiyuandiList (parameter) {
   return axios({
