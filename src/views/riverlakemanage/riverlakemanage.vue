@@ -1302,15 +1302,15 @@ export default {
             reqData.length = this.form2.hehulength === '' ? 0 : parseInt(this.form2.hehulength)
             // reqData.heliujibie = this.form2.heliujibie
             reqData.water_level = this.form2.heliujibie === '' ? 0 : parseInt(this.form2.heliujibie)
-            reqData.origin = this.form2.startjwd
-            reqData.destination = this.form2.endjwd
+            reqData.origin = this.form2.startjwd === '' ? [] : this.form2.startjwd
+            reqData.destination = this.form2.endjwd === '' ? [] : this.form2.endjwd
           } else if (this.hehutypevalue === 2) {
             reqData.length = parseInt(this.form2.length2)
             reqData.water_level = parseInt(this.form2.heduanjibie)
             reqData.regionalism_id = this.form2.xzqh
             reqData.location = this.form2.weizhi
-            reqData.origin = this.form2.startjwd2
-            reqData.destination = this.form2.endjwd2
+            reqData.origin = this.form2.startjwd2 === '' ? [] : this.form2.startjwd2
+            reqData.destination = this.form2.endjwd2 === '' ? [] : this.form2.endjwd2
           } else if (this.hehutypevalue === 3) {
             reqData.location = this.form2.weizhihupo
             reqData.area = parseInt(this.form2.mianjihupo)
@@ -1328,11 +1328,10 @@ export default {
             reqData.location = this.form2.weizhishuikupian
           }
           console.log(reqData)
-          // console.log(reqData.origin)
-          // console.log(typeof (reqData.origin))
+          console.log(reqData.origin)
+          console.log(typeof (reqData.origin))
           if (this.addmodifyFlag === '1') {
             addRiverlake(reqData).then(res => {
-              // console.log(res)
               this.searchClick()
               this.visible = false
               this.$refs.form2.clearValidate()
