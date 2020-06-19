@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <a-row :gutter="8" style="height: 100%">
       <a-col :span="24" style="height: 100%">
-        <a-card :bordered="false" style="margin-top: 8px;height: calc(100% - 88px)" title="模版列表">
+        <a-card :bordered="false" style="margin-top: 8px;" title="模版列表">
           <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">新增</a-button>
           <s-table
             ref="table"

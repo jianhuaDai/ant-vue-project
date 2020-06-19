@@ -200,12 +200,12 @@
                 label="经纬度"
                 prop="jwd"
                 ref="jwd">
-                <a-input v-model="form2.jwd">
+                <!-- <a-input v-model="form2.jwd">
                   <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
-                </a-input>
-                <!-- <mapInput
+                </a-input> -->
+                <mapInput
                   v-model="form2.jwd"
-                  v-if="visible"></mapInput> -->
+                  v-if="visible"></mapInput>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -309,7 +309,7 @@
       @cancel="handleCancelDel">
       <p>确定删除该条记录?</p>
     </a-modal>
-    <div
+    <!-- <div
       id="distance"
       class="distance-container"
       v-show="handleCancelMap"></div>
@@ -319,7 +319,6 @@
     <div
       class="add-map-box"
       v-show="handleCancelMap">
-      <!-- <div id="add-map" style="width:100%;height:428px" v-show="handleCancelMap"></div> -->
       <div
         id="add-map"
         class="map-view"
@@ -340,7 +339,7 @@
           class="add-map-submit-btn"
           @click="cancelAddDraw">取消</a-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -368,6 +367,9 @@ export default {
         getRiver({ water_type: value }).then(res => {
           this.suoshushuitinamevalue = []
         console.log(res)
+        if (res.data.list.length === 0) {
+          this.form2.suoshushuitiname = ''
+        }
         for (var i = 0; i < res.data.list.length; i++) {
           this.suoshushuitinamevalue.push(
             {
@@ -415,7 +417,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '水源地名称不能为空', trigger: 'blur' }
+          { required: true, message: '测站名称不能为空', trigger: 'blur' }
         ],
         pointname: [
           { required: true, message: '点位名称不能为空', trigger: 'blur' }
@@ -476,7 +478,7 @@ export default {
         },
         {
           title: '测站编码',
-          dataIndex: 'monitoring_id'
+          dataIndex: 'monitoring_num'
         },
         {
           title: '所属水体',
@@ -582,7 +584,7 @@ export default {
     },
     // 重置按钮触发
     resertClick () {
-      this.form.area = ''
+      this.form.suoshuquyu = ''
       this.form.suoshushuiti = ''
       this.form.czlb = ''
     },

@@ -7,7 +7,7 @@ const api = {
   pollution: '/pollutions/page_query',
   pollutionDetail: '/pollutions',
   NJ_SERVER: 'http://test.susinnovation.com:8080/geoserver/njdemo/ows',
-  riverAndLake: '/water_info/get_water_infos',
+  riverAndLake: '/water_infos/monitor/page_query',
   getWater: '/get_waters/page_query',
   getWaterDetail: '/get_waters',
   waterEmphasiss: '/info_serve/get_water_emphasiss',
@@ -82,8 +82,8 @@ export function loadWater (params) {
 export function loadRiverAndLake (parameter) {
   return axios({
     url: api.riverAndLake,
-    method: 'get',
-    params: parameter
+    method: 'post',
+    data: parameter
   })
 }
 

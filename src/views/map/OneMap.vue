@@ -114,7 +114,7 @@ export default {
       mapOptions: {
         pitch: 30,
         zoom: 7,
-        style: '/bright2'
+        style: '/bright'
       },
       ready: false,
       baseData: {
@@ -184,6 +184,10 @@ export default {
       }
       this.layerManager.currentNav = navId
       this.showInfoPanel = true
+      if (navId !== 2 && Map.getSource('21')) {
+        Map.removeLayer('21')
+        Map.removeSource('21')
+      }
       this.layerRadioHandle(this.baseData.layerItems[navId][0])
     },
     layerManagerHandle (layerItem) {
@@ -218,10 +222,18 @@ export default {
     searchFilter (layerItem, searchName) {
       GetDataByLayer(layerItem.id, { station_name: searchName, name: searchName }).then(res => {
         this.tableList.data = res.data.list
-        this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach(marker => {
-          marker.remove()
-        })
-        this.layerManager.existLayerGroup[layerItem.id].markerGroup.clear()
+        if (res.data.geo_info) {
+          res.data.geo_info.features.forEach((item, index) => {
+            this.tableList.data[index].coordinates = item.geometry.coordinates[0][0][0]
+            this.tableList.data[index].name = item.properties.name
+          })
+        }
+        this.layerManager.existLayerGroup[layerItem.id].markerGroup &&
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach(marker => {
+            marker.remove()
+          })
+        this.layerManager.existLayerGroup[layerItem.id].markerGroup &&
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.clear()
         if (res) {
           setTimeout(() => {
             this.renderLayer(layerItem, res)
@@ -261,8 +273,45 @@ export default {
       }
       this.layerManagerHandle(layerItem)
     },
+    // 加载河湖图层
+    renderRiverLayer (sourceName, data) {
+      Map.addSource(sourceName, {
+        type: 'geojson',
+        data: data
+      })
+      Map.addLayer({
+        id: sourceName,
+        type: 'fill',
+        source: sourceName,
+        layout: {
+        },
+        paint: {
+          'fill-color': '#BFDBF7',
+          'fill-outline-color': '#ccc'
+        }
+      })
+      Map.addSource(sourceName + 'text', {
+        type: 'geojson',
+        data: data
+      })
+      Map.addLayer({
+        id: sourceName + 'text',
+        type: 'symbol',
+        source: sourceName,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 12
+        },
+        paint: {
+          'text-color': '#3fd4a2'
+        },
+        maxzoom: 22,
+        minzoom: 8
+      })
+    },
     // 渲染Layer
     renderLayer (layerItem, res) {
+      console.log(layerItem.id, 'layerItem.id')
       this.showRainTimeRange = layerItem.id === 13
       switch (layerItem.id) {
         case 11: {
@@ -350,9 +399,16 @@ export default {
           break
         }
         case 81: {
-          res.data.list.forEach((v) => {
-            this.renderMarker(v.lon_lat,
-              layerItem, v.billboard_id, layerItem.icon, layerItem.bgColor, '公示牌', `${v.billboard_num}`)
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.billboard_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              '公示牌',
+              `${v.billboard_num}`
+            )
           })
           break
         }
@@ -368,6 +424,91 @@ export default {
               `${v.in_river.toFixed(2)}t/a`
             )
           })
+          break
+        }
+        case 21: {
+          console.log(this.layerManager.visibleLayerIds, 'this.layerManager.visibleLayerIds')
+          if (this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeLayer('21text')
+            Map.removeSource('21')
+            Map.removeSource('21text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeLayer('22text')
+            Map.removeSource('22')
+            Map.removeSource('22text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeLayer('23text')
+            Map.removeSource('23')
+            Map.removeSource('23text')
+          }
+          const data = {
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
+          }
+          this.renderRiverLayer('21', data)
+          break
+        }
+        case 22: {
+          if (this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeLayer('22text')
+            Map.removeSource('22')
+            Map.removeSource('22text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeLayer('21text')
+            Map.removeSource('21')
+            Map.removeSource('21text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeLayer('23text')
+            Map.removeSource('23')
+            Map.removeSource('23text')
+          }
+          const data = {
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
+          }
+          this.renderRiverLayer('22', data)
+          break
+        }
+        case 23: {
+          if (this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
+            Map.removeLayer('23')
+            Map.removeLayer('23text')
+            Map.removeSource('23')
+            Map.removeSource('23text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
+            Map.removeLayer('22')
+            Map.removeLayer('22text')
+            Map.removeSource('22')
+            Map.removeSource('22text')
+          }
+          if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
+            Map.removeLayer('21')
+            Map.removeLayer('21text')
+            Map.removeSource('21')
+            Map.removeSource('21text')
+          }
+          const data = {
+            type: 'FeatureCollection',
+            name: 'js',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+            features: res.data.geo_info.features
+          }
+          this.renderRiverLayer('23', data)
           break
         }
         default: {
@@ -387,7 +528,6 @@ export default {
       if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
         this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       }
-      // this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       const el = document.createElement('div')
       el.className = 'hc-marker-container'
       const child = document.createElement('div')
@@ -419,6 +559,12 @@ export default {
       this.tableList.columns = TableColumnsByLayer(this.layerManager.activeLayerItem.id)
       GetDataByLayer(this.layerManager.activeLayerItem.id).then(res => {
         this.tableList.data = res.data.list
+        if (res.data.geo_info) {
+          res.data.geo_info.features.forEach((item, index) => {
+            this.tableList.data[index].coordinates = item.geometry.coordinates
+            this.tableList.data[index].name = item.properties.name
+          })
+        }
       })
     },
     rowSelect (record) {
@@ -426,9 +572,36 @@ export default {
         const coordinate = record.lon_lat
         Map.flyTo({
           center: coordinate,
-          zoom: 11
+          zoom: 13
         })
       }
+      if (record.coordinates) {
+        const boundingBox = this.getBoundingBox(record.coordinates)
+        Map.fitBounds([
+          [boundingBox.xMin, boundingBox.yMin],
+          [boundingBox.xMax, boundingBox.yMax]
+        ])
+      }
+    },
+    getBoundingBox (data) {
+      var bounds = {}
+      var coords
+      var latitude
+      var longitude
+      for (var i = 0; i < data.length; i++) {
+        coords = data
+        coords[i].forEach(item => {
+          item.forEach(value => {
+            longitude = value[0]
+            latitude = value[1]
+            bounds.xMin = bounds.xMin < longitude ? bounds.xMin : longitude
+            bounds.xMax = bounds.xMax > longitude ? bounds.xMax : longitude
+            bounds.yMin = bounds.yMin < latitude ? bounds.yMin : latitude
+            bounds.yMax = bounds.yMax > latitude ? bounds.yMax : latitude
+          })
+        })
+      }
+      return bounds
     },
     customRow (record, index) {
       return {
