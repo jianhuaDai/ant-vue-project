@@ -529,7 +529,6 @@ export default {
       if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
         this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       }
-      // this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       const el = document.createElement('div')
       el.className = 'hc-marker-container'
       const child = document.createElement('div')
@@ -583,10 +582,6 @@ export default {
           [boundingBox.xMin, boundingBox.yMin],
           [boundingBox.xMax, boundingBox.yMax]
         ])
-        const coid = [boundingBox.xMin + (boundingBox.xMax - boundingBox.xMin) / 2, boundingBox.yMin + (boundingBox.yMax - boundingBox.yMin) / 2]
-        const el = document.createElement('div')
-        el.innerHTML = record.name
-        new mapboxgl.Marker(el).setLngLat(coid).addTo(Map)
       }
     },
     getBoundingBox (data) {
