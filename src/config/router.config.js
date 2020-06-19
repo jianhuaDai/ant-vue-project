@@ -206,6 +206,14 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // demo
+      {
+        path: '/d3-bar',
+        name: 'd3Bar',
+        component: () => import('@/views/demo/d3-bar.vue'),
+        hidden: true,
+        meta: { title: 'd3', hidden: true, icon: 'warning', permission: ['dashboard'] }
+      },
       // Exception
       {
         path: '/exception',

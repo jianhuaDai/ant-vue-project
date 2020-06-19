@@ -68,7 +68,7 @@
           <a-col :md="12">
             <div class="detail-item">
               <div class="title">经纬度：</div>
-              <div class="value">{{ form.lon_lat }}</div>
+              <div class="value">{{ form.lon_lat&&form.lon_lat.toString() }}</div>
             </div>
           </a-col>
         </a-row>
@@ -111,8 +111,7 @@
 
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFuZ25hbnh4IiwiYSI6ImNqdmU2OWVuYTF5enI0ZHBmMjVkM3V4MDEifQ.lE08N8pOvVxWtKBzNS1PUg'
 
-  const d3 = require('d3')
-  require('d3-geo')
+  const d3 = { ...{}, ...require('d3'), ...require('d3-geo') }
   export default {
     name: 'PollutionDetail',
     created () {

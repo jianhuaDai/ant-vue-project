@@ -41,7 +41,11 @@
             </div>
           </div>
           <!--        </div>-->
-          <div class="info-area" v-show="layerManager.activeLayerItem.id !== 0" style="margin: 10px 0">
+          <div
+            class="info-area"
+            v-show="layerManager.activeLayerItem.id !== 0"
+            style="margin: 10px 0"
+          >
             <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
             <a-input-search
               placeholder="请输入搜索内容"
@@ -71,20 +75,15 @@
               :rowSelection="tableList.options.rowSelection"
               :scroll="{ y: 500 }"
             >
-              <span slot="up_value" slot-scope="text">
-                {{ text ? text.toFixed(2) : '' }}
+              <span slot="up_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span slot="down_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span slot="value" slot-scope="text">{{ text ? text.toFixed(0) : '' }}</span>
+              <span slot="m3s" slot-scope="text">
+                {{ text }}m
+                <sup>3</sup>/s
               </span>
-              <span slot="down_value" slot-scope="text">
-                {{ text ? text.toFixed(2) : '' }}
-              </span>
-              <span slot="value" slot-scope="text">
-                {{ text ? text.toFixed(0) : '' }}
-              </span>
-              <span slot="m3s" slot-scope="text"> {{ text }}m<sup>3</sup>/s </span>
-              <span slot="hasOrNo" slot-scope="text">
-                {{ text === 1 ? '有' : '无' }}
-              </span>
-              <span slot="in_river" slot-scope="text"> {{ text.toFixed(2) }}t/a </span>
+              <span slot="hasOrNo" slot-scope="text">{{ text === 1 ? '有' : '无' }}</span>
+              <span slot="in_river" slot-scope="text">{{ text.toFixed(2) }}t/a</span>
             </a-table>
           </div>
         </div>
@@ -100,9 +99,9 @@ import MapboxView from '../../components/Hczy/Map/MapboxView'
 import mapboxgl from 'mapbox-gl'
 import HcMarker from './components/HcMarker'
 import { MaskPageView } from '@/layouts'
-import { Navs, LayerBtns, GetDataByLayer, GetTableRowKey, TableColumnsByLayer, GetLayerItem } from './config/base'
+import { Navs, LayerBtns, GetDataByLayer, GetTableRowKey, TableColumnsByLayer, RiverType } from './config/base'
 import DetailModal from './modules/DetailModal'
-import { getAllriver } from '@/api/mapServer'
+import { getRiver } from '@/api/mapServer'
 import moment from 'moment'
 let Map = null
 export default {
@@ -529,7 +528,6 @@ export default {
       if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
         this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       }
-      // this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       const el = document.createElement('div')
       el.className = 'hc-marker-container'
       const child = document.createElement('div')
@@ -583,10 +581,6 @@ export default {
           [boundingBox.xMin, boundingBox.yMin],
           [boundingBox.xMax, boundingBox.yMax]
         ])
-        const coid = [boundingBox.xMin + (boundingBox.xMax - boundingBox.xMin) / 2, boundingBox.yMin + (boundingBox.yMax - boundingBox.yMin) / 2]
-        const el = document.createElement('div')
-        el.innerHTML = record.name
-        new mapboxgl.Marker(el).setLngLat(coid).addTo(Map)
       }
     },
     getBoundingBox (data) {
