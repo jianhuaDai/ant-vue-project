@@ -150,10 +150,23 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-model-item
-                label="所属区域"
-                prop="suoshuquyu2"
-                ref="suoshuquyu2">
-                <a-tree-select v-model="form2.suoshuquyu2" :treeData="options"></a-tree-select>
+                label="规划信息名称"
+                prop="ghxxmc"
+                ref="ghxxmc">
+                <a-input v-model="form2.ghxxmc"></a-input>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-model-item
+                label="规划信息分类"
+                prop="ghxxfl"
+                ref="ghxxfl">
+                <dictionary-select
+                  v-model="form2.ghxxfl"
+                  :insert-option-all="false"
+                  :select-first="false"
+                  :dictionary-type="DictionaryEnum.DIC_LINE_BUSINESS">
+                </dictionary-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
@@ -185,24 +198,10 @@
             </a-col>
             <a-col :span="12">
               <a-form-model-item
-                label="规划信息名称"
-                prop="ghxxmc"
-                ref="ghxxmc">
-                <a-input v-model="form2.ghxxmc"></a-input>
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-model-item
-                label="规划信息分类"
-                prop="ghxxfl"
-                ref="ghxxfl">
-                <dictionary-select
-                  v-model="form2.ghxxfl"
-                  :insert-option-all="false"
-                  :select-first="false"
-                  :dictionary-type="DictionaryEnum.DIC_LINE_BUSINESS"
-                >
-                </dictionary-select>
+                label="所属区域"
+                prop="suoshuquyu2"
+                ref="suoshuquyu2">
+                <a-tree-select v-model="form2.suoshuquyu2" :treeData="options"></a-tree-select>
               </a-form-model-item>
             </a-col>
           </a-row>
