@@ -31,7 +31,7 @@
             </a-form>
           </div>
         </a-card>
-        <a-card :bordered="false" style="margin-top: 8px;height: calc(100% - 88px)" title="查询列表">
+        <a-card :bordered="false" style="margin-top: 8px;" title="查询列表">
           <a-button slot="extra" type="primary" icon="plus" @click="handleEditOrNew()">新增</a-button>
           <s-table
             ref="table"
