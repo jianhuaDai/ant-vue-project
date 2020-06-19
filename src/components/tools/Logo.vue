@@ -1,10 +1,10 @@
 <template>
   <div class="logo" :style="{paddingLeft: collapsed?'12px':'24px'}">
     <router-link :to="{name:'Home'}">
-<!--      <img class="expand" style="width: calc(100% - 24px);height: auto" src="@/assets/logo2.png" />-->
+      <!--      <img class="expand" style="width: calc(100% - 24px);height: auto" src="@/assets/logo2.png" />-->
       <img src="@/assets/logo.svg">
       <h1 :style="{color: '#000'}" v-if="showTitle">{{ title }}</h1>
-<!--      <img src="@/assets/logo.svg" class="collapse" />-->
+      <!--      <img src="@/assets/logo.svg" class="collapse" />-->
     </router-link>
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '江苏河长制',
+      default: '河长制',
       required: false
     },
     showTitle: {

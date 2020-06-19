@@ -439,19 +439,22 @@ export function GetDataByLayer () {
     case 21: {
       return loadRiverAndLake({
         page_size: 0,
-        water_type: 1
+        water_type: 1,
+        ...params
       })
     }
     case 22: {
       return loadRiverAndLake({
         page_size: 0,
-        water_type: 3
+        water_type: 3,
+        ...params
       })
     }
     case 23: {
       return loadRiverAndLake({
         page_size: 0,
-        water_type: 5
+        water_type: 5,
+        ...params
       })
     }
     case 31: {
