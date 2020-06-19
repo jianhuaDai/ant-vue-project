@@ -124,7 +124,7 @@
         </a-card>
       </a-col>
     </a-row>
-    <!-- 新增水情 -->
+    <!-- 新增生态 -->
     <a-modal
       :title="title"
       width="60%"
@@ -614,9 +614,7 @@ export default {
       // this.queryParam.regionalism_id = this.form.suoshuquyu
       this.queryParam.regionalism_id = this.form.suoshuquyu === '' ? '' : this.form.suoshuquyu
       this.queryParam.water_type = this.form.suoshushuiti === '' ? null : this.form.suoshushuiti
-      // this.queryParam.station_type = this.form.czlb === '' ? null : parseInt(this.form.czlb)
       this.queryParam.station_use = this.form.czlb === '' ? 0 : this.form.czlb
-      // console.log(this.queryParam)
       this.queryParam.station_type = 4
       // this.$refs[this.queryParam].$refs.table.refresh(true)
       this.$refs.table.refresh(true)
@@ -625,6 +623,7 @@ export default {
     resertClick () {
       this.form.suoshuquyu = ''
       this.form.suoshushuiti = ''
+      this.form.czlb = ''
     },
     // 点击获取地图坐标
     showMap () {

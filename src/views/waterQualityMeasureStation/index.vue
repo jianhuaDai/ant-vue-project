@@ -445,7 +445,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '水源地名称不能为空', trigger: 'blur' }
+          { required: true, message: '测站名称不能为空', trigger: 'blur' }
         ],
         pointname: [
           { required: true, message: '点位名称不能为空', trigger: 'blur' }
