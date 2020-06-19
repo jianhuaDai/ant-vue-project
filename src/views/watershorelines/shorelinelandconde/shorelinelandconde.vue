@@ -414,7 +414,7 @@ export default {
     // 岸线用地信息删除
     handleDel (value) {
       console.log(value)
-      this.rowData = value.river_line_id
+      this.rowData = value.land_id
       this.visibledel = true
     },
     handleOk () {

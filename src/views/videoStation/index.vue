@@ -489,7 +489,7 @@ export default {
         },
         {
           title: '测站编码',
-          dataIndex: 'monitoring_id'
+          dataIndex: 'monitoring_num'
         },
         {
           title: '所属水体',
