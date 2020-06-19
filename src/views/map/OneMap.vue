@@ -225,13 +225,16 @@ export default {
         this.tableList.data = res.data.list
         if (res.data.geo_info) {
           res.data.geo_info.features.forEach((item, index) => {
-            this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
+            this.tableList.data[index].coordinates = item.geometry.coordinates[0][0][0]
+            this.tableList.data[index].name = item.properties.name
           })
         }
-        this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach(marker => {
-          marker.remove()
-        })
-        this.layerManager.existLayerGroup[layerItem.id].markerGroup.clear()
+        this.layerManager.existLayerGroup[layerItem.id].markerGroup &&
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.forEach(marker => {
+            marker.remove()
+          })
+        this.layerManager.existLayerGroup[layerItem.id].markerGroup &&
+          this.layerManager.existLayerGroup[layerItem.id].markerGroup.clear()
         if (res) {
           setTimeout(() => {
             this.renderLayer(layerItem, res)
@@ -281,11 +284,30 @@ export default {
         id: sourceName,
         type: 'fill',
         source: sourceName,
-        layout: {},
+        layout: {
+        },
         paint: {
-          'fill-color': 'blue',
+          'fill-color': '#BFDBF7',
           'fill-outline-color': '#ccc'
         }
+      })
+      Map.addSource(sourceName + 'text', {
+        type: 'geojson',
+        data: data
+      })
+      Map.addLayer({
+        id: sourceName + 'text',
+        type: 'symbol',
+        source: sourceName,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 12
+        },
+        paint: {
+          'text-color': '#3fd4a2'
+        },
+        maxzoom: 22,
+        minzoom: 8
       })
     },
     // 渲染Layer
@@ -409,15 +431,21 @@ export default {
           console.log(this.layerManager.visibleLayerIds, 'this.layerManager.visibleLayerIds')
           if (this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
             Map.removeLayer('21')
+            Map.removeLayer('21text')
             Map.removeSource('21')
+            Map.removeSource('21text')
           }
           if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
             Map.removeLayer('22')
+            Map.removeLayer('22text')
             Map.removeSource('22')
+            Map.removeSource('22text')
           }
           if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
             Map.removeLayer('23')
+            Map.removeLayer('23text')
             Map.removeSource('23')
+            Map.removeSource('23text')
           }
           const data = {
             type: 'FeatureCollection',
@@ -431,15 +459,21 @@ export default {
         case 22: {
           if (this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
             Map.removeLayer('22')
+            Map.removeLayer('22text')
             Map.removeSource('22')
+            Map.removeSource('22text')
           }
           if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
             Map.removeLayer('21')
+            Map.removeLayer('21text')
             Map.removeSource('21')
+            Map.removeSource('21text')
           }
           if (!this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
             Map.removeLayer('23')
+            Map.removeLayer('23text')
             Map.removeSource('23')
+            Map.removeSource('23text')
           }
           const data = {
             type: 'FeatureCollection',
@@ -453,15 +487,21 @@ export default {
         case 23: {
           if (this.layerManager.visibleLayerIds.includes(23) && Map.getSource('23')) {
             Map.removeLayer('23')
+            Map.removeLayer('23text')
             Map.removeSource('23')
+            Map.removeSource('23text')
           }
           if (!this.layerManager.visibleLayerIds.includes(22) && Map.getSource('22')) {
             Map.removeLayer('22')
+            Map.removeLayer('22text')
             Map.removeSource('22')
+            Map.removeSource('22text')
           }
           if (!this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
             Map.removeLayer('21')
+            Map.removeLayer('21text')
             Map.removeSource('21')
+            Map.removeSource('21text')
           }
           const data = {
             type: 'FeatureCollection',
@@ -523,8 +563,8 @@ export default {
         this.tableList.data = res.data.list
         if (res.data.geo_info) {
           res.data.geo_info.features.forEach((item, index) => {
-            // this.tableList.data[index].lon_lat = item.geometry.coordinates[0][0][0]
             this.tableList.data[index].coordinates = item.geometry.coordinates
+            this.tableList.data[index].name = item.properties.name
           })
         }
       })
@@ -543,6 +583,10 @@ export default {
           [boundingBox.xMin, boundingBox.yMin],
           [boundingBox.xMax, boundingBox.yMax]
         ])
+        const coid = [boundingBox.xMin + (boundingBox.xMax - boundingBox.xMin) / 2, boundingBox.yMin + (boundingBox.yMax - boundingBox.yMin) / 2]
+        const el = document.createElement('div')
+        el.innerHTML = record.name
+        new mapboxgl.Marker(el).setLngLat(coid).addTo(Map)
       }
     },
     getBoundingBox (data) {
@@ -550,7 +594,6 @@ export default {
       var coords
       var latitude
       var longitude
-
       for (var i = 0; i < data.length; i++) {
         coords = data
         coords[i].forEach(item => {
