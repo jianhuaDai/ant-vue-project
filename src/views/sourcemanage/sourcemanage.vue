@@ -22,7 +22,6 @@
                   <dictionary-select
                     v-model="form.wrytype"
                     :insert-option-all="false"
-                    :select-first="false"
                     :dictionary-type="DictionaryEnum.POLLUTION_TYPE"
                   >
                   </dictionary-select>

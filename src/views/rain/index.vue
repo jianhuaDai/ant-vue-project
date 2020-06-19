@@ -405,7 +405,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '雨情名称不能为空', trigger: 'blur' }
+          { required: true, message: '测站名称不能为空', trigger: 'blur' }
         ],
         pointname: [
           { required: true, message: '点位名称不能为空', trigger: 'blur' }
@@ -587,8 +587,7 @@ export default {
     // 重置按钮触发
     resertClick () {
       this.form.suoshuquyu = ''
-      this.form.suoshushuiti = ''
-      this.form.czlb = ''
+      this.form.czmc = ''
     },
     // 点击获取地图坐标
     showMap () {
