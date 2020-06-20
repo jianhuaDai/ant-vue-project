@@ -31,7 +31,7 @@
                 <a-tree-select
                   showSearch
                   allowClear
-                  :dropdownStyle="{ maxHeight: '600px', overflow: 'auto' }"
+                  :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
                   :treeData="deptData"
                   treeNodeFilterProp="title"
                   :treeIcon="true"
@@ -52,7 +52,7 @@
                   :allowClear="true"
                   :treeDefaultExpandedKeys="expendBook"
                   :treeIcon="true"
-                  :dropdownStyle="{ maxHeight: '600px', overflow: 'auto' }"
+                  :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
                   placeholder="请选择上级河湖长"
                   :treeData="bookData"
                   v-model="form.pid">
@@ -83,12 +83,12 @@
                 <a-tree-select
                   showSearch
                   multiple
-                  treeNodeFilterProp="title"
-                  v-model="form.water_ids"
-                  :allowClear="true"
+                  :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+                  :replaceFields="{children: 'children', title: 'name',key: 'water_id', value: 'water_id'}"
                   :treeData="riverData"
-                  :treeDataSimpleMode="true"
-                  placeholder="请选择河湖"/>
+                  treeCheckable
+                  treeCheckStrictly
+                  v-model="form.waters"/>
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -152,7 +152,7 @@
           pid: '',
           regionalism_id: '',
           title_id: null,
-          water_ids: [],
+          waters: [],
           dept_ids: ''
         },
         rules: {
@@ -177,16 +177,17 @@
     watch: {
     },
     created () {
-      this.initDeptTree()
-      this.initRiverData()
     },
     methods: {
       initRiverData () {
-        getRiverData({ page_size: 0 }).then(res => {
-          this.riverData = res.data.ist
-          this.riverData = res.data.list.map((v) => {
-            return { id: v.water_id, pId: v.pid, value: v.water_id, title: v.name }
+        this.riverData = []
+        getRiverData({ page_size: 0, status: 1 }).then(res => {
+          this.riverData = this.arrayToTree(res.data.list, (parent, child) => {
+            return parent.water_id === child.pid
           })
+          // this.riverData = res.data.list.map((v) => {
+            // return { id: v.water_id, pId: v.pid, value: v.water_id, title: v.name }
+          // })
         })
       },
       processBook (data = [], result = []) {
@@ -222,6 +223,7 @@
         })
       },
       initBook (enterpriseId = '136485248216072193') {
+        this.bookData = []
         getEnterpriseBook({ id: enterpriseId }).then(res => {
           this.bookData.push({
             key: res.data.enterprise_id,
@@ -253,26 +255,33 @@
         return tree.children || []
       },
       initDeptTree (enterpriseId = '136485248216072193') {
+        this.deptData = []
         getDeptList({ enterprise_id: enterpriseId, page_size: 0 }).then(res => {
           this.deptData = this.arrayToTree(res.data.list)
         })
       },
       showModal (data = {}) {
         this.initBook()
+        this.initDeptTree()
+        this.initRiverData()
 
         this.title = data.employee_id ? '编辑' : '新建'
         this.visible = true
+        const _this = this
         if (data.employee_id) {
           this.confirmLoading = true
           getEmployee(data.employee_id).then(res => {
-            this.form = { ...{}, ...res.data }
-            this.form.water_ids = res.data.water_info_vo.map((v) => {
-              return v.water_id
-            })
+            this.form = { ...{ waters: [] }, ...res.data }
             this.form.dept_ids = res.data.depts.length > 0 ? res.data.depts[0].dept_id : ''
             if (this.form.pid === '0') {
-            this.form.pid = ''
-          }
+             this.form.pid = ''
+            }
+            res.data.water_info_vo.forEach(v => {
+              _this.form.waters.push({
+                label: v.name,
+                value: v.water_id
+              })
+            })
             // this.form.dept_ids = res.data.depts.map((v) => {
             //   return v.dept_id
             // })
@@ -306,6 +315,9 @@
             _this.confirmLoading = true
             const params = _this.form
             params.dept_ids = [params.dept_ids]
+             params.water_ids = params.waters.map(v => {
+              return v.value
+            })
             saveChief(params).then((res) => {
               _this.$message.success('保存成功')
               _this.visible = false
