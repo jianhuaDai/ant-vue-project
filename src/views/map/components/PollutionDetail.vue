@@ -109,7 +109,6 @@
   import 'mapbox-gl/dist/mapbox-gl.css'
   import mapboxgl from 'mapbox-gl'
   import * as d3 from 'd3'
-  import 'd3-geo'
 
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFuZ25hbnh4IiwiYSI6ImNqdmU2OWVuYTF5enI0ZHBmMjVkM3V4MDEifQ.lE08N8pOvVxWtKBzNS1PUg'
 
