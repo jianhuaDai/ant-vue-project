@@ -23,6 +23,7 @@
     "camunda-bpmn-moddle": "^4.4.0",
     "core-js": "^3.1.2",
     "d3": "^5.16.0",
+    "d3-geo": "^1.12.1",
     "echarts": "^4.8.0",
     "echarts-liquidfill": "^2.0.6",
     "enquire.js": "^2.1.6",

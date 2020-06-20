@@ -109,6 +109,7 @@
   import 'mapbox-gl/dist/mapbox-gl.css'
   import mapboxgl from 'mapbox-gl'
   import * as d3 from 'd3'
+  import { geoIdentity, geoProjection, geoPath } from 'd3-geo'
 
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZmFuZ25hbnh4IiwiYSI6ImNqdmU2OWVuYTF5enI0ZHBmMjVkM3V4MDEifQ.lE08N8pOvVxWtKBzNS1PUg'
 
@@ -162,9 +163,9 @@
           return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2))
         }
 
-        const projection = d3.geoIdentity().reflectY(true).fitWidth(width, riverGeoData)
-        const path = d3.geoPath(projection)
-        const height = Math.ceil(d3.geoPath(projection).bounds(riverGeoData)[1][1])
+        const projection = geoIdentity().reflectY(true).fitWidth(width, riverGeoData)
+        const path = geoPath(projection)
+        const height = Math.ceil(geoPath(projection).bounds(riverGeoData)[1][1])
         const pointXY = projection(pollutionPoint)
         const colors = ['#800026', '#bd0026', '#e31a1c', '#fc4e2a', '#fd8d3c', '#feb24c', 'rgba(254,217,118,0.5)']
         const pollutionDomain = [0, effectRadius]
