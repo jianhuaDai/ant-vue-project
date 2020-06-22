@@ -1,15 +1,21 @@
 <template>
-  <div>
-    <a-row :gutter="8">
-      <a-col :span="4">
+  <div class="main-view">
+    <a-row
+      :gutter="16"
+      class="row">
+      <a-col :span="4" class="left-tree-area">
+        <!-- <a-card
+          title="区域数据"
+          :bordered="false"
+          :style="{height:leftTreeHeight + 'px'}" -->
         <a-card
           title="区域数据"
           :bordered="false"
-          :style="{height:leftTreeHeight + 'px'}"
           :bodyStyle="{padding:'10px 10px 10px 10px'}">
-          <div :style="{height: areadivHeight + 'px'}">
-            <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
-          </div>
+          <!-- <div :style="{height: areadivHeight + 'px'}"> -->
+          <!-- <div> -->
+          <AreaTree @sendSelectNode="getSelectNode"></AreaTree>
+          <!-- </div> -->
         </a-card>
       </a-col>
       <a-col :span="20">
@@ -67,10 +73,13 @@
           <a-col
             :span="24"
             style="margin-top:8px;">
-            <a-card
+            <!-- <a-card
               title="查询列表:"
               :bodyStyle="{padding:'2px'}"
-              :style="{height: listHeight + 'px'}">
+              :style="{height: listHeight + 'px'}"> -->
+            <a-card
+              title="查询列表:"
+              :bodyStyle="{padding:'2px'}">
               <a-button
                 slot="extra"
                 type="primary"
@@ -92,10 +101,14 @@
                   :columns="columns"
                   :data="loadData"
                   :showPagination="true">
-                  <span slot="origin" slot-scope="text">
+                  <span
+                    slot="origin"
+                    slot-scope="text">
                     {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
                   </span>
-                  <span slot="destination" slot-scope="text">
+                  <span
+                    slot="destination"
+                    slot-scope="text">
                     {{ text.length > 0 ? text[0] + ',' + text[1] : '' }}
                   </span>
                   <template
@@ -120,9 +133,13 @@
                       <span>水库片</span>
                     </div>
                   </template>
-                  <span slot="status" slot-scope="text, record">
+                  <span
+                    slot="status"
+                    slot-scope="text, record">
                     <!-- <a-badge :status="text | statusBadge" :text="text | statusName" /> -->
-                    <a-switch :checked="text === 1" @click="changeStatus(record)"></a-switch>
+                    <a-switch
+                      :checked="text === 1"
+                      @click="changeStatus(record)"></a-switch>
                   </span>
                   <!-- <template
                     slot="status"
@@ -308,8 +325,7 @@
                   label="起点经纬度:"
                   prop="startjwd"
                   ref="startjwd">
-                  <a-input
-                    v-model="form2.startjwd">
+                  <a-input v-model="form2.startjwd">
                     <a-icon
                       @click="showMap1"
                       slot="addonAfter"
@@ -323,8 +339,7 @@
                   label="终点经纬度:"
                   prop="endjwd"
                   ref="endjwd">
-                  <a-input
-                    v-model="form2.endjwd">
+                  <a-input v-model="form2.endjwd">
                     <a-icon
                       @click="showMap2"
                       slot="addonAfter"
@@ -383,8 +398,7 @@
                   label="起点经纬度:"
                   prop=""
                   ref="">
-                  <a-input
-                    v-model="form2.startjwd2">
+                  <a-input v-model="form2.startjwd2">
                     <a-icon
                       @click="showMap3"
                       slot="addonAfter"
@@ -398,8 +412,7 @@
                   label="终点经纬度:"
                   prop="endjwd2"
                   ref="endjwd2">
-                  <a-input
-                    v-model="form2.endjwd2">
+                  <a-input v-model="form2.endjwd2">
                     <a-icon
                       @click="showMap4"
                       slot="addonAfter"
@@ -513,8 +526,7 @@
                     v-model="form2.gcdj"
                     :insert-option-all="false"
                     :select-first="false"
-                    :dictionary-type="DictionaryEnum.PROJECT_LEVEL"
-                  >
+                    :dictionary-type="DictionaryEnum.PROJECT_LEVEL">
                   </dictionary-select>
                 </a-form-item>
               </a-col>
@@ -897,21 +909,21 @@ export default {
       console.log(res)
       for (var i = 0; i < res.data.depts.length; i++) {
         this.gldwnamevalue.push(
-            {
-              key: res.data.depts[i].dept_id,
-              name: res.data.depts[i].dept_name
-            }
-          )
-          if (res.data.depts[i].employees) {
-            for (var j = 0; j < res.data.depts[i].employees.length; j++) {
-              this.hehuzhangvalue.push(
+          {
+            key: res.data.depts[i].dept_id,
+            name: res.data.depts[i].dept_name
+          }
+        )
+        if (res.data.depts[i].employees) {
+          for (var j = 0; j < res.data.depts[i].employees.length; j++) {
+            this.hehuzhangvalue.push(
               {
                 key: res.data.depts[i].employees[j].employee_id,
                 name: res.data.depts[i].employees[j].employee_name
               }
             )
-            }
           }
+        }
       }
     })
   },
@@ -1403,7 +1415,18 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
+.main-view {
+  height: 100%;
+  .row {
+    height: 100%;
+    .left-tree-area {
+      background: #ffffff;
+      height: 100%;
+      padding: 16px 0 0 16px;
+    }
+  }
+}
 .add-mask {
   position: fixed;
   top: 0;

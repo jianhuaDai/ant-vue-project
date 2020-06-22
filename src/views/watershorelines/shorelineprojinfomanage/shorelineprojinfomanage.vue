@@ -434,7 +434,7 @@ export default {
     },
     'form2.anxiantype3' (value2) {
       if (value2) {
-        getAnxianxinxiList({ line_type: value2 }).then(res => {
+        getAnxianxinxiList({ line_type: value2, status: 1 }).then(res => {
           console.log(res)
           this.anxiantype2value2 = []
           if (res.data.list.length > 0) {
