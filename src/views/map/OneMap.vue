@@ -453,6 +453,34 @@ export default {
           })
           break
         }
+        case 61: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.source_num,
+              layerItem.icon,
+              layerItem.bgColor,
+              v.name,
+              ''
+            )
+          })
+          break
+        }
+        case 62: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.station_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              v.station_name,
+              ''
+            )
+          })
+          break
+        }
         case 21: {
           console.log(this.layerManager.visibleLayerIds, 'this.layerManager.visibleLayerIds')
           if (this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {

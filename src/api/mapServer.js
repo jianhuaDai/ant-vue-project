@@ -156,11 +156,19 @@ export function loadRiverLine (parameter) {
   })
 }
 
-export function loadBlackWater (parameter) {
+export function loadWaterPoint (parameter) {
   return axios({
-    url: api.blackWater,
-    method: 'get',
-    params: parameter
+    url: `/water_sources/page_query`,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function loadEcologicalStation (parameter) {
+  return axios({
+    url: `/monitoring_station/page_query`,
+    method: 'post',
+    data: parameter
   })
 }
 
