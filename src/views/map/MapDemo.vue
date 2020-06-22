@@ -94,7 +94,7 @@
     TableColumnsByLayer,
     GetDataByLayer,
     GetTableRowKey,
-    LakeLabel,
+    // LakeLabel,
     buildGeoJSON
   } from './config/base'
   let MapScene = null
@@ -839,7 +839,7 @@
             const textLayer = new PointLayer({
               name: 'lakeText',
               zIndex: 100
-            }).source(LakeLabel)
+            }).source()
               .color('#0e0030')
               .shape('name', 'text')
               .size(12)
