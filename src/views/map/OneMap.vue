@@ -284,12 +284,16 @@ export default {
         id: sourceName,
         type: 'fill',
         source: sourceName,
-        layout: {
-        },
+        layout: {},
         paint: {
           'fill-color': '#BFDBF7',
           'fill-outline-color': '#ccc'
         }
+      })
+      // 添加事件监听
+      Map.on('click', sourceName, function (e) {
+        // 河湖点击展示
+        console.log(e.features[0].properties.id, 'eeeeeee')
       })
       Map.addSource(sourceName + 'text', {
         type: 'geojson',
@@ -577,6 +581,31 @@ export default {
         })
       }
       if (record.coordinates) {
+        if (Map.getSource('highLigth')) {
+          Map.removeLayer('highLigth')
+          Map.removeSource('highLigth')
+        }
+        // 高亮显示当前多边形图层
+        Map.addSource('highLigth', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: record.coordinates
+            }
+          }
+        })
+        Map.addLayer({
+          id: 'highLigth',
+          type: 'line',
+          source: 'highLigth',
+          layout: {},
+          paint: {
+            'line-color': 'blue'
+          }
+        })
+        // 定位多边形边界线
         const boundingBox = this.getBoundingBox(record.coordinates)
         Map.fitBounds([
           [boundingBox.xMin, boundingBox.yMin],
