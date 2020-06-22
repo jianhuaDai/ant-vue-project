@@ -149,10 +149,16 @@ export function LayerBtns () {
       detailTitle: '排污口详情'
     }],
     6: [{
-      id: 61,
-      name: '黑臭水',
-      icon: '/icons/black-water.svg'
-    }],
+        id: 61,
+        name: '水源地',
+        icon: '/icons/black-water.svg'
+      },
+      {
+        id: 62,
+        name: '生态监测站',
+        icon: '/icons/black-water.svg'
+      }
+    ],
     7: [{
       id: 71,
       name: '重点工程',
