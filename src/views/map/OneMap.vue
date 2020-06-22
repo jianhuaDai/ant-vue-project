@@ -312,7 +312,7 @@ export default {
           detailModal: 'lakeRiverDetail',
           detailTitle: '河湖详情'
         }
-        _this.markerClick('id', layerItem)
+        // _this.markerClick('id', layerItem)
         // this.$refs.detailModal.showModal('', { detailModal: 'lakeRiverDetail' }, 'sssss')
       })
       Map.addSource(sourceName + 'text', {
