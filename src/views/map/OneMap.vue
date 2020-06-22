@@ -303,6 +303,8 @@ export default {
       // 添加事件监听
       Map.on('click', sourceName, function (e) {
         // 河湖点击展示
+        // console.log(e)
+        console.log(e.features[0])
         console.log(e.features[0].properties.id, 'eeeeeee')
         const layerItem = {
           id: 11,
@@ -312,7 +314,7 @@ export default {
           detailModal: 'lakeRiverDetail',
           detailTitle: '河湖详情'
         }
-        // _this.markerClick('id', layerItem)
+        // _this.markerClick('id', e.features[0].properties.id)
         // this.$refs.detailModal.showModal('', { detailModal: 'lakeRiverDetail' }, 'sssss')
       })
       Map.addSource(sourceName + 'text', {

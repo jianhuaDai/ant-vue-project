@@ -5,9 +5,17 @@ const api = {
     delriverlake: '/water_infos/delete/',
     addriverlake: '/water_infos',
     updateriverlake: '/water_infos/',
-    getgldwdata: '/enterprise_book/'
+    getgldwdata: '/enterprise_book/',
+    getsingleriverlake: '/water_infos/'
 }
-
+// 根据编码查询单个河湖信息
+export function getSingleriverlake (id, parameter) {
+  return axios({
+    url: api.getsingleriverlake + id,
+    method: 'get',
+    data: parameter
+  })
+}
 // 查询河湖列表接口
 export function getRiverlakeList (parameter) {
   return axios({
