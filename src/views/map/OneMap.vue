@@ -5,17 +5,21 @@
         ref="map"
         :options="mapOptions"
         @mapLoaded="mapLoaded"
-        :background-color="'rgba(207, 229, 246, 1)'"
-      ></mapbox-view>
-      <div class="nav-map" v-show="ready">
+        :background-color="'rgba(207, 229, 246, 1)'"></mapbox-view>
+      <div
+        class="nav-map"
+        v-show="ready">
         <div
           @click="nav(item.id)"
           :class="['nav-map-item', item.id === layerManager.currentNav ? 'active' : '']"
           :key="item.id"
-          v-for="item in baseData.navs"
-        >
-          <a-icon :component="item.icon" v-show="item.id !== layerManager.currentNav"></a-icon>
-          <a-icon :component="item.iconSelected" v-show="item.id === layerManager.currentNav"></a-icon>
+          v-for="item in baseData.navs">
+          <a-icon
+            :component="item.icon"
+            v-show="item.id !== layerManager.currentNav"></a-icon>
+          <a-icon
+            :component="item.iconSelected"
+            v-show="item.id === layerManager.currentNav"></a-icon>
           <span class="title">{{ item.title }}</span>
           <div class="line"></div>
         </div>
@@ -31,28 +35,24 @@
               :key="item.id"
               @click="layerRadioHandle(item)"
               v-for="item in baseData.layerItems[layerManager.currentNav]"
-              :class="['layer-btn', layerManager.activeLayerItem.id === item.id ? 'active' : '']"
-            >
+              :class="['layer-btn', layerManager.activeLayerItem.id === item.id ? 'active' : '']">
               <span style="margin-right: 6px">{{ item.name }}</span>
               <a-checkbox
                 :checked="layerManager.visibleLayerIds.includes(item.id)"
-                @click="layerCheckboxHandle($event, item)"
-              ></a-checkbox>
+                @click="layerCheckboxHandle($event, item)"></a-checkbox>
             </div>
           </div>
           <!--        </div>-->
           <div
             class="info-area"
             v-show="layerManager.activeLayerItem.id !== 0"
-            style="margin: 10px 0"
-          >
+            style="margin: 10px 0">
             <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
             <a-input-search
               placeholder="请输入搜索内容"
               v-model="searchName"
               style="width: 240px;margin-bottom: 24px"
-              @search="searchFilter(layerManager.activeLayerItem, searchName)"
-            />
+              @search="searchFilter(layerManager.activeLayerItem, searchName)" />
             <a-range-picker
               v-if="showRainTimeRange"
               style="width: 300px;margin-bottom: 10px;"
@@ -62,8 +62,7 @@
               valueFormat="YYYY-MM-DD HH:mm:ss"
               format="YYYY-MM-DD HH:mm:ss"
               v-model="rainTimeRange"
-              @ok="rainTimeRangeChange"
-            />
+              @ok="rainTimeRangeChange" />
             <a-table
               v-show="tableList.columns.length > 0"
               :rowKey="tableList.rowKey"
@@ -73,17 +72,28 @@
               :pagination="{ hideOnSinglePage: true, size: 'small' }"
               :customRow="customRow"
               :rowSelection="tableList.options.rowSelection"
-              :scroll="{ y: 500 }"
-            >
-              <span slot="up_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
-              <span slot="down_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
-              <span slot="value" slot-scope="text">{{ text ? text.toFixed(0) : '' }}</span>
-              <span slot="m3s" slot-scope="text">
+              :scroll="{ y: 500 }">
+              <span
+                slot="up_value"
+                slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span
+                slot="down_value"
+                slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span
+                slot="value"
+                slot-scope="text">{{ text ? text.toFixed(0) : '' }}</span>
+              <span
+                slot="m3s"
+                slot-scope="text">
                 {{ text }}m
                 <sup>3</sup>/s
               </span>
-              <span slot="hasOrNo" slot-scope="text">{{ text === 1 ? '有' : '无' }}</span>
-              <span slot="in_river" slot-scope="text">{{ text.toFixed(2) }}t/a</span>
+              <span
+                slot="hasOrNo"
+                slot-scope="text">{{ text === 1 ? '有' : '无' }}</span>
+              <span
+                slot="in_river"
+                slot-scope="text">{{ text.toFixed(2) }}t/a</span>
             </a-table>
           </div>
         </div>
@@ -145,7 +155,7 @@ export default {
   components: { DetailModal, MapboxView, MaskPageView },
   methods: {
     moment,
-    rainTimeRangeChange () {},
+    rainTimeRangeChange () { },
     initMap () {
       this.nav(1)
       fetch('data/js.geojson')
@@ -250,7 +260,7 @@ export default {
         }
       })
     },
-    clearSelect () {},
+    clearSelect () { },
     layerRadioHandle (layerItem) {
       if (this.layerManager.activeLayerItem.id === layerItem.id) {
         return
@@ -275,6 +285,7 @@ export default {
     },
     // 加载河湖图层
     renderRiverLayer (sourceName, data) {
+      const _this = this
       Map.addSource(sourceName, {
         type: 'geojson',
         data: data
@@ -293,6 +304,16 @@ export default {
       Map.on('click', sourceName, function (e) {
         // 河湖点击展示
         console.log(e.features[0].properties.id, 'eeeeeee')
+        const layerItem = {
+          id: 11,
+          name: '污染源',
+          icon: '/icons/pollution.svg',
+          bgColor: '#516c85',
+          detailModal: 'lakeRiverDetail',
+          detailTitle: '河湖详情'
+        }
+        _this.markerClick('id', layerItem)
+        // this.$refs.detailModal.showModal('', { detailModal: 'lakeRiverDetail' }, 'sssss')
       })
       Map.addSource(sourceName + 'text', {
         type: 'geojson',

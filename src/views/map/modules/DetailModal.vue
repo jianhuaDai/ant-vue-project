@@ -23,6 +23,7 @@
   import waterDetail from '../components/waterDetail'
   import rainDetail from '../components/rainDetail'
   import outFallDetail from '../components/outfallDetail'
+  import lakeRiverDetail from '../components/lakeriverDetail'
   export default {
     props: {
       modelWidth: {
@@ -38,7 +39,8 @@
       PollutionDetail,
       waterDetail,
       rainDetail,
-      outFallDetail
+      outFallDetail,
+      lakeRiverDetail
     },
     data () {
       return {
