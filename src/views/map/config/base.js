@@ -140,7 +140,11 @@ export function LayerBtns () {
     }],
     4: [{
       id: 41,
-      name: '水域岸线'
+      name: '水域岸线',
+      icon: '',
+      bgColor: '#1391d9',
+      detailModal: 'riverLine',
+      detailTitle: '岸线详情'
     }],
     5: [{
       id: 51,
@@ -327,7 +331,7 @@ const TableColumns = {
       width: '50%'
     }, {
       title: '管理单位',
-      dataIndex: 'management_unit',
+      dataIndex: 'dept_name',
       width: '50%'
     }]
   },
@@ -499,7 +503,8 @@ export function GetDataByLayer () {
     case 41: {
       return loadRiverLine({
         page_size: 0,
-        province_id: 32
+        status: 1,
+        ...params
       })
     }
     case 51: {

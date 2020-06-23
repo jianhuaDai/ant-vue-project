@@ -150,9 +150,9 @@ export function loadSewage (parameter) {
 
 export function loadRiverLine (parameter) {
   return axios({
-    url: api.riverLine,
-    method: 'get',
-    params: parameter
+    url: '/rivers_line/monitor/page_query',
+    method: 'post',
+    data: parameter
   })
 }
 
