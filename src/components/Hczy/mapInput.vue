@@ -3,6 +3,9 @@
     <a-input v-model="location">
       <a-icon @click="showMap" slot="addonAfter" type="environment" :style="{ color: '#0D7DD9' }" />
     </a-input>
+    <span class="tips" v-show="showTips">
+      经纬度格式为: [***, ***]
+    </span>
     <div id="distance" class="distance-container" v-show="showMapDom"></div>
     <div class="add-mask" v-show="showMapDom"></div>
     <div class="add-map-box" v-if="showMapDom">
@@ -36,7 +39,8 @@ export default {
       showMapDom: false,
       location: '',
       lng: '',
-      lat: ''
+      lat: '',
+      showTips: false
     }
   },
   created () {
@@ -119,5 +123,13 @@ export default {
 .add-map-submit-btn {
   float: right;
   margin-left: 20px;
+}
+.tips {
+  position: absolute;
+  width: 200px;
+  left: 0;
+  top: 30px;
+  font-size: 12px;
+  color: rgb(126, 120, 120);
 }
 </style>
