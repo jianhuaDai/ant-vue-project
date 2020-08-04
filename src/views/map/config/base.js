@@ -23,7 +23,9 @@ import {
   loadGetWater,
   loadWaterEmphasiss,
   loadWaterFunction,
-  loadSewage, loadRiverLine, loadBlackWater, loadProject, loadVideoMonitor, loadBoard, loadEvent, loadComplaint
+  loadWaterPoint,
+  loadEcologicalStation,
+  loadSewage, loadRiverLine, loadProject, loadVideoMonitor, loadBoard, loadEvent, loadComplaint
 } from '@/api/mapServer'
 import { PointLayer } from '@antv/l7'
 
@@ -138,7 +140,11 @@ export function LayerBtns () {
     }],
     4: [{
       id: 41,
-      name: '水域岸线'
+      name: '水域岸线',
+      icon: '',
+      bgColor: '#1391d9',
+      detailModal: 'riverLine',
+      detailTitle: '岸线详情'
     }],
     5: [{
       id: 51,
@@ -151,12 +157,12 @@ export function LayerBtns () {
     6: [{
         id: 61,
         name: '水源地',
-        icon: '/icons/black-water.svg'
+        icon: '/icons/water-point.svg'
       },
       {
         id: 62,
         name: '生态监测站',
-        icon: '/icons/black-water.svg'
+        icon: '/icons/ecological-station.svg'
       }
     ],
     7: [{
@@ -325,7 +331,7 @@ const TableColumns = {
       width: '50%'
     }, {
       title: '管理单位',
-      dataIndex: 'management_unit',
+      dataIndex: 'dept_name',
       width: '50%'
     }]
   },
@@ -348,12 +354,24 @@ const TableColumns = {
   61: {
     rowKey: 'monitor_id',
     columns: [{
-      title: '河流',
-      dataIndex: 'river_name',
-      width: '70%'
+      title: '水源地名称',
+      dataIndex: 'name',
+      width: '60%'
     }, {
-      title: '负责人',
-      dataIndex: 'rivers_holder',
+      title: '测站类型',
+      dataIndex: 'station_type_name',
+      width: '30%'
+    }]
+  },
+  62: {
+    rowKey: 'ecological_id',
+    columns: [{
+      title: '测站名称',
+      dataIndex: 'station_name',
+      width: '60%'
+    }, {
+      title: '测站类型',
+      dataIndex: 'station_type_name',
       width: '30%'
     }]
   },
@@ -485,7 +503,8 @@ export function GetDataByLayer () {
     case 41: {
       return loadRiverLine({
         page_size: 0,
-        province_id: 32
+        status: 1,
+        ...params
       })
     }
     case 51: {
@@ -495,9 +514,16 @@ export function GetDataByLayer () {
       })
     }
     case 61: {
-      return loadBlackWater({
+      return loadWaterPoint({
         page_size: 0,
-        province_id: 32
+        ...params
+      })
+    }
+    case 62: {
+      return loadEcologicalStation({
+        page_size: 0,
+        station_type: 4,
+        ...params
       })
     }
     case 71: {

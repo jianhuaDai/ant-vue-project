@@ -314,7 +314,7 @@ export default {
           detailModal: 'lakeRiverDetail',
           detailTitle: '河湖详情'
         }
-        // _this.markerClick('id', e.features[0].properties.id)
+        _this.markerClick(e.features[0].properties.id, layerItem)
         // this.$refs.detailModal.showModal('', { detailModal: 'lakeRiverDetail' }, 'sssss')
       })
       Map.addSource(sourceName + 'text', {
@@ -449,6 +449,34 @@ export default {
               layerItem.bgColor,
               v.sewage_name,
               `${v.in_river.toFixed(2)}t/a`
+            )
+          })
+          break
+        }
+        case 61: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.source_num,
+              layerItem.icon,
+              layerItem.bgColor,
+              v.name,
+              ''
+            )
+          })
+          break
+        }
+        case 62: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.station_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              v.station_name,
+              ''
             )
           })
           break
