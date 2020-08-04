@@ -12,10 +12,10 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "url": "http://map.susinnovation.com:9001/data/v3.json"
+      "url": "http://test.susinnovation.com:8081/data/v3.json"
     }
   },
-  "glyphs": "http://font.susinnovation.com:9001/{fontstack}/{range}.pbf?key=KDhMfHvorAFkFe64wlZb",
+  "glyphs": "http://test.susinnovation.com:8082/{fontstack}/{range}.pbf?key=KDhMfHvorAFkFe64wlZb",
   "layers": [
     {
       "id": "background",
