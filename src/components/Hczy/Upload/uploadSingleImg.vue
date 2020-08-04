@@ -37,7 +37,7 @@ export default {
   },
   created () {
     this.image_url = this.value
-    if (this.image_url.length > 0) {
+    if (this.value && this.image_url.length > 0) {
       this.showImage = true
     }
   },

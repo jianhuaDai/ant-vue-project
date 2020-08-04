@@ -45,6 +45,8 @@ export default {
   watch: {
     location: {
       handler (val) {
+        console.log(val, 'sdsadds')
+        this.$emit('change', JSON.parse(val))
       }
     }
   },
