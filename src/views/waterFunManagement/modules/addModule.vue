@@ -185,7 +185,7 @@ export default {
   methods: {
     getFractureList () {
       getSectionList(
-        { page: 1, page_size: 0 }
+        { page_size: 0 }
       ).then((res) => {
         this.fractureList = res.data.list
       })
