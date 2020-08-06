@@ -425,6 +425,20 @@ export default {
           })
           break
         }
+        case 42: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.fracture_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              '',
+              `断面名称：${v.fracture_name}`
+            )
+          })
+          break
+        }
         case 81: {
           res.data.list.forEach(v => {
             this.renderMarker(
