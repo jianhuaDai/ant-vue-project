@@ -69,7 +69,7 @@
               :bordered="false"
               :columns="tableList.columns"
               :dataSource="tableList.data"
-              :pagination="{ hideOnSinglePage: true, size: 'small' }"
+              :pagination="false"
               :customRow="customRow"
               :rowSelection="tableList.options.rowSelection"
               :scroll="{ y: 500 }">
@@ -421,6 +421,20 @@ export default {
               layerItem.bgColor,
               v.func_name,
               `水质目标：${v.water_target_name}`
+            )
+          })
+          break
+        }
+        case 42: {
+          res.data.list.forEach(v => {
+            this.renderMarker(
+              v.lon_lat,
+              layerItem,
+              v.fracture_id,
+              layerItem.icon,
+              layerItem.bgColor,
+              '',
+              `断面名称：${v.fracture_name}`
             )
           })
           break

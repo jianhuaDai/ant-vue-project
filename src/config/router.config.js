@@ -206,6 +206,12 @@ export const asyncRouterMap = [
                 name: 'ShorelinePlan',
                 component: () => import('@/views/watershorelines/shorelineplan/shorelineplan'),
                 meta: { title: '岸线规划信息', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/monitor-info/sandMining',
+                name: 'SandMining',
+                component: () => import('@/views/sandMining/index.vue'),
+                meta: { title: '采砂管理', keepAlive: true, permission: ['dashboard'] }
               }
             ]
           }

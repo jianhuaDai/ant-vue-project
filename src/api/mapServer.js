@@ -156,6 +156,14 @@ export function loadRiverLine (parameter) {
   })
 }
 
+export function loadSection (parameter) {
+  return axios({
+    url: '/fracture/page_query',
+    method: 'post',
+    data: parameter
+  })
+}
+
 export function loadWaterPoint (parameter) {
   return axios({
     url: `/water_sources/page_query`,

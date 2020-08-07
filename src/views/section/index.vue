@@ -135,7 +135,9 @@ export default {
       })
     }
   },
-  created () {}
+  created () {
+    console.log(process.env, 'dsdasda')
+  }
 }
 </script>
 <style scoped></style>
