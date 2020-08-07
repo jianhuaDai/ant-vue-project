@@ -20,6 +20,7 @@ const action = Vue.directive('action', {
     const roles = store.getters.roles
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal
+    console.log('22222')
     roles.permissions.forEach(p => {
       if (!permissionId.includes(p.permissionId)) {
         return

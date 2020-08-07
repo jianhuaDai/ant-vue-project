@@ -69,7 +69,7 @@
               :bordered="false"
               :columns="tableList.columns"
               :dataSource="tableList.data"
-              :pagination="{ hideOnSinglePage: true, size: 'small' }"
+              :pagination="false"
               :customRow="customRow"
               :rowSelection="tableList.options.rowSelection"
               :scroll="{ y: 500 }">

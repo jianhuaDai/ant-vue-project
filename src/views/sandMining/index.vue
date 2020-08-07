@@ -1,7 +1,21 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      采砂管理
+    <a-card>
+      <a-steps :current="1">
+        <a-step>
+          <!-- <span slot="title">Finished</span> -->
+          <template slot="title">
+            采砂申报管理
+          </template>
+          <span slot="description">
+            所有采砂申请都需要在信息填完后提交给主管单位审批。
+          </span>
+        </a-step>
+        <a-step title="In Progress" sub-title="Left 00:00:08" description="This is a description." />
+        <a-step title="Waiting" description="This is a description." />
+      </a-steps>
+    </a-card>
+    <a-card :bordered="false" style="margin-top: 24px;">
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
