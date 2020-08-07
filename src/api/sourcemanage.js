@@ -34,7 +34,7 @@ export function addSource (parameter) {
 }
 
 // 更新污染源
-export function updateSource (id,parameter) {
+export function updateSource (id, parameter) {
   return axios({
     url: api.updatesource + id,
     method: 'put',

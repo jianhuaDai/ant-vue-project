@@ -459,6 +459,7 @@ export default {
       }, 1)
     },
     setFormValue (data) {
+      console.log(data)
       this.$set(this.form2, 'suoshuquyu2', data.regionalism_id)
       this.$set(this.form2, 'code', data.land_num)
       this.$set(this.form2, 'anxiantype3', data.line_type)

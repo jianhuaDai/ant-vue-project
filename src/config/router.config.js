@@ -108,6 +108,30 @@ export const asyncRouterMap = [
                 name: 'Outfall',
                 component: () => import('@/views/outfall/index.vue'),
                 meta: { title: '排污口', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/project-info/pumpstation',
+                name: 'pumpstation',
+                component: () => import('@/views/pumpStationManagement/pumpstation.vue'),
+                meta: { title: '泵站', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/project-info/gatestation',
+                name: 'gatestation',
+                component: () => import('@/views/gateStationManagement/gatestation.vue'),
+                meta: { title: '闸站', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/project-info/shengtaigc',
+                name: 'shengtaigc',
+                component: () => import('@/views/shentaigcManagement/shengtaigcManage.vue'),
+                meta: { title: '生态工程', keepAlive: true, permission: ['dashboard'] }
+              },
+              {
+                path: '/info-manage/project-info/fameng',
+                name: 'fameng',
+                component: () => import('@/views/famengManagement/famengManage.vue'),
+                meta: { title: '阀门', keepAlive: true, permission: ['dashboard'] }
               }
             ]
           },

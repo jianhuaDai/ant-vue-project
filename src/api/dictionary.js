@@ -33,7 +33,10 @@ export const DictionaryEnum = {
   DIC_LAND_TYPE: 'land_type', // 土地用途
   DIC_STATION_USE_TYPE: 'station_use_type', // 测站类别
   FUNC_INDICATOR: 'func_indicator',
-  DIC_WATER_GRADE: 'water_grade' // 河湖层级
+  DIC_WATER_GRADE: 'water_grade', // 河湖层级,
+  DIC_PUMPSTATION_TYPE: 'pump_station_type', // 泵站类型
+  DIC_SLUICE_GATE_STATION_TYPE: 'sluice_gate_station_type', // 闸站类型
+  DIC_SOURCE_PROPERTY: 'source_property'  //水源地属性
 }
 export function getDictionary (type, pid = 0) {
   return axios({

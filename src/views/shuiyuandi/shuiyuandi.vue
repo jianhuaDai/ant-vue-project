@@ -226,7 +226,7 @@
                   v-model="form2.type2"
                   :insert-option-all="false"
                   :select-first="false"
-                  :dictionary-type="DictionaryEnum.ATTENTION_LEVEL"
+                  :dictionary-type="DictionaryEnum.DIC_SOURCE_PROPERTY"
                 >
                 </dictionary-select>
               </a-form-model-item>
