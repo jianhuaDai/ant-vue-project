@@ -35,17 +35,34 @@
       <div class="table-page-search-wrapper">
         <a-form layout="inline">
           <a-row :gutter="48">
-            <a-col :md="6" :sm="24">
+            <a-col :md="5" :sm="24">
               <a-form-item label="所属区域" style="margin-bottom: 0">
                 <a-tree-select v-model="queryParam.regionalism_id" :treeData="treeData"> </a-tree-select>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item label="所属岸线" style="margin-bottom: 0">
-                <a-input v-model="queryParam.river_line_id" placeholder="" />
-              </a-form-item>
+            <a-col :md="10" :sm="24">
+              <a-col :md="12" :sm="24">
+                <a-form-item label="所属岸线" style="margin-bottom: 0">
+                  <dictionary-select
+                    @change="getshoreLineList"
+                    v-model="anxiantype"
+                    :insert-option-all="false"
+                    :select-first="false"
+                    :dictionary-type="DictionaryEnum.DIC_LINE_TYPE"
+                  >
+                  </dictionary-select>
+                </a-form-item>
+              </a-col>
+              <a-col :md="12" :sm="24">
+                <!-- <a-input v-model="queryParam.river_line_id" placeholder="全部岸线" /> -->
+                <a-select v-model="queryParam.river_line_id" placeholder="全部岸线">
+                  <a-select-option v-for="item in anxianOptions" :key="item.river_line_id">
+                    {{ item.line_name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
             </a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="5" :sm="24">
               <a-form-item label="审批状态" style="margin-bottom: 0">
                 <a-select v-model="queryParam.approval_status">
                   <a-select-option v-for="item in approvalStatus" :key="item.value" :value="item.value">
@@ -54,7 +71,7 @@
                 </a-select>
               </a-form-item>
             </a-col>
-            <a-col :md="6" :sm="24">
+            <a-col :md="4" :sm="24">
               <div style="float: right">
                 <a-button style="margin-right: 8px" @click="resetQuery">重置</a-button>
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
@@ -107,10 +124,13 @@ import { getSendMingList, deleteSendMing, editSendMing } from '@/api/sendMing'
 import AddModule from './modules/addModule'
 import { treeData } from '@/config/areaTreeSelectData'
 import { mapState } from 'vuex'
+import { getAnxianxinxiList } from '@/api/shorelineinfomanage'
+
 export default {
   name: 'Outfall',
   data () {
     return {
+      anxiantype: null,
       treeData,
       queryParam: {
         regionalism_id: null,
@@ -135,6 +155,7 @@ export default {
           value: 3
         }
       ],
+      anxianOptions: [],
       columns: [
         {
           title: '所属区域',
@@ -180,12 +201,6 @@ export default {
       ],
       loadData: parameter => {
         return getSendMingList(Object.assign(parameter, this.queryParam)).then(res => {
-          res.data.list = res.data.list.map((item, index) => {
-            return {
-              ...item,
-              id: index + 1
-            }
-          })
           return res.data
         })
       }
@@ -199,6 +214,15 @@ export default {
   },
   components: { PageView, STable, Ellipsis, AddModule },
   methods: {
+    getshoreLineList () {
+      getAnxianxinxiList({
+        line_type: this.anxiantype
+      }).then((res) => {
+        if (res.data.list) {
+        this.anxianOptions = res.data.list
+        }
+      })
+    },
     goTo (record) {
       this.$router.push({ path: '/task/solution', query: { taskId: record.id, taskName: record.name } })
     },
@@ -264,7 +288,9 @@ export default {
       })
     }
   },
-  created () {}
+  created () {
+    this.getshoreLineList()
+  }
 }
 </script>
 <style scoped></style>

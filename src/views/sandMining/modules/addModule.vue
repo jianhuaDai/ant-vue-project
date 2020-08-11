@@ -19,15 +19,36 @@
         >
           <a-row :gutter="24" v-if="visible">
             <a-col :span="12">
-              <a-form-model-item label="所属区域" prop="regionalism_id" ref="regionalism_id">
+              <a-form-model-item style="margin-bottom: 0;" label="所属区域" prop="regionalism_id" ref="regionalism_id">
                 <a-tree-select v-model="form.regionalism_id" :treeData="treeData">
                 </a-tree-select>
               </a-form-model-item>
             </a-col>
             <a-col :span="12">
-              <a-form-model-item label="所属岸线" prop="river_line_id" ref="river_line_id">
+              <!-- <a-form-model-item label="所属岸线" prop="river_line_id" ref="river_line_id">
                 <a-input v-model="form.river_line_id"></a-input>
-              </a-form-model-item>
+              </a-form-model-item> -->
+              <div style="display: flex;">
+                <a-form-model-item label="所属岸线" style="margin-bottom: 0; width: 100%;display: flex;" >
+                  <dictionary-select
+                    style="width: 45%;margin-right: 5%;"
+                    @change="getshoreLineList"
+                    v-model="anxiantype"
+                    placeholder="全部"
+                    :insert-option-all="false"
+                    :select-first="false"
+                    :dictionary-type="DictionaryEnum.DIC_LINE_TYPE"
+                  >
+                  </dictionary-select>
+                  <a-select v-model="form.river_line_id" placeholder="全部岸线" style="margin-bottom: 0;width: 50%;">
+                    <a-select-option v-for="item in anxianOptions" :key="item.river_line_id">
+                      {{ item.line_name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-model-item>
+
+              </div>
+
             </a-col>
             <a-col :span="12">
               <a-form-model-item label="采砂公司" prop="company" ref="company">
@@ -93,11 +114,14 @@ import { addSendMing, editSendMing } from '@/api/sendMing'
 import { getRiversAndLakes } from '@/api/infomanage'
 import mapInput from '@/components/Hczy/mapInput.vue'
 import uploadMutiImg from '@/components/Hczy/Upload/uploadMutiImg.vue'
+import { getAnxianxinxiList } from '@/api/shorelineinfomanage'
 export default {
   props: {},
   components: { mapInput, uploadMutiImg },
   data () {
     return {
+      anxiantype: null,
+      anxianOptions: [],
       riversAndLakes: [],
       treeData,
       getWaterModule: 'getWaterModule',
@@ -116,11 +140,21 @@ export default {
   watch: {},
   mounted () {},
   created () {
+    this.getshoreLineList()
     getRiversAndLakes({ page: 1, page_size: 0 }).then(res => {
       this.riversAndLakes = res.data.list
     })
   },
   methods: {
+    getshoreLineList () {
+      getAnxianxinxiList({
+        line_type: this.anxiantype
+      }).then((res) => {
+        if (res.data.list) {
+        this.anxianOptions = res.data.list
+        }
+      })
+    },
     showModal (data = {}) {
       this.visible = true
       if (JSON.stringify(data) !== '{}') {
