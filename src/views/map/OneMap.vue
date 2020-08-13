@@ -1,25 +1,24 @@
 <template>
   <mask-page-view>
     <div class="map">
+      <div class="overlay">
+        <button id="replay">Replay</button>
+      </div>
       <mapbox-view
         ref="map"
         :options="mapOptions"
         @mapLoaded="mapLoaded"
-        :background-color="'rgba(207, 229, 246, 1)'"></mapbox-view>
-      <div
-        class="nav-map"
-        v-show="ready">
+        :background-color="'rgba(207, 229, 246, 1)'"
+      ></mapbox-view>
+      <div class="nav-map" v-show="ready">
         <div
           @click="nav(item.id)"
           :class="['nav-map-item', item.id === layerManager.currentNav ? 'active' : '']"
           :key="item.id"
-          v-for="item in baseData.navs">
-          <a-icon
-            :component="item.icon"
-            v-show="item.id !== layerManager.currentNav"></a-icon>
-          <a-icon
-            :component="item.iconSelected"
-            v-show="item.id === layerManager.currentNav"></a-icon>
+          v-for="item in baseData.navs"
+        >
+          <a-icon :component="item.icon" v-show="item.id !== layerManager.currentNav"></a-icon>
+          <a-icon :component="item.iconSelected" v-show="item.id === layerManager.currentNav"></a-icon>
           <span class="title">{{ item.title }}</span>
           <div class="line"></div>
         </div>
@@ -35,24 +34,24 @@
               :key="item.id"
               @click="layerRadioHandle(item)"
               v-for="item in baseData.layerItems[layerManager.currentNav]"
-              :class="['layer-btn', layerManager.activeLayerItem.id === item.id ? 'active' : '']">
+              :class="['layer-btn', layerManager.activeLayerItem.id === item.id ? 'active' : '']"
+            >
               <span style="margin-right: 6px">{{ item.name }}</span>
               <a-checkbox
                 :checked="layerManager.visibleLayerIds.includes(item.id)"
-                @click="layerCheckboxHandle($event, item)"></a-checkbox>
+                @click="layerCheckboxHandle($event, item)"
+              ></a-checkbox>
             </div>
           </div>
           <!--        </div>-->
-          <div
-            class="info-area"
-            v-show="layerManager.activeLayerItem.id !== 0"
-            style="margin: 10px 0">
+          <div class="info-area" v-show="layerManager.activeLayerItem.id !== 0" style="margin: 10px 0">
             <div style="font-weight: 500;margin: 15px 0">{{ layerManager.activeLayerItem.name }}</div>
             <a-input-search
               placeholder="请输入搜索内容"
               v-model="searchName"
               style="width: 240px;margin-bottom: 24px"
-              @search="searchFilter(layerManager.activeLayerItem, searchName)" />
+              @search="searchFilter(layerManager.activeLayerItem, searchName)"
+            />
             <a-range-picker
               v-if="showRainTimeRange"
               style="width: 300px;margin-bottom: 10px;"
@@ -62,7 +61,8 @@
               valueFormat="YYYY-MM-DD HH:mm:ss"
               format="YYYY-MM-DD HH:mm:ss"
               v-model="rainTimeRange"
-              @ok="rainTimeRangeChange" />
+              @ok="rainTimeRangeChange"
+            />
             <a-table
               v-show="tableList.columns.length > 0"
               :rowKey="tableList.rowKey"
@@ -72,28 +72,14 @@
               :pagination="false"
               :customRow="customRow"
               :rowSelection="tableList.options.rowSelection"
-              :scroll="{ y: 500 }">
-              <span
-                slot="up_value"
-                slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
-              <span
-                slot="down_value"
-                slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
-              <span
-                slot="value"
-                slot-scope="text">{{ text ? text.toFixed(0) : '' }}</span>
-              <span
-                slot="m3s"
-                slot-scope="text">
-                {{ text }}m
-                <sup>3</sup>/s
-              </span>
-              <span
-                slot="hasOrNo"
-                slot-scope="text">{{ text === 1 ? '有' : '无' }}</span>
-              <span
-                slot="in_river"
-                slot-scope="text">{{ text.toFixed(2) }}t/a</span>
+              :scroll="{ y: 500 }"
+            >
+              <span slot="up_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span slot="down_value" slot-scope="text">{{ text ? text.toFixed(2) : '' }}</span>
+              <span slot="value" slot-scope="text">{{ text ? text.toFixed(0) : '' }}</span>
+              <span slot="m3s" slot-scope="text"> {{ text }}m <sup>3</sup>/s </span>
+              <span slot="hasOrNo" slot-scope="text">{{ text === 1 ? '有' : '无' }}</span>
+              <span slot="in_river" slot-scope="text">{{ text.toFixed(2) }}t/a</span>
             </a-table>
           </div>
         </div>
@@ -109,21 +95,25 @@ import MapboxView from '../../components/Hczy/Map/MapboxView'
 import mapboxgl from 'mapbox-gl'
 import HcMarker from './components/HcMarker'
 import { MaskPageView } from '@/layouts'
-import { Navs, LayerBtns, GetDataByLayer, GetTableRowKey, TableColumnsByLayer, RiverType } from './config/base'
+import { Navs, LayerBtns, GetDataByLayer, GetTableRowKey, TableColumnsByLayer } from './config/base'
 import DetailModal from './modules/DetailModal'
-import { getRiver } from '@/api/mapServer'
 import moment from 'moment'
+import * as turf from '@turf/turf'
+import { loadRiverAndLake } from '@/api/mapServer'
 let Map = null
 export default {
   name: 'OneMap',
-  data () {
+  data() {
     return {
+      showMessage: false,
+      longRiverData: [],
       searchName: '',
       rainTimeRange: ['2020-06-10 00:00:00', '2020-06-10 18:18:14'],
       showRainTimeRange: false,
       mapOptions: {
         pitch: 30,
-        zoom: 7,
+        zoom: 10,
+        center: [120.87572773715249, 31.86364835278333],
         style: '/bright'
       },
       ready: false,
@@ -153,20 +143,141 @@ export default {
     }
   },
   components: { DetailModal, MapboxView, MaskPageView },
+  created() {},
   methods: {
     moment,
-    rainTimeRangeChange () { },
-    initMap () {
+    rainTimeRangeChange() {},
+    initMap() {
+      var _this = this
       this.nav(1)
       fetch('data/js.geojson')
         .then(res => {
           return res.json()
         })
         .then(data => {
+          var point = {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [121.603474, 32.093615]
+                }
+              }
+            ]
+          }
+          var arc = []
+          var steps = 1000
+          // San Francisco
+          var origin = [120.91854393025727, 31.783589924576944]
+
+          // Washington DC
+          var destination = [120.75680696773281, 32.00498695993434]
+          var route = {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'LineString',
+                  coordinates: [origin, destination]
+                }
+              }
+            ]
+          }
+          var lineDistance = turf.rhumbDistance(origin, destination, { units: 'miles' })
+          for (var i = 0; i < lineDistance; i += lineDistance / steps) {
+            var line = turf.lineString(route.features[0].geometry.coordinates)
+            var segment = turf.along(line, i, { units: 'miles' })
+            arc.push(segment.geometry.coordinates)
+          }
+          route.features[0].geometry.coordinates = arc
+          Map.addSource('route', {
+            type: 'geojson',
+            data: route
+          })
+          Map.addSource('point', {
+            type: 'geojson',
+            data: point
+          })
+          Map.loadImage('/icons/chuan2.png', function(error, image) {
+            if (error) throw error
+            Map.addImage('chuan', image)
+
+            Map.addLayer({
+              id: 'points',
+              type: 'symbol',
+              source: 'point',
+              layout: {
+                'icon-image': 'chuan',
+                'icon-size': 0.25
+              }
+            })
+          })
+
+          var counter = 0
+          function animate() {
+            // Update point geometry to a new position based on counter denoting
+            // the index to access the arc.
+            point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter]
+            // Calculate the bearing to ensure the icon is rotated to match the route arc
+            // The bearing is calculate between the current point and the next point, except
+            // at the end of the arc use the previous point and the current point
+            point.features[0].properties.bearing = turf.bearing(
+              turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
+              turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter : counter + 1])
+            )
+
+            // Update the source with this new data.
+            Map.getSource('point').setData(point)
+            // console.log(point.features[0].geometry.coordinates, 'point', _this.longRiverData)
+            const isInPolygon = _this.longRiverData.length > 0 ? turf.booleanPointInPolygon(turf.point(point.features[0].geometry.coordinates), turf.polygon(_this.longRiverData[0])) : false
+            if (isInPolygon && !_this.showMessage) {
+              _this.showMessage = true
+              _this.$message.warning({
+                content: '警告⚠️',
+                duration: 0
+              })
+            }
+            // Request the next frame of animation so long the end has not been reached.
+            if (counter < steps) {
+              requestAnimationFrame(animate)
+            }
+
+            counter = counter + 1
+          }
+          document.getElementById('replay').addEventListener('click', function() {
+            // Set the coordinates of the original point back to origin
+            point.features[0].geometry.coordinates = origin
+
+            // Update the source layer
+            Map.getSource('point').setData(point)
+
+            // Reset the counter
+            counter = 0
+            this.showMessage = false
+            // Restart the animation.
+            animate(counter)
+          })
+          animate(counter)
+          Map.addLayer({
+            id: 'route',
+            source: 'route',
+            type: 'line',
+            paint: {
+              'line-width': 0,
+              'line-color': '#007cbf'
+            }
+          })
+          //
           Map.addSource('320000', {
             type: 'geojson',
             data: data
           })
+          console.log('2222', turf.rhumbDistance(origin, destination, { units: 'miles' }))
+
           Map.addLayer(
             {
               id: 'area',
@@ -182,25 +293,56 @@ export default {
           )
         })
     },
-    mapLoaded (map) {
+    mapLoaded(map) {
       Map = map
       this.ready = true
       this.initMap()
+      loadRiverAndLake({
+        page_size: 0,
+        name: '长江'
+      }).then(res => {
+        console.log(res, 'reshhhhh')
+        if (res.data.geo_info.features[0].geometry.coordinates) {
+          this.longRiverData = res.data.geo_info.features[0].geometry.coordinates
+          Map.addSource('longriver', {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: this.longRiverData
+              }
+            }
+          })
+          Map.addLayer({
+            id: 'longriver',
+            type: 'line',
+            source: 'longriver',
+            layout: {},
+            paint: {
+              'line-color': 'blue'
+            }
+          })
+        }
+      })
+      map.on('click', function(e) {
+        console.log(e.lngLat, 'e.lngLat')
+      })
     },
-    nav (navId) {
+    nav(navId) {
       if (this.layerManager.currentNav === navId) {
         this.showInfoPanel = !this.showInfoPanel
         return
       }
       this.layerManager.currentNav = navId
       this.showInfoPanel = true
-      if (navId !== 2 && Map.getSource('21')) {
-        Map.removeLayer('21')
-        Map.removeSource('21')
-      }
+      // if (navId !== 2 && Map.getSource('21')) {
+      //   Map.removeLayer('21')
+      //   Map.removeSource('21')
+      // }
       this.layerRadioHandle(this.baseData.layerItems[navId][0])
     },
-    layerManagerHandle (layerItem) {
+    layerManagerHandle(layerItem) {
       this.clearSelect()
       if (!this.layerManager.existLayerGroup[layerItem.id]) {
         this.layerManager.existLayerGroup[layerItem.id] = {
@@ -216,7 +358,7 @@ export default {
         )
       }
     },
-    toggleLayer (layerItem, isShow = true, extraLayer = false) {
+    toggleLayer(layerItem, isShow = true, extraLayer = false) {
       const layerGroup = this.layerManager.existLayerGroup[layerItem.id]
       if (isShow) {
         this.loadLayer(layerItem)
@@ -229,7 +371,7 @@ export default {
         }
       }
     },
-    searchFilter (layerItem, searchName) {
+    searchFilter(layerItem, searchName) {
       GetDataByLayer(layerItem.id, { station_name: searchName, name: searchName }).then(res => {
         this.tableList.data = res.data.list
         if (res.data.geo_info) {
@@ -251,7 +393,7 @@ export default {
         }
       })
     },
-    loadLayer (layerItem) {
+    loadLayer(layerItem) {
       GetDataByLayer(layerItem.id).then(res => {
         if (res) {
           setTimeout(() => {
@@ -260,8 +402,8 @@ export default {
         }
       })
     },
-    clearSelect () { },
-    layerRadioHandle (layerItem) {
+    clearSelect() {},
+    layerRadioHandle(layerItem) {
       if (this.layerManager.activeLayerItem.id === layerItem.id) {
         return
       }
@@ -270,7 +412,7 @@ export default {
       this.layerManagerHandle(layerItem)
       this.renderTableList()
     },
-    layerCheckboxHandle (e, layerItem) {
+    layerCheckboxHandle(e, layerItem) {
       e.stopPropagation()
       if (this.layerManager.activeLayerItem.id === layerItem.id) {
         return
@@ -284,7 +426,7 @@ export default {
       this.layerManagerHandle(layerItem)
     },
     // 加载河湖图层
-    renderRiverLayer (sourceName, data) {
+    renderRiverLayer(sourceName, data) {
       const _this = this
       Map.addSource(sourceName, {
         type: 'geojson',
@@ -301,11 +443,11 @@ export default {
         }
       })
       // 添加事件监听
-      Map.on('click', sourceName, function (e) {
+      Map.on('click', sourceName, function(e) {
         // 河湖点击展示
-        // console.log(e)
-        console.log(e.features[0])
-        console.log(e.features[0].properties.id, 'eeeeeee')
+        console.log(e, 'dsdsddsdsds')
+        // console.log(e.features[0])
+        // console.log(e.features[0].properties.id, 'eeeeeee')
         const layerItem = {
           id: 11,
           name: '污染源',
@@ -337,7 +479,7 @@ export default {
       })
     },
     // 渲染Layer
-    renderLayer (layerItem, res) {
+    renderLayer(layerItem, res) {
       console.log(layerItem.id, 'layerItem.id')
       this.showRainTimeRange = layerItem.id === 13
       switch (layerItem.id) {
@@ -469,34 +611,17 @@ export default {
         }
         case 61: {
           res.data.list.forEach(v => {
-            this.renderMarker(
-              v.lon_lat,
-              layerItem,
-              v.source_num,
-              layerItem.icon,
-              layerItem.bgColor,
-              v.name,
-              ''
-            )
+            this.renderMarker(v.lon_lat, layerItem, v.source_num, layerItem.icon, layerItem.bgColor, v.name, '')
           })
           break
         }
         case 62: {
           res.data.list.forEach(v => {
-            this.renderMarker(
-              v.lon_lat,
-              layerItem,
-              v.station_id,
-              layerItem.icon,
-              layerItem.bgColor,
-              v.station_name,
-              ''
-            )
+            this.renderMarker(v.lon_lat, layerItem, v.station_id, layerItem.icon, layerItem.bgColor, v.station_name, '')
           })
           break
         }
         case 21: {
-          console.log(this.layerManager.visibleLayerIds, 'this.layerManager.visibleLayerIds')
           if (this.layerManager.visibleLayerIds.includes(21) && Map.getSource('21')) {
             Map.removeLayer('21')
             Map.removeLayer('21text')
@@ -587,13 +712,13 @@ export default {
         }
       }
     },
-    markerClick (dataId, layerItem) {
+    markerClick(dataId, layerItem) {
       if (layerItem.detailModal) {
         this.$refs.detailModal.showModal(dataId, layerItem, layerItem.detailTitle)
       }
     },
     // 渲染marker
-    renderMarker (coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
+    renderMarker(coordinates, layerItem, dataId, icon, bgColor, name = '取水口', info = '水量: 300 m<sup>2</sup>/h') {
       if (!this.layerManager.existLayerGroup[layerItem.id].markerGroup) {
         this.layerManager.existLayerGroup[layerItem.id].markerGroup = new Set()
       }
@@ -622,7 +747,7 @@ export default {
         this.markerClick(dataId, layerItem)
       })
     },
-    renderTableList () {
+    renderTableList() {
       this.tableList.data = []
       this.tableList.rowKey = GetTableRowKey(this.layerManager.activeLayerItem.id)
       this.tableList.columns = TableColumnsByLayer(this.layerManager.activeLayerItem.id)
@@ -636,7 +761,7 @@ export default {
         }
       })
     },
-    rowSelect (record) {
+    rowSelect(record) {
       if (record.lon_lat) {
         const coordinate = record.lon_lat
         Map.flyTo({
@@ -677,7 +802,7 @@ export default {
         ])
       }
     },
-    getBoundingBox (data) {
+    getBoundingBox(data) {
       var bounds = {}
       var coords
       var latitude
@@ -697,7 +822,7 @@ export default {
       }
       return bounds
     },
-    customRow (record, index) {
+    customRow(record, index) {
       return {
         on: {
           click: () => {
@@ -891,5 +1016,26 @@ export default {
   /*transform: translateX(50%);*/
   z-index: 999;
   /*display: none;*/
+}
+.overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.overlay button {
+  font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  background-color: #3386c0;
+  color: #fff;
+  display: inline-block;
+  margin: 0;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.overlay button:hover {
+  background-color: #4ea0da;
 }
 </style>
