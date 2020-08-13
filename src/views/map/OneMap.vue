@@ -238,7 +238,7 @@ export default {
               _this.showMessage = true
               _this.$message.warning({
                 content: '警告⚠️',
-                duration: 0
+                duration: 5
               })
             }
             // Request the next frame of animation so long the end has not been reached.
