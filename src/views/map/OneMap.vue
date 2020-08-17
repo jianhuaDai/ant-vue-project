@@ -169,12 +169,13 @@ export default {
             ]
           }
           var arc = []
-          var steps = 1000
+          var steps = 400
           // San Francisco
-          var origin = [120.91854393025727, 31.783589924576944]
+          var origin = [120.94544675532876, 31.824293177278065]
 
           // Washington DC
-          var destination = [120.75680696773281, 32.00498695993434]
+          var destination = [120.70116162894186, 32.04431174141331]
+          var destination2 = [120.65640418912534, 32.05105412109148]
           var route = {
             type: 'FeatureCollection',
             features: [
@@ -182,7 +183,8 @@ export default {
                 type: 'Feature',
                 geometry: {
                   type: 'LineString',
-                  coordinates: [origin, destination]
+                  coordinates: [origin, destination],
+                  coordinates2: [destination, destination2]
                 }
               }
             ]
@@ -193,6 +195,7 @@ export default {
             var segment = turf.along(line, i, { units: 'miles' })
             arc.push(segment.geometry.coordinates)
           }
+
           route.features[0].geometry.coordinates = arc
           Map.addSource('route', {
             type: 'geojson',
@@ -238,8 +241,10 @@ export default {
               _this.showMessage = true
               _this.$message.warning({
                 content: '警告⚠️',
-                duration: 5
+                duration: 0
               })
+            } else if (!isInPolygon) {
+              _this.$message.destroy()
             }
             // Request the next frame of animation so long the end has not been reached.
             if (counter < steps) {
@@ -257,7 +262,18 @@ export default {
 
             // Reset the counter
             counter = 0
-            this.showMessage = false
+            _this.$message.destroy()
+            _this.showMessage = false
+            Map.removeLayer('points')
+            Map.addLayer({
+              id: 'points',
+              type: 'symbol',
+              source: 'point',
+              layout: {
+                'icon-image': 'chuan',
+                'icon-size': 0.25
+              }
+            })
             // Restart the animation.
             animate(counter)
           })
@@ -276,7 +292,7 @@ export default {
             type: 'geojson',
             data: data
           })
-          console.log('2222', turf.rhumbDistance(origin, destination, { units: 'miles' }))
+          // console.log('2222', turf.rhumbDistance(origin, destination, { units: 'miles' }))
 
           Map.addLayer(
             {
