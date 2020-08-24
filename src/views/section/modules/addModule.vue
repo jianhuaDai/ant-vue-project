@@ -150,7 +150,7 @@
 import { outfallTypes } from '../data.js'
 import { addSection, editSection } from '@/api/section'
 import { getRiversAndLakes } from '@/api/infomanage'
-import { treeData } from '@/config/areaTreeSelectData'
+// import { treeData } from '@/config/areaTreeSelectData'
 import mapInput from '@/components/Hczy/mapInput.vue'
 import uploadSingleImg from '@/components/Hczy/Upload/uploadSingleImg.vue'
 export default {
@@ -163,7 +163,7 @@ export default {
   components: { mapInput, uploadSingleImg },
   data () {
     return {
-      treeData,
+      // treeData,
       outfallTypes,
       riversAndLakes: [],
       getWaterModule: 'getWaterModule',
